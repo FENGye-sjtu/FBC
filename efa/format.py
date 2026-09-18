@@ -4,6 +4,11 @@ import json
 STEP_END = "<STEP_END>"
 
 
+def binding_prompt(boxes):
+    return ("Identify the object in the FIRST crop relative to its original-frame anchors. "
+            "Return its category and spatial/ownership identity. Coordinates: "+json.dumps(boxes))
+
+
 def read_prompt(query, boxes):
     return ("Read only the provided source images. Return a short canonical value for the predicate. "
             f"Original-frame coordinates in image order: {boxes}. "

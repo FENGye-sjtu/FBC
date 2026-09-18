@@ -15,7 +15,7 @@ import time
 from PIL import Image
 from efa.core import Scores
 from efa.regions import Box, complement, source_version
-from efa.format import STEP_END, route_prompt, read_prompt
+from efa.format import STEP_END, route_prompt, read_prompt, binding_prompt
 
 
 def parse_json(text):
@@ -187,9 +187,7 @@ class QwenBackend:
         # coordinates of each actual view; no prior main-trace cache is reused.
         local,n=self.logp(self.prompt(claim.query,targets),targets,claim.value)
         expanded,_=self.logp(self.prompt(claim.query,context),context,claim.value)
-        b_prompt=("Identify the object in the FIRST crop relative to its original-frame anchors. "
-                  "Return its category and spatial/ownership identity. Coordinates: "+
-                  json.dumps([list(vars(b).values()) for b in context]))
+        b_prompt=binding_prompt([list(vars(b).values()) for b in context])
         binding,bn=self.logp(b_prompt,context,claim.subject)
         deletion=None
         if comp:

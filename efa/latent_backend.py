@@ -28,7 +28,7 @@ class LatentBackend(QwenBackend):
         self.features={}
         if resampler_path:
             state=torch.load(resampler_path,map_location=self.device,weights_only=True)
-            check_reader_precision(state,self.encoder_config)
+            check_reader_precision(state,self.encoder_config,allow_adapter_mismatch=allow_untrained)
             self.resampler.load_state_dict(state['resampler'])
             if state['steps']<1:
                 raise ValueError('The source reader has not been trained')

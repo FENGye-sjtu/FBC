@@ -27,3 +27,11 @@ class PrecisionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'differs'):
             check_reader_precision(dict(encoder_config=dict(vision_quantized=True)),dict(vision_quantized=False))
         check_reader_precision(dict(encoder_config=dict(vision_quantized=False)),dict(vision_quantized=False))
+
+    def test_joint_reader_requires_its_saved_shared_adapter(self):
+        trained=dict(vision_quantized=False,adapter_sha256='trained')
+        check_reader_precision(dict(encoder_config=trained),dict(trained))
+        with self.assertRaisesRegex(ValueError,'different shared adapter'):
+            check_reader_precision(dict(encoder_config=trained),dict(vision_quantized=False,adapter_sha256='other'))
+        # Deliberate training initialization may realign a previous reader.
+        check_reader_precision(dict(encoder_config=trained),dict(vision_quantized=False,adapter_sha256='other'),True)

@@ -37,3 +37,9 @@ predicted and incomplete source training, natural student repairs and revisits,
 numerical/deductive data, benchmark decontamination, calibrated gates and matched
 paper evaluations. The current 35 tests pass on the server; they do not establish
 research effectiveness. No benchmark gain or submission-readiness claim is made.
+
+Subsequent local progress while SSH remains unavailable: native read/identity/
+whole-string unlikelihood training is implemented and CPU-tested (39 tests).
+See READER_OBJECTIVES.md. Its 384-record / 54-negative data version is published
+to HF commit `6114f79c0c3b3b521c63cf1140b11ad26325e2f9`; server upload and
+GPU validation remain pending. Do not describe this new training as already run.
