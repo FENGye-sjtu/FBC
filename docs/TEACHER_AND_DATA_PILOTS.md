@@ -117,7 +117,66 @@ candidates yielded one teacher-approved multistep episode (dev), compared with
 zero for that subset under the preceding prompt. This is a small annotation
 comparison, not evidence of student-model improvement.
 
-The offline approvals are teacher pseudo-labels. No runtime PASS, calibrated
+The resource wait subsequently cleared. The 2B region run completed 200 optimizer
+steps: training loss 0.793738, runtime 1,028.89 s. Positive compact-reader alignment
+completed 256 updates on 250 eligible training region tasks in 93.99 s. The episode
+run then completed 32 updates on the 24 exported interface examples: loss 0.748369,
+runtime 11.15 s, followed by 64 warm-start reader alignment updates in 25.38 s.
+These losses measure training fit, not held-out performance. The episode export
+contains only three distinct multistep training trajectories.
+
+The new `efa.evaluate` compares native and eight-token crop readers using the same
+neutral queries and native boxes on hash-selected held-out ZwZ images. It also
+runs direct full-image answers and the full bounded EFA controller on two cases.
+The source boxes are oracle inputs only for the component comparison; the full
+controller must route its own evidence. Cross-image source features and parent
+context are reset between examples. Gate thresholds remain uncalibrated.
+
+The first measured held-out run completed in 126.82 s on 16 records / 14 distinct
+images. Strict canonical exact match was 1/16 for each reader; mean reference NLL
+was 1.72947 native and 1.47074 compact. These are poor results, and the lower NLL
+does not establish improved answer quality. The literal reference
+`rectangular/rectangle` also illustrates a known strict-match limitation; original
+outputs and reference strings are retained without retrospective score changes.
+Direct whole-image answering was 0/2; EFA was 1/2, with 0/2 verified. Both EFA cases
+took one step, three repair rounds and ten audits. The helmet case had invalid
+routing throughout and an incorrect fallback; the flexible-pipe material case had
+valid regions but failed binding throughout, changing plastic to the correct metal
+only through unverified common-context fallback. Neither is a successful verified
+repair. These two cases cannot validate multistep reasoning or performance gains.
+
+The result bundle, policy, checkpoint hashes and training metrics are published as
+`efa/heldout_2b_v0` in QC1/FBC, commit
+`0ee7f9c06870e1c0d5b05b41b6643dd2b8dcdfa3`. All 25 current tests passed on the server;
+local tests passed with the two optional torch tests skipped. A fixed-case stage
+diagnostic now compares the original model, region adapter and episode adapter
+under neutral and original-question crop prompts to identify the reader failure.
+
+The stage diagnostic completed: base/region/episode native crop exact matches were
+0/1/1 with the neutral interface and 2/2/2 with the original question. This small
+comparison does not implicate episode SFT as the main cause. Upstream ZwZ also
+deliberately filters for questions that Qwen3-VL-8B finds difficult; its source card
+does not claim these are easy foundational region-reading examples.
+Diagnostic outputs are published at `efa/reader_diagnostic_2b_v0`, HF commit
+`284f16026178e85ae34589ca2091ba9d81569054`.
+
+Source inspection exposed a concrete alignment concern in `zwz-21434`: the
+unchanged parquet question refers to a garment on the right, its answer is purple,
+but its pixel box `[171.3,257.1,556.2,1159.6]` lies on the white garment at left in
+the linked original 1600x1600 image. The right garment is pink and the foreground
+garment purple. The public synthesis code uses pixel xyxy boxes and overlays red
+rectangles on original images; it provides no basis for an arbitrary coordinate
+rescaling or answer replacement. This case needs source adjudication. Keep the
+published pilot and its literal metrics as diagnostic artifacts, not a validated
+model ranking. Do not expand the existing unreviewed ZwZ conversion into formal
+training. The next data stage must use source-checked original-image bindings,
+including GQA scene-graph referents, before training/evaluating the reader again.
+
+Sources inspected: ZwZ dataset card at revision
+`fec404cb7bd5a18458e5add2802a5fb183981d14`, parquet row 21434, and
+`inclusionAI/Zooming-without-Zooming/data_synthesis/create_vqa.py` (main).
+
+The offline approvals are teacher pseudo-labels. No calibrated
 threshold, verified coverage, benchmark accuracy, successful repair rate, or
 paper-level improvement is claimed. Full reader discrimination objectives,
 student error/repair trajectories, revision detection, and matched evaluations

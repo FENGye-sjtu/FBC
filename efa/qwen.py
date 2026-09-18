@@ -71,6 +71,13 @@ class QwenBackend:
     def begin(self,claim):
         self.audit_kind=claim.kind
 
+    def set_image(self,path):
+        """Begin a new independent example, including its image provenance."""
+        self.image=Image.open(path).convert('RGB')
+        self.image_digest=hashlib.sha256(self.image.tobytes()+str(self.image.size).encode()).hexdigest()
+        if hasattr(self,'features'):self.features.clear()
+        self.calls=[];self.premises=[];self.audit_kind='visual'
+
     def describe_source(self,query,source):
         details=dict(target=[vars(b) for b in source.target],context=[vars(b) for b in source.context],
                      valid=source.valid,kind=self.audit_kind)

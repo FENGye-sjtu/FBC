@@ -108,7 +108,7 @@ class LatentBackend(QwenBackend):
         start=time.monotonic()
         with self.torch.inference_mode():
             inputs=self.latent_inputs(self.prompt(query,boxes),boxes)
-            output=self.model.generate(**inputs,max_new_tokens=32,do_sample=False,num_beams=6,
+            output=self.model.generate(**inputs,max_new_tokens=32,do_sample=False,num_beams=1 if k==1 else 6,
                                        num_return_sequences=k,use_cache=True)
         values=self.processor.batch_decode(output[:,inputs.input_ids.shape[1]:],skip_special_tokens=True)
         self.calls.append(dict(operation='latent_repair_propose',seconds=time.monotonic()-start,outputs=k))

@@ -99,6 +99,7 @@ def main():
                         continue
                     pull(remote+'/'+name,local/name)
             elif stat.S_ISREG(info.st_mode):
+                local.parent.mkdir(parents=True,exist_ok=True)
                 if local.exists():
                     if local.stat().st_size!=info.st_size:
                         raise ValueError('Existing destination differs; choose a new folder')
