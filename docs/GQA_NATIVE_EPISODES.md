@@ -39,6 +39,11 @@ requests from the 64-case pilot. There are 156 approved trajectories: 126 train,
 Recorded cached-response usage is 1,429,066 prompt plus 241,219 completion tokens.
 The complete frozen dataset is `efa/gqa_native_review_v2_complete`, HF commit
 `e19bda2b491706c57cabe7873767c7258eb6311a`; it is also uploaded to the server.
+The eligible train split contributes 384 atoms/steps. Its 126 final targets are
+all category queries; the other steps are presence, native relations and a few
+attributes. This dataset does not yet cover numerical reasoning, counting or
+explicit premise-based deductions. Those require additional native program or
+table supervision before claiming the complete training distribution.
 On the same first 64 cases, approvals changed from 21 to 23; this is only a small
 annotation-protocol comparison, not evidence of a student-model gain. The first
 128 completed version-2 reviews are frozen separately: 38 approved trajectories,
@@ -127,7 +132,7 @@ Published private QC1/FBC data versions:
 - `efa/gqa_native_program_v2`: `1847d840ed3a54007ba5cfbc009c50fbab722e80`.
 - `efa/gqa_native_review_v1`: `3e975204627aa09974a896343d4adc45f6af57a8`.
 
-All 33 tests passed on the server; the local suite skips two optional torch tests.
+All 35 tests passed on the server; the local suite skips two optional torch tests.
 Precision diagnostics are published as `efa/vision_precision_2b_v0`
 (HF `01e921e61ed4fac9e146b1e5aebf6c5f9d9b06bc`) and `efa/vision_precision_2b_v2`
 (HF `c4419dd81903781efeea6ec212a552a9d3eefca7`).
