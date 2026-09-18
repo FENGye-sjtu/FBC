@@ -83,7 +83,8 @@ The completed region export contains 718 crop reads, 250 region targets and 250
 single-step format examples (1,218 total); the remaining original rows were held
 out or not convertible to neutral property atoms. All 23 then-deployed tests passed
 on the server; local tests subsequently passed 24 cases with two optional torch
-tests skipped. The latest deduction-alias change has not yet had server validation.
+tests skipped. A subsequent server run passed all 24 tests, including the alias
+handling, multisource export and resampler gradient checks.
 
 The 3B low-memory attempt subsequently failed during weight loading: the process
 used 5.67 GiB when another 44 MiB allocation exhausted the available GPU memory.
@@ -91,6 +92,12 @@ It produced no optimizer steps. A separate Qwen2-VL-2B fallback preserves the
 existing data and failed run, with its model source revision recorded at download.
 The backend selects the matching Qwen2 or Qwen2.5 vision implementation; a 3B
 adapter/resampler is never loaded into the 2B model.
+The 2B source revision is `895c3a49bc3fa70a340399125c650a463535e71c`.
+Its first run loaded successfully but ran out of memory on the first backward
+pass (4.81 GiB process usage, 144 MiB allocation request, 113.56 MiB free). No
+optimizer step completed. The retry uses the separately available GPU with about
+7.8 GB free, requires at least 7 GB at launch, and writes `region_sft_2b_v1` and
+`latent_reader_2b_v1` rather than overwriting the failed v0 run.
 
 Native GQA scene graphs were acquired and matched to program object IDs for all
 32 source questions. Their region candidates are published as

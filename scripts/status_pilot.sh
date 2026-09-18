@@ -2,12 +2,12 @@
 set -eu
 source /data_cinema/zqc/VBC/code/scripts/server_env.sh
 nvidia-smi --query-gpu=index,memory.free,utilization.gpu --format=csv,noheader
-ps -eo pid,etime,args | awk '/VBC.*(region_sft_pilot_v2|region_sft_2b_v0|model_2b_setup)/ && !/awk/'
+ps -eo pid,etime,args | awk '/VBC.*(region_sft_pilot_v2|region_sft_2b_v[01]|model_2b_setup)/ && !/awk/'
 python - <<'PY'
 import json
 from pathlib import Path
 root=Path('/data_cinema/zqc/VBC')
-for label in ['model_2b_setup','region_sft_2b_v0']:
+for label in ['model_2b_setup','region_sft_2b_v1']:
     path=root/'logs'/(label+'.log')
     if path.exists():
         print(label,'\n'.join(path.read_text(errors='replace').splitlines()[-5:]))
@@ -18,7 +18,9 @@ for name in ['data/derived/region_sft_pilot_v2/export_manifest.json',
              'runs/region_sft_pilot_v2/all_results.json',
              'runs/latent_reader_pilot_v2/metrics.json',
              'runs/region_sft_2b_v0/all_results.json',
-             'runs/latent_reader_2b_v0/metrics.json']:
+             'runs/latent_reader_2b_v0/metrics.json',
+             'runs/region_sft_2b_v1/all_results.json',
+             'runs/latent_reader_2b_v1/metrics.json']:
     path=root/name
     if path.exists():
         value=json.loads(path.read_text());value.pop('losses',None)
