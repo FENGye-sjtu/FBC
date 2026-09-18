@@ -1,0 +1,7 @@
+{
+  "status": "engineering_only_not_calibrated",
+  "warning": "Thresholds are explicit starting settings, not measured or suitable for paper risk claims.",
+  "strata": {
+    "default": {"binding": -3.0, "support": -2.0, "deletion": -0.2, "specificity": -0.2, "use_deletion": true, "use_specificity": true}
+  }
+}

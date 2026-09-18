@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+*.egg-info/
+data/
+runs/
+models/
+cache/
+tmp/
+*.log
+third_party/DeepEyesV2/

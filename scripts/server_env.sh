@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# All writable runtime paths are project-local; do not repurpose HOME.
+export EFA_ROOT=/data_cinema/zqc/VBC
+export HF_HOME="$EFA_ROOT/cache/huggingface"
+export HF_ENDPOINT=https://hf-mirror.com
+export PIP_CACHE_DIR="$EFA_ROOT/cache/pip"
+export TORCH_HOME="$EFA_ROOT/cache/torch"
+export XDG_CACHE_HOME="$EFA_ROOT/cache/xdg"
+export TMPDIR="$EFA_ROOT/tmp"
+export TRITON_CACHE_DIR="$EFA_ROOT/cache/triton"
+export CUDA_CACHE_PATH="$EFA_ROOT/cache/cuda"
+export MPLCONFIGDIR="$EFA_ROOT/cache/matplotlib"
+export WANDB_DIR="$EFA_ROOT/runs/wandb"
+export WANDB_MODE=disabled
+export PYTHONDONTWRITEBYTECODE=1
+export TOKENIZERS_PARALLELISM=false
+export OMP_NUM_THREADS=2
+export PATH="$EFA_ROOT/envs/efa/bin:$PATH"
+export PYTHONPATH="$EFA_ROOT/code${PYTHONPATH:+:$PYTHONPATH}"

@@ -1,0 +1,9 @@
+{
+  "name": "DeepEyesV2",
+  "repository": "https://github.com/Visual-Agent/DeepEyesV2",
+  "revision": "62575437c2fa1201230145470631b02a4584b673",
+  "checked_on": "2026-09-18",
+  "sft_entry": "cold_start/run_cold_start.sh",
+  "sft_framework": "LLaMA-Factory",
+  "note": "Latest main at inspection time. Fetch exact archive; never silently upgrade a running experiment."
+}
