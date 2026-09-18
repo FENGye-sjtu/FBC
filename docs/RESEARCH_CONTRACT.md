@@ -45,11 +45,13 @@ to FENGye-sjtu/FBC without force. Upload data versions to QC1/FBC, official endp
 
 `efa.core` implements the bounded resolver and versioned ledger. `efa.qwen` is the
 first executable real-model backend using independently encoded native crop tokens.
-It is a baseline until the trained eight-token reader is integrated and validated.
-`efa.latent.SourceResampler` defines the trainable eight-token compression module;
-random weights are not a usable verifier. No efficiency or calibration claim is made.
-Automatic late-error localization and complete rollback/regeneration orchestration
-still require integration beyond the ledger's tested graph revocation.
+`efa.latent_backend` now integrates independently encoded crops with the eight-token
+resampler and the shared decoder. A 40-step positive-only alignment smoke completed;
+this is not the full training objective or a validated verifier. Random weights
+cannot be loaded for inference. No efficiency or calibration claim is made.
+The controller supports explicit parent re-audit requests, revocation and fresh
+suffix generation under the original monotone budget. Reliable identification
+of when to request such a revisit still requires training and empirical evaluation.
 
 The initial LoRA smoke trains native region reading/routing only. It is not the
 paper's full three-stage model. Full episodes require teacher annotation followed by

@@ -6,6 +6,7 @@ No scores from this backend are described as calibrated unless a policy is fitte
 """
 import json
 import hashlib
+import math
 from dataclasses import dataclass
 from pathlib import Path
 import time
@@ -37,20 +38,26 @@ class Sources:
 class QwenBackend:
     representation="independently_encoded_native_crop_tokens"
 
-    def __init__(self, model_path, image_path, quantized=False, max_pixels=200704):
+    def __init__(self, model_path, image_path, quantized=False, max_pixels=200704, adapter_path=None):
         import torch
         from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration, BitsAndBytesConfig
         self.torch=torch
         self.image=Image.open(image_path).convert("RGB")
         self.image_digest=hashlib.sha256(self.image.tobytes()+str(self.image.size).encode()).hexdigest()
         self.encoder_config=dict(model=str(model_path),max_pixels=max_pixels,min_pixels=3136,quantized=quantized,
-                                 representation=self.representation)
+                                 representation=self.representation,crop_preprocessing="minimum_patch_resize_28_aspect_200")
         self.processor=AutoProcessor.from_pretrained(model_path,min_pixels=3136,max_pixels=max_pixels)
         options=dict(torch_dtype=torch.bfloat16,device_map="auto",attn_implementation="sdpa")
         if quantized:
             options["quantization_config"]=BitsAndBytesConfig(load_in_4bit=True,bnb_4bit_compute_dtype=torch.bfloat16,
                 bnb_4bit_quant_type="nf4",bnb_4bit_use_double_quant=True)
         self.model=Qwen2_5_VLForConditionalGeneration.from_pretrained(model_path,**options).eval()
+        if adapter_path:
+            from peft import PeftModel
+            self.model=PeftModel.from_pretrained(self.model,adapter_path).eval()
+            self.encoder_config['adapter']=str(adapter_path)
+            weights=Path(adapter_path)/'adapter_model.safetensors'
+            self.encoder_config['adapter_sha256']=hashlib.sha256(weights.read_bytes()).hexdigest()
         self.device=self.model.get_input_embeddings().weight.device
         self.calls=[]
         self.premises=[]
@@ -77,6 +84,14 @@ class QwenBackend:
 
     def inputs(self,prompt,boxes):
         images=[self.image.crop(tuple(vars(b).values())) for b in boxes]
+        # Qwen's processor rejects sub-patch dimensions, which occur naturally
+        # for chart lines and complement strips. Resize only the selected pixels;
+        # never expand a deletion crop into a forbidden neighboring region.
+        for i,im in enumerate(images):
+            minimum=max(28,math.ceil(max(im.size)/200))
+            size=(max(minimum,im.width),max(minimum,im.height))
+            if size!=im.size:
+                images[i]=im.resize(size,Image.Resampling.BICUBIC)
         content=[{"type":"image","image":im} for im in images]+[{"type":"text","text":prompt}]
         text=self.processor.apply_chat_template([{"role":"user","content":content}],tokenize=False,add_generation_prompt=True)
         return self.processor(text=[text],images=images or None,return_tensors="pt").to(self.device)

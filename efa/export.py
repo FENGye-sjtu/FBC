@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from PIL import Image
 from efa.format import step_prompt, STEP_END
+from efa.native import property_atom
 
 
 def export(root, destination, allow_unchecked=False):
@@ -11,7 +12,7 @@ def export(root, destination, allow_unchecked=False):
     destination.mkdir(parents=True,exist_ok=True)
     (destination/"images").mkdir(exist_ok=True)
     raw=[json.loads(line) for line in (root/"raw_tasks.jsonl").read_text(encoding="utf-8").splitlines()]
-    outputs={"efa_reads":[],"efa_regions":[],"efa_steps":[]}
+    outputs={"efa_reads":[],"efa_regions":[],"efa_atoms":[],"efa_steps":[]}
     def pair(question,answer,image):
         return {"messages":[{"role":"user","content":"<image>\n"+question},
             {"role":"assistant","content":answer}],"images":[str(image)]}
@@ -29,6 +30,12 @@ def export(root, destination, allow_unchecked=False):
         outputs["efa_regions"].append(pair(
             f"Locate the evidence needed for this question. Return original-pixel xyxy coordinates. Image size: {row['width']}x{row['height']}.\n"+row["question"],
             json.dumps({"bbox":row["bbox"]}),root/row["image"]))
+        atom=property_atom(row['question'],row['answer'])
+        if atom:
+            # Single-observation format supervision, not an invented multi-step
+            # rationale or a reviewed runtime audit episode.
+            target=json.dumps(dict(atoms=[atom],final=True))+STEP_END
+            outputs['efa_atoms'].append(pair(step_prompt(row['question'],[],1),target,root/row['image']))
     episodes=root/"reviewed_episodes.jsonl"
     if episodes.exists():
         for line in episodes.read_text(encoding="utf-8").splitlines():

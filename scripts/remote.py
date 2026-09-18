@@ -1,6 +1,7 @@
 """Scoped SSH operations; password is read interactively and never persisted."""
 import argparse
 import getpass
+import json
 import os
 from pathlib import Path, PurePosixPath
 import shlex
@@ -14,7 +15,7 @@ ROOT = "/data_cinema/zqc/VBC"
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("action", choices=["deploy", "run", "upload"])
+    parser.add_argument("action", choices=["deploy", "run", "upload", "publish"])
     parser.add_argument("--source")
     parser.add_argument("--destination", help="Path relative to remote VBC root")
     parser.add_argument("--script", help="Local shell script to execute on server")
@@ -71,6 +72,31 @@ def main():
             sftp.put(str(path),target)
             count+=1
         print(f"Uploaded {count} files under {ROOT}/{relative}")
+    elif args.action=="publish":
+        from huggingface_hub import get_token
+        if not args.source or not args.destination:
+            parser.error('publish requires project-relative --source and dataset-relative --destination')
+        relative=PurePosixPath(args.source)
+        if relative.is_absolute() or '..' in relative.parts:
+            raise ValueError('Source must be project-relative')
+        source=sftp.normalize(ROOT+'/'+str(relative))
+        if not source.startswith(ROOT+'/'):
+            raise ValueError('Source escapes the project')
+        token=get_token()
+        if not token:
+            raise ValueError('Local Hugging Face login is required')
+        # Credentials travel over the authenticated SSH channel, never in argv,
+        # a shell script, a remote credential file or a printed request body.
+        stdin,stdout,stderr=client.exec_command(ROOT+'/envs/efa/bin/python '+ROOT+'/code/scripts/publish_remote.py')
+        stdin.write(json.dumps(dict(source=source,destination=args.destination,token=token)))
+        stdin.channel.shutdown_write()
+        for line in stdout:
+            print(line,end='',flush=True)
+        errors=stderr.read().decode()
+        if errors:
+            print(errors,file=sys.stderr)
+        if stdout.channel.recv_exit_status():
+            raise SystemExit('Remote data publication failed')
     else:
         if not args.script:
             parser.error("--script is required")

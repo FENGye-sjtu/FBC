@@ -19,12 +19,13 @@ def canonical_qa(row):
     text=row["extra_info"]["question"]
     options=dict(re.findall(r"(?m)^([A-Z])\.\s*(.+)$",text))
     letter=row["answer"].strip()
-    if letter not in options:
+    if options and letter not in options:
         raise ValueError("Unmatched answer choice")
-    value=options[letter].strip().strip("* ")
+    value=(options[letter] if options else letter).strip().strip("* ")
     question=re.split(r"(?m)^[A-Z]\.\s",text)[0]
     question=re.sub(r"Only focus on the objects inside the red bounding box in the image to answer this question\.","",question)
     question=question.replace("<image>","").strip()
+    question=re.sub(r'\nPlease identify their relative position:.*','',question).strip()
     if not value or not question:
         raise ValueError("Empty canonical value/query")
     return question,value
@@ -35,6 +36,7 @@ class Shards:
     def __init__(self, urls):
         self.urls=iter(urls)
         self.current=None
+        self.bytes_read=0
 
     def read(self,n=-1):
         while True:
@@ -46,6 +48,7 @@ class Shards:
                 self.current=urllib.request.urlopen(url,timeout=120)
             data=self.current.read(n)
             if data:
+                self.bytes_read+=len(data)
                 return data
             self.current.close(); self.current=None
 
@@ -59,6 +62,7 @@ def build(metadata, output, limit, endpoint):
     root=Path(output).resolve(); root.mkdir(parents=True,exist_ok=True)
     (root/"images").mkdir(exist_ok=True)
     rows=pq.read_table(metadata).to_pylist()
+    converter_digest=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     grouped={}
     for index,row in enumerate(rows):
         try:
@@ -75,10 +79,19 @@ def build(metadata, output, limit, endpoint):
     urls=[f"{endpoint}/datasets/inclusionAI/ZwZ-RL-VQA/resolve/{info.sha}/{name}" for name in files]
     source=Shards(urls)
     records=[]; visited=set()
+    def checkpoint(complete=False):
+        with (root/"raw_tasks.jsonl").open("w",encoding="utf-8") as stream:
+            for row in records:
+                stream.write(json.dumps(row,ensure_ascii=False)+"\n")
+        manifest=dict(kind="region_qa_seed",source_revision=info.sha,count=len(records),
+            images=len({r['image_sha256'] for r in records}),requested_count=limit,
+            complete_efa_episodes=0,benchmark_dedup_status="pending",image_edits=False,
+            archive_bytes_read=source.bytes_read,construction_complete=complete,converter_sha256=converter_digest)
+        (root/"manifest.json").write_text(json.dumps(manifest,indent=2),encoding="utf-8")
     try:
         # Upstream files are named .tar.gz00 but their magic is uncompressed tar.
         # Detect compression from bytes, not the misleading suffix.
-        with tarfile.open(fileobj=source,mode="r|*") as archive:
+        with tarfile.open(fileobj=source,mode="r|*",ignore_zeros=True) as archive:
             for member in archive:
                 name=Path(member.name).name
                 if not member.isfile() or name not in grouped or name in visited:
@@ -108,18 +121,15 @@ def build(metadata, output, limit, endpoint):
                     if len(records)>=limit:
                         break
                 print(f"ZwZ: {len(records)} region QA records from {len(visited)} original images",flush=True)
+                checkpoint()
                 if len(records)>=limit:
                     break
     finally:
         source.close()
+        checkpoint()
     if not records:
         raise RuntimeError("No matched original images found")
-    with (root/"raw_tasks.jsonl").open("w",encoding="utf-8") as stream:
-        for row in records:
-            stream.write(json.dumps(row,ensure_ascii=False)+"\n")
-    manifest=dict(kind="region_qa_seed",source_revision=info.sha,count=len(records),images=len(visited),
-                  complete_efa_episodes=0,benchmark_dedup_status="pending",image_edits=False)
-    (root/"manifest.json").write_text(json.dumps(manifest,indent=2),encoding="utf-8")
+    checkpoint(complete=True)
 
 
 if __name__=="__main__":

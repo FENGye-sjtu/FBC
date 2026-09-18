@@ -11,7 +11,9 @@ def step_prompt(question, context, number, final_budget=False):
         '"family":"attribute","kind":"visual"}],"final":false}. '
         "Maximum three atoms. For inference use kind=premise and family=deduction. "
         "When ready, final=true and the final answer must be the value of the LAST atom. "
-        "Do not include disputed values in object identities. Earlier unverified values are provisional. ")
+        "Do not include disputed values in object identities. Earlier unverified values are provisional. "
+        'If later evidence requires rechecking an earlier premise, instead return {"review_parent":"exact live node key"} '
+        f'followed by {STEP_END}. Do not propose its replacement before the audit. ')
     if final_budget:
         prompt+="This is the final budgeted step: supply the final answer."
     return prompt

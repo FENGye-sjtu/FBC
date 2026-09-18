@@ -18,7 +18,8 @@ from efa.core import Claim
 root=Path('/data_cinema/zqc/VBC')
 data=root/'data/derived/zwz_seed_v0'
 row=json.loads((data/'raw_tasks.jsonl').read_text().splitlines()[0])
-b=QwenBackend(root/'models/Qwen2.5-VL-3B-Instruct',data/row['image'],True,max_pixels=50176)
+b=QwenBackend(root/'models/Qwen2.5-VL-3B-Instruct',data/row['image'],True,max_pixels=50176,
+             adapter_path=root/'runs/reader_sft_smoke_v1')
 claim=Claim('the line painted on the ground','color',row['answer'])
 b.begin(claim)
 source=Sources((Box(*row['bbox']),),(Box(*row['context_bbox']),),True)
@@ -30,7 +31,7 @@ assert all(v is None or math.isfinite(v) for k,v in vars(scores).items() if k!='
 result=dict(task=row['id'],reference=row['answer'],generated=value,scores=vars(scores),
     source=b.describe_source(claim.query,source),seconds=time.monotonic()-start,
     peak_allocated_bytes=torch.cuda.max_memory_allocated(),calls=b.calls,
-    region_source='native_annotation',model='base_3b_unadapted',calibrated=False,
+    region_source='native_annotation',model='3b_reader_sft_smoke_v1',calibrated=False,
     scope='backend_smoke_not_benchmark')
 out=root/'runs/model_smoke.json'
 if out.exists():

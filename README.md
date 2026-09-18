@@ -15,9 +15,11 @@ illustrations, not measured results. See [research contract](docs/RESEARCH_CONTR
 - Native ZwZ region QA conversion, offline teacher episode annotation, and
   DeepEyesV2/LLaMA-Factory SFT export with a 3B four-bit LoRA configuration.
 
-The native-crop backend is an engineering baseline. The eight-token resampler is
-not yet integrated or trained. Automatic late-error localization and full suffix
-regeneration remain open. Initial thresholds are uncalibrated. No benchmark
+The native-crop backend is an engineering baseline. An experimental eight-token
+reader is integrated and has completed a 40-step positive-region alignment smoke.
+The step interface supports parent re-audits and regenerates after revocation;
+reliable detection of when to revisit still requires training/evaluation.
+Initial thresholds are uncalibrated. No benchmark
 accuracy, efficiency gain, or full EFA training completion is claimed.
 
 ## Setup and data
