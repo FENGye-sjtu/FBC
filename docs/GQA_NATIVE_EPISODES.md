@@ -102,6 +102,11 @@ the new default. New SFT and reader training start from fresh weights.
 `scripts/train_gqa_mixed_2b.sh` uses all 126 approved train trajectories, 1,200
 SFT updates, fourfold sampling of numbered-step examples, then 768 multi-region
 reader alignment updates. Its evaluator selects three dev episodes by hash.
+It compares direct answering, the same checkpoint's numbered steps without audits,
+and full EFA on the same images. The unaudited path exposes prior values as
+unverified, supplies no reference regions, and records unsupported parent-revisit
+requests as failures instead of invoking hidden audits. These comparisons are not
+compute matched; traces retain individual forward-call records.
 Training and evaluation outcomes must be read from the run artifacts; the
 single-case loading correction does not establish step reasoning or audit quality.
 

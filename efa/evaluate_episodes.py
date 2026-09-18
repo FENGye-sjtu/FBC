@@ -9,6 +9,7 @@ from efa.infer import run
 from efa.latent_backend import LatentBackend
 from efa.qwen import QwenBackend,Sources
 from efa.regions import Box
+from efa.step_baseline import run_step_only
 
 
 def main():
@@ -52,7 +53,12 @@ def main():
             backend.set_image(root/row['image'])
             direct=backend.generate(row['question']+'\nReturn a short canonical answer.',
                 [Box(0,0,backend.image.width,backend.image.height)],max_tokens=32)[0]
-            result['direct']=dict(answer=direct,correct=canonical(direct)==canonical(row['answer']))
+            result['direct']=dict(answer=direct,correct=canonical(direct)==canonical(row['answer']),calls=list(backend.calls))
+            backend.set_image(root/row['image'])
+            step_only=run_step_only(backend,row['question'])
+            (out/(row['id']+'-step-only.json')).write_text(json.dumps(step_only,indent=2))
+            result['step_only']=dict(final=step_only['final'],budget=step_only['budget'],
+                correct=canonical(step_only['final']['answer'])==canonical(row['answer']))
             backend.set_image(root/row['image'])
             audited=run(backend,row['question'],policies)
             (out/(row['id']+'-trace.json')).write_text(json.dumps(audited,indent=2))
@@ -64,6 +70,8 @@ def main():
     summary=dict(kind='heldout_reviewed_episode_engineering_evaluation',count=len(records),split=a.split,
         visual_atoms=len(reads),native_correct=sum(r['native_correct'] for r in reads),
         compact_correct=sum(r['compact_correct'] for r in reads),direct_correct=sum(r['direct']['correct'] for r in records),
+        step_only_correct=sum(r['step_only']['correct'] for r in records),
+        step_only_generated_steps=[r['step_only']['budget']['steps'] for r in records],
         efa_correct=sum(r['efa']['correct'] for r in records),verified=sum(r['efa']['final']['verified'] for r in records),
         generated_steps=[r['efa']['budget']['steps'] for r in records],checkpoint=backend.encoder_config,
         calibrated=False,benchmark_dedup_status='pending',reference_basis='native_annotations_and_teacher_checks',
