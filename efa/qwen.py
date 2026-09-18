@@ -40,7 +40,7 @@ class QwenBackend:
 
     def __init__(self, model_path, image_path, quantized=False, max_pixels=200704, adapter_path=None):
         import torch
-        from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration, BitsAndBytesConfig
+        from transformers import AutoConfig, AutoProcessor, Qwen2_5_VLForConditionalGeneration, Qwen2VLForConditionalGeneration, BitsAndBytesConfig
         self.torch=torch
         self.image=Image.open(image_path).convert("RGB")
         self.image_digest=hashlib.sha256(self.image.tobytes()+str(self.image.size).encode()).hexdigest()
@@ -51,7 +51,12 @@ class QwenBackend:
         if quantized:
             options["quantization_config"]=BitsAndBytesConfig(load_in_4bit=True,bnb_4bit_compute_dtype=torch.bfloat16,
                 bnb_4bit_quant_type="nf4",bnb_4bit_use_double_quant=True)
-        self.model=Qwen2_5_VLForConditionalGeneration.from_pretrained(model_path,**options).eval()
+        model_type=AutoConfig.from_pretrained(model_path).model_type
+        implementations={'qwen2_vl':Qwen2VLForConditionalGeneration,'qwen2_5_vl':Qwen2_5_VLForConditionalGeneration}
+        if model_type not in implementations:
+            raise ValueError('Unsupported Qwen vision architecture: '+model_type)
+        self.encoder_config['model_type']=model_type
+        self.model=implementations[model_type].from_pretrained(model_path,**options).eval()
         if adapter_path:
             from peft import PeftModel
             self.model=PeftModel.from_pretrained(self.model,adapter_path).eval()

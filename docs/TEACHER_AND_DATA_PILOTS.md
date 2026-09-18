@@ -63,6 +63,13 @@ format/atom constraints. A cache-reusing trial with deduction-alias normalizatio
 is tracked separately. Reference answers can induce incorrect supporting values;
 therefore exact final-answer agreement alone never approves a trajectory.
 
+The alias-normalized ChartQA trial produced 12 structured episodes and the same
+one approved three-step training episode; four atom-count rejections remained.
+Published at `efa/chartqa_plus_v2`, HF commit
+`e7130e46ac68df5746b76bb388c2df7ffe06b7b8`. Combined with GQA, current approved
+multistep training exports contain eight step examples, eight crop reads and
+eight region targets. GQA's third episode remains held out.
+
 ## Training and remaining work
 
 The next native-region run is `scripts/train_region_pilot.sh`: 200 SFT optimizer
@@ -72,10 +79,30 @@ All data remain engineering-only pending benchmark/near-duplicate clearance.
 The first launch exited before model loading because no GPU met the 7.5 GB free
 threshold. The adjusted run requires 5.5 GB and uses the shorter sequence limit.
 Actual completion/losses must be read from the server output, not inferred here.
+The completed region export contains 718 crop reads, 250 region targets and 250
+single-step format examples (1,218 total); the remaining original rows were held
+out or not convertible to neutral property atoms. All 23 then-deployed tests passed
+on the server; local tests subsequently passed 24 cases with two optional torch
+tests skipped. The latest deduction-alias change has not yet had server validation.
+
+The 3B low-memory attempt subsequently failed during weight loading: the process
+used 5.67 GiB when another 44 MiB allocation exhausted the available GPU memory.
+It produced no optimizer steps. A separate Qwen2-VL-2B fallback preserves the
+existing data and failed run, with its model source revision recorded at download.
+The backend selects the matching Qwen2 or Qwen2.5 vision implementation; a 3B
+adapter/resampler is never loaded into the 2B model.
+
+Native GQA scene graphs were acquired and matched to program object IDs for all
+32 source questions. Their region candidates are published as
+`efa/viscot_gqa_native_v2`, HF commit
+`82b5c2f4d6f7854cd44aa153342eda41955d3d62`. On the first eight tasks the added
+candidates yielded one teacher-approved multistep episode (dev), compared with
+zero for that subset under the preceding prompt. This is a small annotation
+comparison, not evidence of student-model improvement.
 
 The offline approvals are teacher pseudo-labels. No runtime PASS, calibrated
 threshold, verified coverage, benchmark accuracy, successful repair rate, or
 paper-level improvement is claimed. Full reader discrimination objectives,
 student error/repair trajectories, revision detection, and matched evaluations
-remain required. Native GQA scene graphs are being acquired to improve intermediate
-object region candidates without inventing intermediate labels.
+remain required. Native GQA scene graph candidates improve the region supervision
+source without inventing intermediate labels.
