@@ -27,6 +27,7 @@ def main():
     client.load_system_host_keys()
     client.connect("202.120.36.100", port=2034, username="zqc", password=getpass.getpass("SSH password: "),
                    look_for_keys=False, allow_agent=False, timeout=20)
+    client.get_transport().set_keepalive(20)
     sftp = client.open_sftp()
 
     def ensure(directory):
