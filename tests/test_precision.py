@@ -4,6 +4,10 @@ from efa.precision import check_reader_precision,configure_mixed_precision
 
 
 class PrecisionTests(unittest.TestCase):
+    def test_silent_upstream_quantization_omission_is_rejected(self):
+        with self.assertRaisesRegex(ValueError,'quantization was not configured'):
+            configure_mixed_precision(None,None,None,{},lambda *args: None)
+
     def test_upstream_language_quantization_and_existing_exclusions_are_preserved(self):
         options={}
         def upstream(config,tokenizer,args,kwargs):

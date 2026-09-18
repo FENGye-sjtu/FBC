@@ -17,6 +17,7 @@ def main():
             base=model.get_base_model() if hasattr(model,'get_base_model') else model
             visual_types=sorted({type(m).__name__ for m in base.visual.modules() if 'Linear' in type(m).__name__})
             language_types=sorted({type(m).__name__ for m in base.model.modules() if 'Linear' in type(m).__name__})
+            print('OBSERVED_TRAINING_PRECISION',json.dumps(dict(vision=visual_types,language=language_types)),flush=True)
             if any('4bit' in name or '8bit' in name for name in visual_types):
                 raise RuntimeError('The visual tower must remain unquantized')
             if 'Linear4bit' not in language_types:

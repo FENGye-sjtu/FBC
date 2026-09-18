@@ -6,4 +6,4 @@ gpu=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | a
 if [ -z "$gpu" ]; then exit 3; fi
 export CUDA_VISIBLE_DEVICES="$gpu"
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-python -m efa.evaluate_episodes --model "$EFA_ROOT/models/Qwen2-VL-2B-Instruct" --adapter "$EFA_ROOT/runs/gqa_sft_2b_v1" --resampler "$EFA_ROOT/runs/latent_gqa_2b_v1/resampler.pt" --root "$EFA_ROOT/data/derived/gqa_native_review_v2_complete" --output "$EFA_ROOT/runs/gqa_heldout_2b_v1" --policy "$EFA_ROOT/code/configs/policy_engineering.json" --split dev --limit 3 --engineering-only
+python -m efa.evaluate_episodes --model "$EFA_ROOT/models/Qwen2-VL-2B-Instruct" --adapter "$EFA_ROOT/runs/gqa_sft_2b_v2" --resampler "$EFA_ROOT/runs/latent_gqa_2b_v2/resampler.pt" --root "$EFA_ROOT/data/derived/gqa_native_review_v2_complete" --output "$EFA_ROOT/runs/gqa_heldout_2b_v2" --policy "$EFA_ROOT/code/configs/policy_engineering.json" --split dev --limit 3 --engineering-only

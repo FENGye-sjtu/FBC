@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 import yaml
 from efa.export import export
-root=Path('/data_cinema/zqc/VBC');out=root/'data/derived/gqa_sft_2b_v1'
+root=Path('/data_cinema/zqc/VBC');out=root/'data/derived/gqa_sft_2b_v2'
 if out.exists():raise ValueError('Preserve existing export')
 export(root/'data/derived/gqa_native_review_v2_complete',out,True)
 steps=json.loads((out/'efa_steps.json').read_text())
@@ -26,14 +26,14 @@ manifest.update(step_sampling_multiplier=4,unique_step_examples=len(steps))
 config=yaml.safe_load((root/'code/configs/sft_3b.yaml').read_text())
 config.update(model_name_or_path=str(root/'models/Qwen2-VL-2B-Instruct'),
     dataset='efa_steps_weighted,efa_reads,efa_regions',dataset_dir=str(out),
-    output_dir=str(root/'runs/gqa_sft_2b_v1'),max_steps=1200,
+    output_dir=str(root/'runs/gqa_sft_2b_v2'),max_steps=1200,
     image_max_pixels=50176,cutoff_len=1024,lora_rank=16,lora_alpha=32,
     lora_target='q_proj,k_proj,v_proj,o_proj',gradient_accumulation_steps=2,
     learning_rate=5e-5,save_steps=200)
 if Path(config['output_dir']).exists():raise ValueError('Preserve existing run')
-(root/'runs/gqa_sft_2b_v1.yaml').write_text(yaml.safe_dump(config))
+(root/'runs/gqa_sft_2b_v2.yaml').write_text(yaml.safe_dump(config))
 print('MIXED_PRECISION_EPISODE_SFT',json.dumps(manifest),flush=True)
 PY
-python -m efa.sft_entry "$EFA_ROOT/runs/gqa_sft_2b_v1.yaml"
-python -m efa.train_latent --model "$EFA_ROOT/models/Qwen2-VL-2B-Instruct" --adapter "$EFA_ROOT/runs/gqa_sft_2b_v1" --root "$EFA_ROOT/data/derived/gqa_native_review_v2_complete" --episode-file teacher_reviewed_episodes.jsonl --output "$EFA_ROOT/runs/latent_gqa_2b_v1" --steps 768 --engineering-only
+python -m efa.sft_entry "$EFA_ROOT/runs/gqa_sft_2b_v2.yaml"
+python -m efa.train_latent --model "$EFA_ROOT/models/Qwen2-VL-2B-Instruct" --adapter "$EFA_ROOT/runs/gqa_sft_2b_v2" --root "$EFA_ROOT/data/derived/gqa_native_review_v2_complete" --episode-file teacher_reviewed_episodes.jsonl --output "$EFA_ROOT/runs/latent_gqa_2b_v2" --steps 768 --engineering-only
 bash "$EFA_ROOT/code/scripts/evaluate_gqa_mixed_2b.sh"

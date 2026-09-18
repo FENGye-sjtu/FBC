@@ -57,7 +57,7 @@ regions from the selected episode annotation tier. It excludes held-out and
 rejected episodes. Positive alignment is still not the full discrimination objective.
 
 `scripts/train_gqa_2b.sh` launches a fresh Qwen2-VL-2B adapter from the base model on
-the 20 approved training trajectories. It uses rank-16 q/k/v/o LoRA, 4-bit weights,
+the 20 approved training trajectories. It uses rank-16 q/k/v/o LoRA,
 128 SFT updates, accumulation two, learning rate 2e-5, and a 50,176-pixel budget;
 then 256 positive multi-region reader alignment updates. The ZwZ-trained adapter
 and reader are not initialization sources for this run. Completion and quality
@@ -105,14 +105,25 @@ reader alignment updates. Its evaluator selects three dev episodes by hash.
 Training and evaluation outcomes must be read from the run artifacts; the
 single-case loading correction does not establish step reasoning or audit quality.
 
+The first SFT precision callback revealed another configuration error: the
+installed LLaMA-Factory expects `quantization_method: bnb`; the earlier value
+`bitsandbytes` silently skipped quantization. Run `gqa_sft_2b_v1` was stopped
+before optimizer updates when no `Linear4bit` language modules were found.
+Consequently earlier SFT runs using this configuration must not be described as
+verified NF4 training. Their NF4 inference/reader alignment artifacts remain
+historical measurements, with a train/inference precision mismatch. The corrected
+configuration uses `bnb`, requires a generated quantization config, and records
+actual module types. The fresh run is `gqa_sft_2b_v2`, followed by
+`latent_gqa_2b_v2` and `gqa_heldout_2b_v2`; the failed v1 directories are preserved.
+
 Published private QC1/FBC data versions:
 
 - `efa/gqa_native_program_v1`: `e10218bdd8ad1906d41d510794a8b8057f90bbff`.
 - `efa/gqa_native_program_v2`: `1847d840ed3a54007ba5cfbc009c50fbab722e80`.
 - `efa/gqa_native_review_v1`: `3e975204627aa09974a896343d4adc45f6af57a8`.
 
-All 32 current tests passed on the server; the local suite skips two optional
-torch tests. Precision diagnostics are published as `efa/vision_precision_2b_v0`
+All 33 tests passed on the server; the local suite skips two optional torch tests.
+Precision diagnostics are published as `efa/vision_precision_2b_v0`
 (HF `01e921e61ed4fac9e146b1e5aebf6c5f9d9b06bc`) and `efa/vision_precision_2b_v2`
 (HF `c4419dd81903781efeea6ec212a552a9d3eefca7`).
 Tests cover relation direction, missing source edges, inherited

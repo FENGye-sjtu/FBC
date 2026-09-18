@@ -24,7 +24,7 @@ max_steps: 100
 gradient_checkpointing: true
 bf16: true
 quantization_bit: 4
-quantization_method: bitsandbytes
+quantization_method: bnb
 double_quantization: true
 flash_attn: sdpa
 lr_scheduler_type: cosine
