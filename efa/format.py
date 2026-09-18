@@ -9,6 +9,10 @@ def binding_prompt(boxes):
             "Return its category and spatial/ownership identity. Coordinates: "+json.dumps(boxes))
 
 
+def premise_prompt(query,premises):
+    return "Given ONLY these explicit premises: "+json.dumps(premises)+"\nAnswer: "+json.dumps(query)
+
+
 def read_prompt(query, boxes):
     return ("Read only the provided source images. Return a short canonical value for the predicate. "
             f"Original-frame coordinates in image order: {boxes}. "

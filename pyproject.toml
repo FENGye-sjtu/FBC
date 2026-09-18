@@ -11,7 +11,7 @@ dependencies = ["Pillow>=10", "huggingface-hub>=0.30", "requests>=2.31"]
 
 [project.optional-dependencies]
 model = ["torch==2.6.0", "transformers==4.51.3", "accelerate>=1.2,<1.8", "peft==0.15.2", "qwen-vl-utils==0.0.11", "lm-format-enforcer==0.10.11"]
-data = ["pyarrow>=18"]
+data = ["pyarrow>=18", "ijson>=3.3"]
 remote = ["paramiko>=3.5"]
 
 [tool.setuptools.packages.find]

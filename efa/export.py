@@ -3,7 +3,7 @@ import argparse
 import json
 from pathlib import Path
 from PIL import Image
-from efa.format import step_prompt, route_prompt, read_prompt, STEP_END
+from efa.format import step_prompt, route_prompt, read_prompt, premise_prompt, STEP_END
 from efa.native import property_atom
 from efa.review import usable_sources
 
@@ -13,7 +13,7 @@ def export(root, destination, allow_unchecked=False):
     destination.mkdir(parents=True,exist_ok=True)
     (destination/"images").mkdir(exist_ok=True)
     raw=[json.loads(line) for line in (root/"raw_tasks.jsonl").read_text(encoding="utf-8").splitlines()]
-    outputs={"efa_reads":[],"efa_regions":[],"efa_atoms":[],"efa_steps":[]}
+    outputs={"efa_reads":[],"efa_regions":[],"efa_atoms":[],"efa_steps":[],"efa_premises":[]}
     def pair(question,answer,image):
         images=image if isinstance(image,list) else [image]
         return {"messages":[{"role":"user","content":"<image>\n"*len(images)+question},
@@ -61,6 +61,9 @@ def export(root, destination, allow_unchecked=False):
             context=[]
             for number,step in enumerate(row["steps"],1):
                 for index,atom in enumerate(step['atoms']):
+                    if atom['kind']=='premise':
+                        query={k:atom[k] for k in ('subject','predicate')}
+                        outputs['efa_premises'].append(pair(premise_prompt(query,context),atom['value'],[]))
                     if atom['kind']!='visual':continue
                     query={k:atom[k] for k in ('subject','predicate')}
                     region=atom['region']

@@ -15,7 +15,7 @@ import time
 from PIL import Image
 from efa.core import Scores
 from efa.regions import Box, complement, source_version
-from efa.format import STEP_END, route_prompt, read_prompt, binding_prompt
+from efa.format import STEP_END, route_prompt, read_prompt, binding_prompt, premise_prompt
 
 
 def parse_json(text):
@@ -95,7 +95,7 @@ class QwenBackend:
         return details
 
     def premise_prompt(self,query):
-        return "Given ONLY these explicit premises: "+json.dumps(self.premises)+"\nAnswer: "+json.dumps(query)
+        return premise_prompt(query,self.premises)
 
     def inputs(self,prompt,boxes):
         images=[self.image.crop(tuple(vars(b).values())) for b in boxes]

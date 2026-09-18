@@ -28,7 +28,7 @@ def main():
         raise ValueError('Publish an immutable completed snapshot, not a live writer directory')
     result=api.upload_folder(repo_id='QC1/FBC',repo_type='dataset',revision='main',
         parent_commit=info.sha,folder_path=str(source),path_in_repo=str(destination),
-        allow_patterns=['*.json','*.jsonl','*.md','images/*.png','images/*.jpg','images/*.jpeg','images/*.webp'],
+        allow_patterns=['*.json','*.jsonl','*.md','LICENSE.txt','images/*.png','images/*.jpg','images/*.jpeg','images/*.webp'],
         commit_message=f'Add {destination}: {manifest["count"]} region records')
     print(json.dumps(dict(commit=result.oid,manifest=manifest)),flush=True)
 
