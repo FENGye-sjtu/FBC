@@ -103,6 +103,11 @@ need to be read from its result files. The episode stage is queued after native
 reader alignment: 32 optimizer steps on 24 examples (eight next-step, eight crop
 read, eight region targets), then 64 alignment steps initialized from the existing
 compact reader. These are supervised interface pilots, not completed paper training.
+The run later remained at step 107 while its process stayed alive. Read-only
+inspection reported a futex wait and high host I/O pressure (some avg10 94.55,
+full avg10 86.93), alongside memory pressure. This is a verified resource wait,
+not a completed training result; the existing trainer and dependent queue are
+preserved. No other project's processes were stopped or modified.
 
 Native GQA scene graphs were acquired and matched to program object IDs for all
 32 source questions. Their region candidates are published as
