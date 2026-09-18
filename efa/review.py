@@ -18,6 +18,11 @@ def canonical(value):
     return str(value).strip().casefold().rstrip('.')
 
 
+def usable_sources(row):
+    return all(a.get('region',{}).get('insufficient') is False
+               for s in row['steps'] for a in s['atoms'] if a['kind']=='visual')
+
+
 def review(row,root,cache):
     checks=[];steps={s['id']:s for s in row['steps']}
     original=Image.open(root/row['image']).convert('RGB')
@@ -40,7 +45,7 @@ def review(row,root,cache):
             result=teacher_json([{'role':'system','content':REVIEW_PROMPT},{'role':'user','content':content}],cache,'independent_source_review')
             checks.append(dict(step=step['id'],atom=index,**result))
     reference_match=canonical(row['steps'][-1]['atoms'][-1]['value'])==canonical(row['answer'])
-    passed=reference_match and all(c['output'].get('supported') is True and c['output'].get('insufficient') is False for c in checks)
+    passed=reference_match and usable_sources(row) and all(c['output'].get('supported') is True and c['output'].get('insufficient') is False for c in checks)
     return dict(row,annotation_status='teacher_reviewed_episode' if passed else 'teacher_review_rejected',
                 review=dict(reference_match=reference_match,checks=checks,
                             label_basis='fresh_context_same_teacher_checks_not_ground_truth'),runtime_audit=None)

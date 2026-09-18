@@ -5,6 +5,7 @@ from pathlib import Path
 from PIL import Image
 from efa.format import step_prompt, route_prompt, STEP_END
 from efa.native import property_atom
+from efa.review import usable_sources
 
 
 def export(root, destination, allow_unchecked=False):
@@ -49,6 +50,8 @@ def export(root, destination, allow_unchecked=False):
             row=json.loads(line)
             allowed=['reviewed_episode']+(['teacher_reviewed_episode'] if allow_unchecked else [])
             if row["split"]!="train" or row.get("annotation_status") not in allowed:
+                continue
+            if not usable_sources(row):
                 continue
             if row.get("benchmark_dedup_status")!="cleared" and not allow_unchecked:
                 continue

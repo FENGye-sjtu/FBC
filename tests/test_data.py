@@ -1,9 +1,17 @@
 import unittest
 from efa.regions import normalized_boxes
 from efa.annotate import validate_steps
+from efa.review import usable_sources
 
 
 class AnnotationTests(unittest.TestCase):
+    def test_insufficient_region_cannot_enter_training(self):
+        atom={'kind':'visual','region':{'insufficient':True}}
+        row={'steps':[{'atoms':[atom]}]}
+        self.assertFalse(usable_sources(row))
+        atom['region']['insufficient']=False
+        self.assertTrue(usable_sources(row))
+
     def test_teacher_boxes_convert_into_original_pixel_frame(self):
         self.assertEqual(normalized_boxes([250,100,750,300],2000,1000),[[500,100,1500,300]])
         with self.assertRaises(ValueError):
