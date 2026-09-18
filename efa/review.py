@@ -29,27 +29,33 @@ def review(row,root,cache):
     original=Image.open(root/row['image']).convert('RGB')
     for step in row['steps']:
         for index,atom in enumerate(step['atoms']):
-            content=[]
             claim={k:atom[k] for k in ['subject','predicate','value','kind']}
             if atom['kind']=='visual':
                 region=atom['region']
-                for box in dict.fromkeys(tuple(b) for b in region['boxes']+region['context_boxes']):
+                views={'target':list(dict.fromkeys(tuple(b) for b in region['boxes'])),
+                       'expanded':list(dict.fromkeys(tuple(b) for b in region['boxes']+region['context_boxes']))}
+                if views['target']==views['expanded']:views.pop('expanded')
+            else:
+                claim['premises']=[steps[p]['atoms'] for p in step['parents']]
+                views={'premises':[]}
+            for view,boxes in views.items():
+                content=[]
+                for box in boxes:
                     crop=original.crop(box)
                     if min(crop.size)<32:
                         crop=crop.resize((max(32,crop.width),max(32,crop.height)))
                     stream=io.BytesIO();crop.save(stream,format='PNG')
                     content.append({'type':'image_url','image_url':{'url':'data:image/png;base64,'+base64.b64encode(stream.getvalue()).decode()}})
-                claim['original_coordinates']=region
-            else:
-                claim['premises']=[steps[p]['atoms'] for p in step['parents']]
-            content.append({'type':'text','text':json.dumps(claim)})
-            result=teacher_json([{'role':'system','content':REVIEW_PROMPT},{'role':'user','content':content}],cache,'independent_source_review')
-            checks.append(dict(step=step['id'],atom=index,**result))
+                payload=dict(claim)
+                if boxes:payload['original_coordinates_in_image_order']=boxes
+                content.append({'type':'text','text':json.dumps(payload)})
+                result=teacher_json([{'role':'system','content':REVIEW_PROMPT},{'role':'user','content':content}],cache,'source_review_'+view)
+                checks.append(dict(step=step['id'],atom=index,view=view,**result))
     reference_match=canonical(row['steps'][-1]['atoms'][-1]['value'])==canonical(row['answer'])
     passed=reference_match and usable_sources(row) and all(c['output'].get('supported') is True and c['output'].get('insufficient') is False for c in checks)
     return dict(row,annotation_status='teacher_reviewed_episode' if passed else 'teacher_review_rejected',
                 review=dict(reference_match=reference_match,checks=checks,
-                            label_basis='fresh_context_same_teacher_checks_not_ground_truth'),runtime_audit=None)
+                            label_basis='separate_target_and_expanded_teacher_checks_not_ground_truth'),runtime_audit=None)
 
 
 def main():

@@ -46,11 +46,12 @@ def export(root, destination, allow_unchecked=False):
     episode_files=[root/'reviewed_episodes.jsonl']
     if allow_unchecked:
         episode_files.append(root/'teacher_reviewed_episodes.jsonl')
+        episode_files.append(root/'native_episodes.jsonl')
     for episodes in episode_files:
         if not episodes.exists():continue
         for line in episodes.read_text(encoding="utf-8").splitlines():
             row=json.loads(line)
-            allowed=['reviewed_episode']+(['teacher_reviewed_episode'] if allow_unchecked else [])
+            allowed=['reviewed_episode']+(['teacher_reviewed_episode','native_program_episode'] if allow_unchecked else [])
             if row["split"]!="train" or row.get("annotation_status") not in allowed:
                 continue
             if not usable_sources(row):

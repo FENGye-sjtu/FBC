@@ -176,6 +176,9 @@ Sources inspected: ZwZ dataset card at revision
 `fec404cb7bd5a18458e5add2802a5fb183981d14`, parquet row 21434, and
 `inclusionAI/Zooming-without-Zooming/data_synthesis/create_vqa.py` (main).
 
+The following native-program data construction and source-reviewed multi-step
+training stage is tracked in [GQA_NATIVE_EPISODES.md](GQA_NATIVE_EPISODES.md).
+
 The offline approvals are teacher pseudo-labels. No calibrated
 threshold, verified coverage, benchmark accuracy, successful repair rate, or
 paper-level improvement is claimed. Full reader discrimination objectives,

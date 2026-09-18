@@ -86,13 +86,14 @@ if __name__=="__main__":
     p.add_argument("--quantized",action="store_true")
     p.add_argument("--adapter")
     p.add_argument("--resampler")
+    p.add_argument('--quantize-vision',action='store_true',help='Historical NF4-vision checkpoint replay')
     a=p.parse_args(); config=json.loads(Path(a.policy).read_text())
     policies={k:Policy(**v) for k,v in config["strata"].items()}
     if a.resampler:
         from efa.latent_backend import LatentBackend
-        backend=LatentBackend(a.model,a.image,a.quantized,adapter_path=a.adapter,resampler_path=a.resampler)
+        backend=LatentBackend(a.model,a.image,a.quantized,adapter_path=a.adapter,resampler_path=a.resampler,quantize_vision=a.quantize_vision)
     else:
-        backend=QwenBackend(a.model,a.image,a.quantized,adapter_path=a.adapter)
+        backend=QwenBackend(a.model,a.image,a.quantized,adapter_path=a.adapter,quantize_vision=a.quantize_vision)
     result=run(backend,a.question,policies)
     out=Path(a.output);out.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(result,indent=2),encoding="utf-8")

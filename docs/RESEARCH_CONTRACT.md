@@ -56,3 +56,8 @@ of when to request such a revisit still requires training and empirical evaluati
 The initial LoRA smoke trains native region reading/routing only. It is not the
 paper's full three-stage model. Full episodes require teacher annotation followed by
 source checks, and repair episodes require actual student/controller runs.
+
+Native GQA programs now provide explicit multi-step source supervision; see
+`GQA_NATIVE_EPISODES.md` for measured versions, source-review results and the
+fresh 2B episode run. These additions do not replace the required discrimination
+objectives, calibration, natural student repair training or final benchmark study.

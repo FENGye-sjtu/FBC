@@ -23,6 +23,7 @@ def main():
     p.add_argument('--split',choices=['dev','calibration'],default='dev')
     p.add_argument('--limit',type=int,default=16);p.add_argument('--episodes',type=int,default=2)
     p.add_argument('--engineering-only',action='store_true')
+    p.add_argument('--quantize-vision',action='store_true',help='Historical NF4-vision checkpoint replay')
     a=p.parse_args();root=Path(a.root);out=Path(a.output)
     if out.exists():raise ValueError('Use a fresh evaluation directory')
     raw=[json.loads(s) for s in (root/'raw_tasks.jsonl').read_text().splitlines()]
@@ -34,7 +35,7 @@ def main():
     if not a.engineering_only and any(r.get('benchmark_dedup_status')!='cleared' for r in rows):
         raise ValueError('Benchmark clearance is pending')
     backend=LatentBackend(a.model,root/rows[0]['image'],True,max_pixels=50176,
-                          adapter_path=a.adapter,resampler_path=a.resampler)
+                          adapter_path=a.adapter,resampler_path=a.resampler,quantize_vision=a.quantize_vision)
     policy=json.loads(Path(a.policy).read_text())
     policies={k:Policy(**v) for k,v in policy['strata'].items()}
     out.mkdir(parents=True)

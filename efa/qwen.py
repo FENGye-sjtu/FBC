@@ -3,6 +3,7 @@
 This first executable backend uses native crop tokens. It is explicitly a
 source-isolated crop baseline, NOT the paper's trained eight-token resampler.
 No scores from this backend are described as calibrated unless a policy is fitted.
+NF4 defaults to language layers only; vision and the tied output head stay BF16.
 """
 import json
 import hashlib
@@ -38,19 +39,21 @@ class Sources:
 class QwenBackend:
     representation="independently_encoded_native_crop_tokens"
 
-    def __init__(self, model_path, image_path, quantized=False, max_pixels=200704, adapter_path=None):
+    def __init__(self, model_path, image_path, quantized=False, max_pixels=200704, adapter_path=None, quantize_vision=False):
         import torch
         from transformers import AutoConfig, AutoProcessor, Qwen2_5_VLForConditionalGeneration, Qwen2VLForConditionalGeneration, BitsAndBytesConfig
         self.torch=torch
         self.image=Image.open(image_path).convert("RGB")
         self.image_digest=hashlib.sha256(self.image.tobytes()+str(self.image.size).encode()).hexdigest()
         self.encoder_config=dict(model=str(model_path),max_pixels=max_pixels,min_pixels=3136,quantized=quantized,
+                                 vision_quantized=bool(quantized and quantize_vision),
                                  representation=self.representation,crop_preprocessing="minimum_patch_resize_28_aspect_200")
         self.processor=AutoProcessor.from_pretrained(model_path,min_pixels=3136,max_pixels=max_pixels)
         options=dict(torch_dtype=torch.bfloat16,device_map="auto",attn_implementation="sdpa")
         if quantized:
             options["quantization_config"]=BitsAndBytesConfig(load_in_4bit=True,bnb_4bit_compute_dtype=torch.bfloat16,
-                bnb_4bit_quant_type="nf4",bnb_4bit_use_double_quant=True)
+                bnb_4bit_quant_type="nf4",bnb_4bit_use_double_quant=True,
+                llm_int8_skip_modules=['lm_head'] if quantize_vision else ['visual','lm_head'])
         model_type=AutoConfig.from_pretrained(model_path).model_type
         implementations={'qwen2_vl':Qwen2VLForConditionalGeneration,'qwen2_5_vl':Qwen2_5_VLForConditionalGeneration}
         if model_type not in implementations:
