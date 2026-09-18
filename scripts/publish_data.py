@@ -3,9 +3,11 @@ import argparse
 import json
 from pathlib import Path
 from huggingface_hub import HfApi
+from huggingface_hub.utils import disable_progress_bars
 
 
 def main():
+    disable_progress_bars()
     p=argparse.ArgumentParser()
     p.add_argument("--source",required=True)
     p.add_argument("--version",required=True)
@@ -20,7 +22,7 @@ def main():
         raise RuntimeError('Expected the existing private research repository')
     result=api.upload_folder(repo_id='QC1/FBC',repo_type='dataset',revision='main',
         parent_commit=info.sha,folder_path=str(root),path_in_repo='efa/'+a.version,
-        allow_patterns=['*.json','*.jsonl','*.md','images/*.png'],
+        allow_patterns=['*.json','*.jsonl','*.md','images/*.png','images/*.jpg','images/*.jpeg','images/*.webp'],
         commit_message=f'Add EFA {a.version}: {manifest["count"]} region records')
     print(json.dumps(dict(commit=result.oid,url=result.commit_url,manifest=manifest)))
 

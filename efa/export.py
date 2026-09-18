@@ -3,7 +3,7 @@ import argparse
 import json
 from pathlib import Path
 from PIL import Image
-from efa.format import step_prompt, STEP_END
+from efa.format import step_prompt, route_prompt, STEP_END
 from efa.native import property_atom
 
 
@@ -27,20 +27,28 @@ def export(root, destination, allow_unchecked=False):
         path=destination/"images"/(row["id"]+".png")
         crop.save(path)
         outputs["efa_reads"].append(pair(row["question"]+"\nReturn a short canonical answer.",row["answer"],path))
-        outputs["efa_regions"].append(pair(
-            f"Locate the evidence needed for this question. Return original-pixel xyxy coordinates. Image size: {row['width']}x{row['height']}.\n"+row["question"],
-            json.dumps({"bbox":row["bbox"]}),root/row["image"]))
         atom=property_atom(row['question'],row['answer'])
         if atom:
+            # Native object boxes supervise the target only. Full-frame context
+            # preserves anchors without inventing a tighter annotated context.
+            query={k:atom[k] for k in ('subject','predicate')}
+            outputs['efa_regions'].append(pair(
+                route_prompt(query,row['width'],row['height']),
+                json.dumps(dict(boxes=[row['bbox']],
+                    context_boxes=[row['bbox'],[0,0,row['width'],row['height']]])),root/row['image']))
             # Single-observation format supervision, not an invented multi-step
             # rationale or a reviewed runtime audit episode.
             target=json.dumps(dict(atoms=[atom],final=True))+STEP_END
             outputs['efa_atoms'].append(pair(step_prompt(row['question'],[],1),target,root/row['image']))
-    episodes=root/"reviewed_episodes.jsonl"
-    if episodes.exists():
+    episode_files=[root/'reviewed_episodes.jsonl']
+    if allow_unchecked:
+        episode_files.append(root/'teacher_reviewed_episodes.jsonl')
+    for episodes in episode_files:
+        if not episodes.exists():continue
         for line in episodes.read_text(encoding="utf-8").splitlines():
             row=json.loads(line)
-            if row["split"]!="train" or row.get("annotation_status")!="reviewed_episode":
+            allowed=['reviewed_episode']+(['teacher_reviewed_episode'] if allow_unchecked else [])
+            if row["split"]!="train" or row.get("annotation_status") not in allowed:
                 continue
             if row.get("benchmark_dedup_status")!="cleared" and not allow_unchecked:
                 continue

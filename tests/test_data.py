@@ -1,8 +1,14 @@
 import unittest
+from efa.regions import normalized_boxes
 from efa.annotate import validate_steps
 
 
 class AnnotationTests(unittest.TestCase):
+    def test_teacher_boxes_convert_into_original_pixel_frame(self):
+        self.assertEqual(normalized_boxes([250,100,750,300],2000,1000),[[500,100,1500,300]])
+        with self.assertRaises(ValueError):
+            normalized_boxes([[0,0,1200,300]],2000,1000)
+
     def test_dependency_must_exist(self):
         with self.assertRaises(ValueError):
             validate_steps({"steps":[{"id":1,"text":"Step 1: blue","parents":[2],

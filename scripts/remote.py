@@ -6,6 +6,7 @@ import os
 from pathlib import Path, PurePosixPath
 import shlex
 import subprocess
+import stat
 import sys
 
 import paramiko
@@ -15,7 +16,7 @@ ROOT = "/data_cinema/zqc/VBC"
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("action", choices=["deploy", "run", "upload", "publish"])
+    parser.add_argument("action", choices=["deploy", "run", "upload", "publish", "download"])
     parser.add_argument("--source")
     parser.add_argument("--destination", help="Path relative to remote VBC root")
     parser.add_argument("--script", help="Local shell script to execute on server")
@@ -72,6 +73,42 @@ def main():
             sftp.put(str(path),target)
             count+=1
         print(f"Uploaded {count} files under {ROOT}/{relative}")
+    elif args.action=='download':
+        if not args.source or not args.destination:
+            parser.error('download requires project-relative --source and local --destination')
+        relative=PurePosixPath(args.source)
+        if relative.is_absolute() or '..' in relative.parts:
+            raise ValueError('Source must be project-relative')
+        origin=sftp.normalize(ROOT+'/'+str(relative))
+        if not origin.startswith(ROOT+'/'):
+            raise ValueError('Source escapes the project')
+        destination=Path(args.destination).resolve()
+        count=0
+        def pull(remote,local):
+            nonlocal count
+            if not local.resolve().is_relative_to(destination):
+                raise ValueError('Local path escapes destination')
+            info=sftp.lstat(remote)
+            if stat.S_ISLNK(info.st_mode):
+                return
+            if stat.S_ISDIR(info.st_mode):
+                local.mkdir(parents=True,exist_ok=True)
+                for entry in sftp.listdir_attr(remote):
+                    name=entry.filename
+                    if name in ('.','..','.cache') or '/' in name or '\\' in name:
+                        continue
+                    pull(remote+'/'+name,local/name)
+            elif stat.S_ISREG(info.st_mode):
+                if local.exists():
+                    if local.stat().st_size!=info.st_size:
+                        raise ValueError('Existing destination differs; choose a new folder')
+                else:
+                    part=local.with_name(local.name+'.part')
+                    sftp.get(remote,str(part),max_concurrent_prefetch_requests=32)
+                    part.replace(local)
+                count+=1
+        pull(origin,destination)
+        print(f'Downloaded {count} files to {destination}')
     elif args.action=="publish":
         from huggingface_hub import get_token
         if not args.source or not args.destination:

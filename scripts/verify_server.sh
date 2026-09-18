@@ -11,9 +11,9 @@ for name in ['data/derived/sft_v0/export_manifest.json',
              'runs/reader_sft_smoke_v1/all_results.json',
              'runs/reader_sft_smoke_v1/trainer_state.json',
              'runs/model_smoke.json','runs/latent_reader_smoke_v0/metrics.json',
-             'runs/episode_smoke_v0.json','runs/episode_smoke_v1.json',
+             'runs/episode_smoke_v0.json','runs/episode_smoke_v1.json','runs/episode_smoke_v2.json',
              'runs/step_sft_smoke_v0/all_results.json','runs/latent_reader_smoke_v1/metrics.json',
-             'data/derived/zwz_pilot_v1/manifest.json']:
+             'data/derived/zwz_pilot_v1/manifest.json','data/derived/deepeyesv2_seed_v0/manifest.json']:
     path=root/name
     if not path.exists():
         print(name,'PENDING');continue
@@ -30,7 +30,7 @@ for name in ['data/derived/sft_v0/export_manifest.json',
 adapter=root/'runs/reader_sft_smoke_v1/adapter_model.safetensors'
 print('adapter_bytes',adapter.stat().st_size if adapter.exists() else 'PENDING')
 PY
-for label in step_train zwz_pilot episode_smoke_v1 deepeyesv2_data; do
+for label in zwz_pilot episode_smoke_v2 deepeyesv2_build_v1; do
   printf '\n%s\n' "$label"
   tail -n 8 "$EFA_ROOT/logs/$label.log" 2>/dev/null || true
 done

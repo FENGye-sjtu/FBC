@@ -22,7 +22,7 @@ result=run(backend,task['question'],{k:Policy(**v) for k,v in config['strata'].i
 result['task_id']=task['id']
 result['reference_answer']=task['answer']
 result['scope']='training_image_episode_engineering_smoke_not_benchmark'
-out=root/'runs/episode_smoke_v1.json'
+out=root/'runs/episode_smoke_v2.json'
 if out.exists():
     raise RuntimeError('Preserve previous episode')
 out.write_text(json.dumps(result,indent=2))

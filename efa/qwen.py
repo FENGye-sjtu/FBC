@@ -14,7 +14,7 @@ import time
 from PIL import Image
 from efa.core import Scores
 from efa.regions import Box, complement, source_version
-from efa.format import STEP_END
+from efa.format import STEP_END, route_prompt
 
 
 def parse_json(text):
@@ -96,15 +96,25 @@ class QwenBackend:
         text=self.processor.apply_chat_template([{"role":"user","content":content}],tokenize=False,add_generation_prompt=True)
         return self.processor(text=[text],images=images or None,return_tensors="pt").to(self.device)
 
-    def generate(self,prompt,boxes,max_tokens=256,k=1,step_boundary=False):
+    def generate(self,prompt,boxes,max_tokens=256,k=1,step_boundary=False,json_schema=None):
         inputs=self.inputs(prompt,boxes)
         start=time.monotonic()
+        constraints={}
+        if step_boundary or json_schema is not None:
+            from lmformatenforcer import JsonSchemaParser
+            from lmformatenforcer.integrations.transformers import build_token_enforcer_tokenizer_data,build_transformers_prefix_allowed_tokens_fn
+            from efa.grammar import step_parser
+            if not hasattr(self,'_grammar_tokens'):
+                self._grammar_tokens=build_token_enforcer_tokenizer_data(self.processor.tokenizer)
+            parser=step_parser() if step_boundary else JsonSchemaParser(json_schema)
+            constraints['prefix_allowed_tokens_fn']=build_transformers_prefix_allowed_tokens_fn(self._grammar_tokens,parser)
         with self.torch.inference_mode():
             stop=dict(stop_strings=[STEP_END],tokenizer=self.processor.tokenizer) if step_boundary else {}
             output=self.model.generate(**inputs,max_new_tokens=max_tokens,do_sample=False,
-                num_beams=1 if k==1 else 6,num_return_sequences=k,use_cache=True,**stop)
+                num_beams=1 if k==1 else 6,num_return_sequences=k,use_cache=True,**stop,**constraints)
         values=self.processor.batch_decode(output[:,inputs.input_ids.shape[1]:],skip_special_tokens=True)
-        self.calls.append(dict(operation="generate",seconds=time.monotonic()-start,images=len(boxes),outputs=k))
+        self.calls.append(dict(operation="generate",seconds=time.monotonic()-start,images=len(boxes),outputs=k,
+                               constrained_serialization=bool(constraints)))
         return values
 
     def logp(self,prompt,boxes,value):
@@ -127,12 +137,10 @@ class QwenBackend:
         if self.audit_kind=="premise":
             return Sources((),(),bool(self.premises))
         whole=Box(0,0,self.image.width,self.image.height)
-        prompt=("Locate the original-pixel xyxy evidence regions for this NEUTRAL query. "
-                "Return only JSON {\"boxes\":[[x1,y1,x2,y2]],\"context_boxes\":[[x1,y1,x2,y2]]}. "
-                "Context must include needed anchors, axes, units or relational objects. "
-                f"Image size {self.image.width}x{self.image.height}. Query: "+json.dumps(query))
+        prompt=route_prompt(query,self.image.width,self.image.height)
         try:
-            parsed=parse_json(self.generate(prompt,[whole])[0])
+            from efa.grammar import ROUTE_SCHEMA
+            parsed=parse_json(self.generate(prompt,[whole],json_schema=ROUTE_SCHEMA)[0])
             boxes=tuple(Box(*(int(v) for v in b)) for b in parsed["boxes"])
             context=tuple(Box(*(int(v) for v in b)) for b in parsed.get("context_boxes",parsed["boxes"]))
             valid=bool(boxes and context and all(b.valid(self.image.width,self.image.height) for b in boxes+context))

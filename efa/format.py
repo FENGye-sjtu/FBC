@@ -4,6 +4,13 @@ import json
 STEP_END = "<STEP_END>"
 
 
+def route_prompt(query, width, height):
+    return ("Locate the original-pixel xyxy evidence regions for this NEUTRAL query. "
+            'Return only JSON {"boxes":[[x1,y1,x2,y2]],"context_boxes":[[x1,y1,x2,y2]]}. '
+            "Context must include needed anchors, axes, units or relational objects. "
+            f"Image size {width}x{height}. Query: " + json.dumps(query))
+
+
 def step_prompt(question, context, number, final_budget=False):
     prompt=(f"Question: {question}\nAccepted/provisional ledger: {json.dumps(context)}\n"
         f"Generate exactly Step {number}, then stop. Return JSON followed by {STEP_END}: "

@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from hashlib import sha256
 import json
+import math
 
 
 @dataclass(frozen=True)
@@ -42,3 +43,12 @@ def complement(width, height, targets):
 def source_version(image_digest, query, boxes, encoder):
     payload = [image_digest, query, [vars(b) for b in boxes], encoder]
     return sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+
+
+def normalized_boxes(boxes,width,height):
+    if len(boxes)==4 and all(isinstance(v,(int,float)) for v in boxes):
+        boxes=[boxes]
+    if not all(len(b)==4 and all(type(v) in (int,float) and 0<=v<=1000 for v in b) for b in boxes):
+        raise ValueError('Invalid normalized coordinates')
+    return [[(math.floor if i<2 else math.ceil)(v/1000*(width if i%2==0 else height))
+             for i,v in enumerate(b)] for b in boxes]

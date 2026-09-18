@@ -7,20 +7,24 @@ import argparse
 import base64
 import hashlib
 import json
+import mimetypes
 import os
 from pathlib import Path
 import time
 import urllib.parse
 import urllib.request
-from efa.regions import Box, complement
+from efa.regions import Box, complement, normalized_boxes
 
 STEP_PROMPT = '''Write a concise image-grounded solution as numbered steps.
 Return JSON only: {"steps":[{"id":1,"text":"Step 1: ...", "parents":[],
 "atoms":[{"subject":"stable neutral referent","predicate":"color",
 "value":"blue","family":"attribute","kind":"visual"}]}]}.
 Use families attribute, identity, text, relation, count, numeric, deduction.
-Each step has 1-3 atoms. Use 2-8 steps only where the task needs them; do not pad
-simple observations with invented facts. Parents are earlier step IDs.
+Each step has 1-3 atoms. Use one step for direct attribute questions. Use multiple
+steps only for genuine dependencies such as comparison, counting or calculation.
+Do not invent identity or appearance facts to pad a simple answer. Do not repeat
+the final visual answer in an unnecessary deduction step. Parents are earlier step IDs.
+kind MUST be exactly "visual" or "premise"; use kind="premise" for deductions.
 For deductions, specify the actual exposed premises. Every observation must be
 checkable in the image; no answer-conditioned invented observations.
 The subject MUST NOT include the disputed value. For a color claim, use stable
@@ -33,7 +37,9 @@ You have not been given their asserted values. Return JSON only:
 {"regions":[{"key":"1.0","boxes":[[x1,y1,x2,y2]],
 "context_boxes":[[x1,y1,x2,y2]],"identity":"neutral marked-target identity",
 "insufficient":false}]}.
-Coordinates are integer ORIGINAL-image pixels, xyxy. Include necessary relation
+Coordinates are integers NORMALIZED to 0..1000, xyxy: x/width*1000 and y/height*1000.
+Use the supplied native candidate boxes when they refer to the queried object;
+they provide locations, not answers or proof of support. Include necessary relation
 anchors, scale, units, legend, or counting extent. Multiple regions or whole image
 are allowed when necessary. A crop existing is not evidence of claim correctness.
 Return insufficient=true if the referent cannot be identified. Never infer an
@@ -50,6 +56,8 @@ def teacher_json(messages, cache, stage):
         raise ValueError("Teacher credentials require an HTTPS endpoint")
     body = dict(model=model, messages=messages, temperature=0, max_tokens=4096,
                 response_format={"type":"json_object"})
+    if model.startswith('qwen3'):
+        body['enable_thinking']=False
     encoded = json.dumps(body).encode()
     digest = hashlib.sha256(endpoint.encode()+encoded).hexdigest()
     path=cache/(digest+".json")
@@ -94,7 +102,8 @@ def validate_steps(output):
 
 def annotate_task(task, root, cache):
     image_path=root/task["image"]
-    data_url="data:image/png;base64,"+base64.b64encode(image_path.read_bytes()).decode()
+    mime=mimetypes.guess_type(image_path.name)[0] or 'image/png'
+    data_url="data:"+mime+";base64,"+base64.b64encode(image_path.read_bytes()).decode()
     def request(prompt,text):
         return [{"role":"system","content":prompt},{"role":"user","content":[
             {"type":"image_url","image_url":{"url":data_url}}, {"type":"text","text":text}]}]
@@ -105,7 +114,9 @@ def annotate_task(task, root, cache):
              for s in steps for i,a in enumerate(s["atoms"]) if a["kind"]=="visual"]
     # New conversation: no step text, incumbent values, answers, or first response.
     second=teacher_json(request(REGION_PROMPT,json.dumps({"width":task["width"],
-        "height":task["height"],"queries":queries})),cache,"value_blind_route")
+        "height":task["height"],"queries":queries,
+        "native_candidate_boxes_1000":[[round(v/(task['width'] if i%2==0 else task['height'])*1000)
+            for i,v in enumerate(task['bbox'])]] if task.get('bbox') else []})),cache,"value_blind_route_normalized_1000")
     entries=second["output"]["regions"]
     regions={r["key"]:r for r in entries}
     if len(regions)!=len(entries) or set(regions)!={q["key"] for q in queries}:
@@ -118,6 +129,9 @@ def annotate_task(task, root, cache):
                 atom["premise_sources"]=step["parents"]
                 continue
             region=regions[f"{step['id']}.{i}"]
+            for field in ['boxes','context_boxes']:
+                region[field]=normalized_boxes(region[field],task['width'],task['height'])
+            region['coordinate_system']='original_pixels_converted_from_normalized_1000'
             boxes=[Box(*b) for b in region["boxes"]]
             contexts=[Box(*b) for b in region["context_boxes"]]
             if not boxes or not contexts or not all(b.valid(task["width"],task["height"]) for b in boxes+contexts):
@@ -136,9 +150,19 @@ def main():
     a=p.parse_args()
     root=Path(a.root); cache=root/"teacher_cache"; cache.mkdir(exist_ok=True)
     tasks=[json.loads(s) for s in (root/"raw_tasks.jsonl").read_text(encoding="utf-8").splitlines()]
-    with (root/"pseudo_episodes.jsonl").open("w",encoding="utf-8") as out:
+    destination=root/'pseudo_episodes.jsonl'
+    existing={json.loads(s)['id'] for s in destination.read_text(encoding='utf-8').splitlines()} if destination.exists() else set()
+    with destination.open("a",encoding="utf-8") as out:
         for task in tasks[:a.limit]:
-            result=annotate_task(task,root,cache)
+            if task['id'] in existing:
+                continue
+            try:
+                result=annotate_task(task,root,cache)
+            except (ValueError,KeyError,TypeError) as error:
+                with (root/'annotation_rejections.jsonl').open('a',encoding='utf-8') as rejected:
+                    rejected.write(json.dumps(dict(id=task['id'],reason=str(error)))+'\n')
+                print(f"Rejected {task['id']}: {error}",flush=True)
+                continue
             out.write(json.dumps(result,ensure_ascii=False)+"\n"); out.flush()
             print(f"Annotated {task['id']}: {len(result['steps'])} steps",flush=True)
 

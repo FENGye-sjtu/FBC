@@ -43,9 +43,12 @@ image. Stage C will independently check claim/region support against native
 labels, source crops and adjudication. Record model, source revision, request
 hash and usage. Keep teacher labels separate from measured student scores.
 
-The annotation client is implemented, but the supplied key's HTTPS base URL and
-vision model name are still needed. A small pilot should establish usable-episode
-yield and cost before scaling. The deployed student never calls this API.
+The user confirmed DashScope's official compatible-mode endpoint, and successful
+authenticated model discovery confirmed `qwen3.5-flash-2026-02-23`. The pilot uses
+that pinned model with thinking disabled. Fresh-context crop checks retain
+teacher-pseudo-label status; they are not ground truth. Qwen teacher coordinates
+use a declared 0..1000 frame and are converted to original pixels. Native boxes
+are supplied as answer-free candidates. The deployed student never calls this API.
 
 ## Training sequence
 
