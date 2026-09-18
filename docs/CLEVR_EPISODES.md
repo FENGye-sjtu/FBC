@@ -46,3 +46,16 @@ Local validation currently passes 45 CPU tests, including native execution,
 zero-count labels, reference disagreement, noncausal programs, premise-only
 export, and correct bounded ZIP reads. Real-model learning and gate performance
 are not established by these construction tests.
+
+The complete `clevr_count_program_v1` artifact contains 256 original images,
+768 steps (512 visual counts and 256 premise deductions), with 213 train /
+27 dev / 16 calibration episodes. All selected programs agree with their native
+answers. This build transferred 409,808,809 archive bytes before the final license
+read. No complete 19 GB archive was stored locally.
+It is published to private `QC1/FBC/efa/clevr_count_program_v1`, HF commit
+`3d694fb95e7a7f52de40e2e0c3a59a19ac04fa40`, including the original license.
+
+The actual combined SFT export with approved GQA train episodes has 1,023 step
+examples, 810 source reads, 810 region targets and 213 image-free premise reads,
+2,856 examples in total. Cross-source train/held-out image collision checks pass.
+These are measured data/export counts, not training results.

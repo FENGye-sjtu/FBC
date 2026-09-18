@@ -4,19 +4,30 @@ Implementation of **Audit Before Advancing**, following the user's
 `VBC_CVPR2027_EvidenceFirst_v2_Full.pdf`. The manuscript's empirical tables are
 illustrations, not measured results. See [research contract](docs/RESEARCH_CONTRACT.md).
 
+For the existing deployment, start with [active run and handoff](docs/ACTIVE_RUN.md)
+before launching jobs. It records the last confirmed process state and which
+artifacts still require server verification.
+
 ## Current implementation
 
 - Numbered step generation, value-blind region acquisition, incumbent-only B/S/N/D
   audit, at most 3 proposals in each of 3 failure-triggered review rounds.
 - Common-context fallback explicitly remains unverified. A versioned ledger
   inherits all actually exposed parents and supports descendant revocation.
-- Executable Qwen2.5-VL backend with original-image crops, teacher-forced scores,
+- Executable Qwen2/2.5-VL backend with original-image crops, teacher-forced scores,
   source-coordinate/version logs and a separate premise-only deduction path.
 - Native ZwZ region QA conversion, offline teacher episode annotation, and
   DeepEyesV2/LLaMA-Factory SFT export with a 3B four-bit LoRA configuration.
+- [Source-reviewed native GQA steps](docs/GQA_NATIVE_EPISODES.md),
+  [read/identity/whole-sequence rejection objectives](docs/READER_OBJECTIVES.md),
+  and [CLEVR counting-to-deduction programs](docs/CLEVR_EPISODES.md).
+- SFT can supervise image-free premise reading using the same prompt as runtime.
+  Corrected quantization preserves BF16 vision and uses NF4 language layers;
+  the training entry verifies actual module types before optimizer updates.
 
 The native-crop backend is an engineering baseline. An experimental eight-token
-reader is integrated and has completed a 40-step positive-region alignment smoke.
+reader is integrated and has completed positive-region alignment runs; the linked
+experiment records distinguish completed results from pending training.
 The step interface supports parent re-audits and regenerates after revocation;
 reliable detection of when to revisit still requires training/evaluation.
 Initial thresholds are uncalibrated. No benchmark
@@ -56,7 +67,7 @@ All new remote artifacts stay in `/data_cinema/zqc/VBC` or `/data_wyn/zqc/VBC`.
 supports deployment, project-relative upload and shell-script execution with
 interactive password input. It does not persist credentials.
 
-Run `scripts/setup_server.sh`, `scripts/setup_model.sh`, then
+For a fresh deployment, run `scripts/setup_server.sh`, `scripts/setup_model.sh`, then
 `scripts/setup_sft.sh` on the server. Upload region data to
 `data/derived/zwz_seed_v0` and run `scripts/run_sft.sh` for a ten-step reader smoke.
 This validates the training path, not scientific effectiveness. Other GPU jobs

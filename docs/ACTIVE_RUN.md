@@ -43,3 +43,12 @@ whole-string unlikelihood training is implemented and CPU-tested (39 tests).
 See READER_OBJECTIVES.md. Its 384-record / 54-negative data version is published
 to HF commit `6114f79c0c3b3b521c63cf1140b11ad26325e2f9`; server upload and
 GPU validation remain pending. Do not describe this new training as already run.
+
+Further local work completed: `clevr_count_program_v1` provides 256 native
+three-step count/comparison episodes (213 train / 27 dev / 16 calibration).
+It is published at HF commit `3d694fb95e7a7f52de40e2e0c3a59a19ac04fa40`.
+The GQA+CLEVR mixed export has 2,856 SFT examples including 213 image-free
+premise reads. See CLEVR_EPISODES.md and `scripts/train_mixed_programs_2b.sh`.
+All 45 local CPU tests pass. None of these subsequent local changes have been
+deployed while the SSH port remains inaccessible, and no replacement job has
+been launched. Recover server observation before choosing the next GPU run.
