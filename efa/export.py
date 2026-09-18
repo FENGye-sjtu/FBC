@@ -3,7 +3,7 @@ import argparse
 import json
 from pathlib import Path
 from PIL import Image
-from efa.format import step_prompt, route_prompt, STEP_END
+from efa.format import step_prompt, route_prompt, read_prompt, STEP_END
 from efa.native import property_atom
 from efa.review import usable_sources
 
@@ -15,8 +15,9 @@ def export(root, destination, allow_unchecked=False):
     raw=[json.loads(line) for line in (root/"raw_tasks.jsonl").read_text(encoding="utf-8").splitlines()]
     outputs={"efa_reads":[],"efa_regions":[],"efa_atoms":[],"efa_steps":[]}
     def pair(question,answer,image):
-        return {"messages":[{"role":"user","content":"<image>\n"+question},
-            {"role":"assistant","content":answer}],"images":[str(image)]}
+        images=image if isinstance(image,list) else [image]
+        return {"messages":[{"role":"user","content":"<image>\n"*len(images)+question},
+            {"role":"assistant","content":answer}],"images":[str(im) for im in images]}
     for row in raw:
         if row["split"]!="train":
             continue
@@ -27,8 +28,9 @@ def export(root, destination, allow_unchecked=False):
         crop=Image.open(root/row["image"]).crop(tuple(row["bbox"]))
         path=destination/"images"/(row["id"]+".png")
         crop.save(path)
-        outputs["efa_reads"].append(pair(row["question"]+"\nReturn a short canonical answer.",row["answer"],path))
         atom=property_atom(row['question'],row['answer'])
+        prompt=read_prompt({k:atom[k] for k in ('subject','predicate')},[row['bbox']]) if atom else row['question']+'\nReturn a short canonical answer.'
+        outputs["efa_reads"].append(pair(prompt,row["answer"],path))
         if atom:
             # Native object boxes supervise the target only. Full-frame context
             # preserves anchors without inventing a tighter annotated context.
@@ -57,6 +59,18 @@ def export(root, destination, allow_unchecked=False):
                 continue
             context=[]
             for number,step in enumerate(row["steps"],1):
+                for index,atom in enumerate(step['atoms']):
+                    if atom['kind']!='visual':continue
+                    query={k:atom[k] for k in ('subject','predicate')}
+                    region=atom['region']
+                    outputs['efa_regions'].append(pair(route_prompt(query,row['width'],row['height']),
+                        json.dumps({k:region[k] for k in ('boxes','context_boxes')}),root/row['image']))
+                    paths=[]
+                    with Image.open(root/row['image']) as original:
+                        for view,box in enumerate(region['boxes']):
+                            path=destination/'images'/f"{row['id']}-s{number}-a{index}-v{view}.png"
+                            original.crop(tuple(box)).save(path);paths.append(path)
+                    outputs['efa_reads'].append(pair(read_prompt(query,region['boxes']),atom['value'],paths))
                 atoms=[{k:a[k] for k in ("subject","predicate","value","family","kind")} for a in step["atoms"]]
                 target=json.dumps(dict(atoms=atoms,final=number==len(row["steps"])))+STEP_END
                 outputs["efa_steps"].append(pair(step_prompt(row["question"],context,number),target,root/row["image"]))

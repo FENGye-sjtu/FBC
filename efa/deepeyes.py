@@ -5,6 +5,7 @@ import io
 import json
 from pathlib import Path
 import re
+import random
 import zipfile
 from PIL import Image
 from efa.data import partition
@@ -12,15 +13,24 @@ from efa.data import partition
 REVISION='cee88d9e9c494729f719ccca5de5aeb940501a35'
 
 
-def build(source,output,limit):
+def build(source,output,limit,seed=None,archive_url=None):
     source=Path(source);output=Path(output)
     if output.exists():raise ValueError('Choose a new output version')
     rows=json.loads((source/'json/sft_part_0.json').read_text())
     output.mkdir(parents=True);(output/'images').mkdir()
     records=[];rejected={}
-    with zipfile.ZipFile(source/'images.zip') as archive:
+    indices=list(range(len(rows)))
+    if seed is not None:random.Random(seed).shuffle(indices)
+    from contextlib import ExitStack
+    with ExitStack() as stack:
+        archive_source=source/'images.zip'
+        if archive_url:
+            from efa.http_range import HTTPRangeReader
+            archive_source=stack.enter_context(HTTPRangeReader(archive_url))
+        archive=stack.enter_context(zipfile.ZipFile(archive_source))
         names=set(archive.namelist())
-        for index,row in enumerate(rows):
+        for index in indices:
+            row=rows[index]
             messages=row['messages']
             # Tool results and historical system instructions are data, not
             # commands for this converter or the deployed student.
@@ -53,10 +63,13 @@ def build(source,output,limit):
                 benchmark_dedup_status='pending',label_basis='upstream_teacher_answer_not_ground_truth',
                 steps=None,runtime_audit=None))
             if len(records)>=limit:break
+        transferred=archive_source.transferred if archive_url else None
     (output/'raw_tasks.jsonl').write_text(''.join(json.dumps(r,ensure_ascii=False)+'\n' for r in records),encoding='utf-8')
     manifest=dict(kind='deepeyesv2_source_qa',count=len(records),images=len({r['image_sha256'] for r in records}),
         source_revision=REVISION,complete_efa_episodes=0,construction_complete=True,
-        benchmark_dedup_status='pending',rejected=rejected,image_edits=False)
+        benchmark_dedup_status='pending',rejected=rejected,image_edits=False,
+        sampling='source_order' if seed is None else 'seeded_shuffle',sampling_seed=seed,
+        archive_range_bytes=transferred)
     (output/'manifest.json').write_text(json.dumps(manifest,indent=2))
     print(json.dumps(manifest))
 
@@ -64,4 +77,6 @@ def build(source,output,limit):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--source',required=True);p.add_argument('--output',required=True)
     p.add_argument('--limit',type=int,default=64)
-    a=p.parse_args();build(a.source,a.output,a.limit)
+    p.add_argument('--seed',type=int)
+    p.add_argument('--archive-url')
+    a=p.parse_args();build(a.source,a.output,a.limit,a.seed,a.archive_url)

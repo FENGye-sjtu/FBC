@@ -14,7 +14,7 @@ import time
 from PIL import Image
 from efa.core import Scores
 from efa.regions import Box, complement, source_version
-from efa.format import STEP_END, route_prompt
+from efa.format import STEP_END, route_prompt, read_prompt
 
 
 def parse_json(text):
@@ -151,9 +151,7 @@ class QwenBackend:
             return Sources((whole,),(whole,),False)
 
     def prompt(self,query,boxes):
-        return ("Read only the provided source images. Return a short canonical value for the predicate. "
-                f"Original-frame coordinates in image order: {[list(vars(b).values()) for b in boxes]}. "
-                "Neutral query: "+json.dumps(query))
+        return read_prompt(query,[list(vars(b).values()) for b in boxes])
 
     def score(self,claim,source):
         if claim.kind!="visual":

@@ -5,6 +5,26 @@ from efa.review import usable_sources
 
 
 class AnnotationTests(unittest.TestCase):
+    def test_bare_relation_is_not_an_independent_query(self):
+        atom={'subject':'person','predicate':'relation','value':'left','family':'relation',
+              'kind':'visual','region':{'insufficient':False}}
+        row={'steps':[{'id':1,'text':'Step 1: Person is left of the sign.','parents':[],'atoms':[atom]}]}
+        self.assertFalse(usable_sources(row))
+        with self.assertRaises(ValueError):validate_steps(row)
+
+    def test_teacher_serialization_normalization_preserves_original(self):
+        original={'steps':[{'id':1,'text':'Count visible bags.','parents':[],
+            'atoms':[{'subject':'bags','predicate':'count','value':2,'family':'count','kind':'visual'}]}]}
+        normalized=validate_steps(original)
+        self.assertEqual(normalized[0]['text'],'Step 1: Count visible bags.')
+        self.assertEqual(normalized[0]['atoms'][0]['value'],'2')
+        self.assertEqual(original['steps'][0]['atoms'][0]['value'],2)
+
+    def test_deduction_alias_still_requires_explicit_parents(self):
+        row={'steps':[{'id':1,'text':'Compute total.','parents':[],
+            'atoms':[{'subject':'total','predicate':'sum','value':2,'family':'numeric','kind':'deduction'}]}]}
+        with self.assertRaises(ValueError):validate_steps(row)
+
     def test_insufficient_region_cannot_enter_training(self):
         atom={'kind':'visual','region':{'insufficient':True}}
         row={'steps':[{'atoms':[atom]}]}

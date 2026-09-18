@@ -5,9 +5,11 @@ not invent audit scores, PASS labels, or repair outcomes from annotation truth.
 """
 import argparse
 import base64
+import copy
 import hashlib
 import json
 import mimetypes
+import math
 import os
 from pathlib import Path
 import time
@@ -29,6 +31,14 @@ For deductions, specify the actual exposed premises. Every observation must be
 checkable in the image; no answer-conditioned invented observations.
 The subject MUST NOT include the disputed value. For a color claim, use stable
 position/ownership/category, never "the red bag". Final step answers the question.
+The final atom value must be the short canonical answer, without a sentence wrapper.
+When a source program is supplied, use its actual visual dependencies: first
+establish necessary referents/relations, then read the queried property. Each
+step must assert a checkable fact, not an instruction to look for something.
+Every neutral subject/predicate query must stand alone without the step text.
+For relations, include BOTH entities: e.g. subject="person on bicycle",
+predicate="horizontal position relative to pedestrians near storefront",
+value="left". Never use the bare predicate "relation" or leave the anchor implicit.
 No audit scores or verification decisions. Reference answers are annotation aids,
 not proof of intermediate claims. Flag uncertainty rather than inventing evidence.'''
 
@@ -76,24 +86,36 @@ def teacher_json(messages, cache, stage):
 
 
 def validate_steps(output):
-    steps=output.get("steps",[])
+    # Normalize serialization only; never rewrite an observation or dependency.
+    # Keep the original teacher response immutable in the request cache.
+    steps=copy.deepcopy(output.get("steps",[]))
     if not 1 <= len(steps) <= 16:
         raise ValueError("Invalid step count")
     seen=set()
     for step in steps:
         sid=step["id"]
-        if sid in seen or not isinstance(sid,int) or not step["text"].startswith(f"Step {sid}:"):
+        if type(sid) is not int or sid!=len(seen)+1 or not isinstance(step['text'],str) or not step['text'].strip():
             raise ValueError("Invalid numbered step")
+        if not step['text'].startswith(f'Step {sid}:'):
+            if step['text'].startswith('Step '):raise ValueError('Conflicting step numbering')
+            step['text']=f'Step {sid}: '+step['text']
         if any(parent not in seen for parent in step["parents"]):
             raise ValueError("Dependency is not an earlier step")
         atoms=step["atoms"]
         if not 1 <= len(atoms) <= 3:
             raise ValueError("Each step must have 1-3 atoms")
         for atom in atoms:
+            value=atom.get('value')
+            if type(value) in (int,float) and math.isfinite(value):
+                atom['value']=str(value)
+            if atom.get('kind')=='deduction':
+                atom['kind']='premise'
             if not all(isinstance(atom.get(k),str) and atom[k].strip() for k in ("subject","predicate","value")):
                 raise ValueError("Empty or malformed atom")
             if atom.get("kind") not in ("visual","premise"):
                 raise ValueError("Unknown evidence mode")
+            if atom['predicate'].strip().lower()=='relation':
+                raise ValueError('Relation query must specify its reference entity and relation type')
             if atom["kind"]=="premise" and not step["parents"]:
                 raise ValueError("Premise claim has no parents")
         seen.add(sid)
@@ -108,7 +130,7 @@ def annotate_task(task, root, cache):
         return [{"role":"system","content":prompt},{"role":"user","content":[
             {"type":"image_url","image_url":{"url":data_url}}, {"type":"text","text":text}]}]
     first=teacher_json(request(STEP_PROMPT,json.dumps({"question":task["question"],
-        "reference_answer":task["answer"]})),cache,"step_parse")
+        "reference_answer":task["answer"],"source_program":task.get('source_program')})),cache,"step_parse")
     steps=validate_steps(first["output"])
     queries=[dict(key=f"{s['id']}.{i}",subject=a["subject"],predicate=a["predicate"])
              for s in steps for i,a in enumerate(s["atoms"]) if a["kind"]=="visual"]
@@ -116,7 +138,7 @@ def annotate_task(task, root, cache):
     second=teacher_json(request(REGION_PROMPT,json.dumps({"width":task["width"],
         "height":task["height"],"queries":queries,
         "native_candidate_boxes_1000":[[round(v/(task['width'] if i%2==0 else task['height'])*1000)
-            for i,v in enumerate(task['bbox'])]] if task.get('bbox') else []})),cache,"value_blind_route_normalized_1000")
+            for i,v in enumerate(box)] for box in (task.get('native_candidate_boxes') or ([task['bbox']] if task.get('bbox') else []))]})),cache,"value_blind_route_normalized_1000")
     entries=second["output"]["regions"]
     regions={r["key"]:r for r in entries}
     if len(regions)!=len(entries) or set(regions)!={q["key"] for q in queries}:

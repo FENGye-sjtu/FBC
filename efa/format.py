@@ -4,6 +4,12 @@ import json
 STEP_END = "<STEP_END>"
 
 
+def read_prompt(query, boxes):
+    return ("Read only the provided source images. Return a short canonical value for the predicate. "
+            f"Original-frame coordinates in image order: {boxes}. "
+            "Neutral query: "+json.dumps(query))
+
+
 def route_prompt(query, width, height):
     return ("Locate the original-pixel xyxy evidence regions for this NEUTRAL query. "
             'Return only JSON {"boxes":[[x1,y1,x2,y2]],"context_boxes":[[x1,y1,x2,y2]]}. '

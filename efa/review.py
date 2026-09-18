@@ -19,7 +19,8 @@ def canonical(value):
 
 
 def usable_sources(row):
-    return all(a.get('region',{}).get('insufficient') is False
+    return all(a.get('predicate','').strip().lower()!='relation'
+               for s in row['steps'] for a in s['atoms']) and all(a.get('region',{}).get('insufficient') is False
                for s in row['steps'] for a in s['atoms'] if a['kind']=='visual')
 
 

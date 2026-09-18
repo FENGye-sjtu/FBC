@@ -8,6 +8,8 @@ import torch
 from PIL import Image
 from efa.latent_backend import LatentBackend
 from efa.regions import Box
+from efa.native import property_atom
+from efa.format import read_prompt
 
 
 def main():
@@ -19,7 +21,7 @@ def main():
     if out.exists():
         raise ValueError('Choose a new run directory')
     rows=[json.loads(s) for s in (root/'raw_tasks.jsonl').read_text().splitlines()]
-    rows=[r for r in rows if r['split']=='train' and (a.engineering_only or r.get('benchmark_dedup_status')=='cleared')]
+    rows=[r for r in rows if r.get('bbox') and property_atom(r['question'],r['answer']) and r['split']=='train' and (a.engineering_only or r.get('benchmark_dedup_status')=='cleared')]
     if not rows or a.steps<1:
         raise ValueError('No eligible examples or invalid training budget')
     random.seed(2027);torch.manual_seed(2027)
@@ -35,7 +37,8 @@ def main():
         backend.image=Image.open(root/row['image']).convert('RGB')
         backend.features.clear()
         box=Box(*row['bbox'])
-        prompt=row['question']+'\nReturn a short canonical answer.'
+        atom=property_atom(row['question'],row['answer'])
+        prompt=read_prompt({k:atom[k] for k in ('subject','predicate')},[row['bbox']])
         optimizer.zero_grad(set_to_none=True)
         logp,n=backend.sequence_logp(prompt,[box],row['answer'])
         loss=-logp/n
