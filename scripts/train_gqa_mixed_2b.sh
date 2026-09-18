@@ -2,8 +2,8 @@
 set -eu
 source /data_cinema/zqc/VBC/code/scripts/server_env.sh
 cd "$EFA_ROOT/code"
-gpu=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | awk -F, '$2>=8500 {print $1,$2}' | sort -k2nr | head -n1 | awk '{print $1}')
-if [ -z "$gpu" ]; then echo 'WAIT_FOR_8500_MIB_FREE'; exit 3; fi
+gpu=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | awk -F, '$2>=7000 {print $1,$2}' | sort -k2nr | head -n1 | awk '{print $1}')
+if [ -z "$gpu" ]; then echo 'WAIT_FOR_7000_MIB_FREE'; exit 3; fi
 export CUDA_VISIBLE_DEVICES="$gpu"
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 python - <<'PY'
