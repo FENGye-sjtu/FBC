@@ -16,6 +16,7 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--model',required=True);p.add_argument('--root',required=True)
     p.add_argument('--adapter');p.add_argument('--output',required=True)
+    p.add_argument('--resampler',help='Optional existing compact reader to align with a new adapter')
     p.add_argument('--steps',type=int,default=40);p.add_argument('--engineering-only',action='store_true')
     a=p.parse_args();root=Path(a.root);out=Path(a.output)
     if out.exists():
@@ -26,7 +27,7 @@ def main():
         raise ValueError('No eligible examples or invalid training budget')
     random.seed(2027);torch.manual_seed(2027)
     backend=LatentBackend(a.model,root/rows[0]['image'],True,max_pixels=50176,
-                          adapter_path=a.adapter,allow_untrained=True)
+                          adapter_path=a.adapter,resampler_path=a.resampler,allow_untrained=True)
     backend.model.requires_grad_(False)
     backend.resampler.train()
     optimizer=torch.optim.AdamW(backend.resampler.parameters(),lr=1e-4)
@@ -51,6 +52,7 @@ def main():
         print(json.dumps(dict(step=step+1,loss=losses[-1],task=row['id'])),flush=True)
     torch.save(dict(resampler=backend.resampler.state_dict(),steps=a.steps),out/'resampler.pt')
     metrics=dict(steps=a.steps,examples=len(rows),losses=losses,seconds=time.monotonic()-start,
+                 adapter=a.adapter,initial_resampler=a.resampler,
                  engineering_only=a.engineering_only,scope='positive_region_alignment_smoke',
                  trained_objectives=['region_answer_ce'],calibrated=False,
                  peak_allocated_bytes=torch.cuda.max_memory_allocated())

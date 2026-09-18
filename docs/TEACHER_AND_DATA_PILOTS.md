@@ -98,6 +98,11 @@ pass (4.81 GiB process usage, 144 MiB allocation request, 113.56 MiB free). No
 optimizer step completed. The retry uses the separately available GPU with about
 7.8 GB free, requires at least 7 GB at launch, and writes `region_sft_2b_v1` and
 `latent_reader_2b_v1` rather than overwriting the failed v0 run.
+This retry progressed beyond 100 of 200 optimizer steps. Final metrics still
+need to be read from its result files. The episode stage is queued after native
+reader alignment: 32 optimizer steps on 24 examples (eight next-step, eight crop
+read, eight region targets), then 64 alignment steps initialized from the existing
+compact reader. These are supervised interface pilots, not completed paper training.
 
 Native GQA scene graphs were acquired and matched to program object IDs for all
 32 source questions. Their region candidates are published as
