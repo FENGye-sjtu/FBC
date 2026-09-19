@@ -139,3 +139,19 @@ Precision diagnostics are published as `efa/vision_precision_2b_v0`
 Tests cover relation direction, missing source edges, inherited
 source anchors, rejected/held-out exclusion and target-only review failure; they
 do not establish model correctness or calibration.
+
+The corrected v2 pipeline subsequently completed 1,200 SFT updates (loss
+0.179668, 958.665 s), followed by 768 positive reader updates (205.483 s).
+All three selected dev questions generated three steps. Strict string accuracy
+was 8/10 native atom reads, 6/10 compact reads, 2/3 direct QA, 1/3 unaudited
+steps and 1/3 EFA, with zero verified final outputs. Direct "in car" versus
+reference "car" accounts for one literal mismatch; no semantic equivalence
+scorer was used. On the cat example, binding rejected the correct incumbent and
+fallback changed it to bear. Thus the current system has demonstrated harmful
+correction, not an audit advantage. Full artifacts are published at
+`efa/gqa_heldout_2b_v2`, HF `70965b097aa5add2086da25b5bb54138f68b5688`.
+
+Training-length counts are 120 three-step and six four-step trajectories; dev
+has ten three-step and one four-step trajectory. The student skipped an anchor
+in the four-step example. This motivates collecting longer native chains rather
+than interpreting a fixed three-step output as successful program generalization.
