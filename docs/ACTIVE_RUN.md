@@ -46,11 +46,20 @@ annotation tiers are recorded in input_sources.json. This is positive-only
 alignment on the old native/teacher datasets, not the new Codex-reviewed batch.
 Do not reuse a reader aligned to another adapter.
 
-Prepared evaluation: scripts/evaluate_mixed_programs_2b.sh uses the same three
+Completed evaluation: scripts/evaluate_mixed_programs_2b.sh used the same three
 GQA dev IDs (9236, 28788, 94674) and three CLEVR dev IDs (10563, 263129, 231696).
 Outputs: runs/mixed_gqa_heldout_2b_v0 and runs/mixed_clevr_heldout_2b_v0.
-Check scripts/status_mixed_evaluation.sh for actual progress before any launch.
-The original uncalibrated thresholds are unchanged; no results are claimed yet.
+Both summaries and all three result rows per source exist; no evaluation process
+remains. Do not restart these runs. The original uncalibrated thresholds are
+unchanged. GQA: native reads 8/10, compact 6/10, direct 2/3 strict string,
+step-only 2/3, EFA 1/3, zero verified. Direct car answer is 'in car', a semantic
+match rejected by the retained strict metric; do not hide this limitation.
+EFA answers child/cat/horse; elephant was again changed to horse. CLEVR: native
+reads 6/6, compact 2/6, reference-conditioned premise reads 3/3, and direct,
+step-only, EFA all 3/3; two EFA finals verified and both correct. All generated
+trajectories in both sources still have three steps. There is no audit efficacy
+gain demonstrated by these six development cases. Poor compact visual reads
+remain a separate problem even where the final yes/no comparison is correct.
 
 The fresh 2B run uses DeepEyesV2's LLaMA-Factory SFT, verified mixed precision,
 rank-16 LoRA, 2,400 updates and fourfold step sampling. Three sources contribute
@@ -81,12 +90,37 @@ The count cases use the complete image for exhaustiveness and do not supply
 instance-grounding evidence or deletion negatives. New negative/source-error
 variants still need explicit visual review.
 
-The next 48 metadata-selected DeepEyesV2 candidates are listed in
-tmp/deepeyes_next48_candidates.json: four OCR/logo, one chart candidate,
-12 comparisons, 15 relation/reference, 12 attributes, four multi-entity tasks.
-They are not yet image-reviewed or accepted. Upstream source train/dev provenance
-is absent, and the comparison references are heavily yes-biased. The chart row
-422 requires original-image-only reannotation, not reuse of its external tools.
+The next 48 selected DeepEyesV2 original images were read from the existing
+10,272,796,390-byte server archive. Three existing decoded-image hashes were
+excluded; all remaining 45 candidates were then individually inspected with
+their actual target/context crops. Qwen drafted 38 valid episodes and had seven
+conversion failures. Published `data/codex_curated45_adjudicated_v1` contains
+42 accepted episodes, 79 steps, 35 train / six calibration / one dev, and three
+withheld ambiguous cases. Step distribution: 22 one-step, four two-step,
+15 three-step, one four-step. Twenty-nine questions are explicitly revised
+derivatives. Literal answer-string changes include canonicalization and must
+not be reported as semantic corrections. HF commit:
+`1beaf3543da3d5a340b50d883f10411800fc5548`. All 272 published artifact hashes
+match local bytes; the earlier v2 batch's 67 files were checked at the same head.
+
+Combined Codex-adjudicated data: 62 reviewed candidates, 58 accepted episodes,
+96 steps; 50 train / seven calibration / one dev. There are 247 unique train
+SFT examples: 86 steps, 69 reads, 69 routes, 17 premise reads, six native-backed
+bindings. New DeepEyes examples do not acquire fabricated native object IDs;
+explicit Codex binding supervision and corrective source/value variants remain
+to be added. Dataset size is still small and formal decontamination is pending.
+
+## Codex-data SFT continuation
+
+Prepared launcher: scripts/train_codex_adjudicated_2b.sh, status via
+scripts/status_codex_sft.sh. It continues the completed mixed adapter with a
+fresh optimizer into runs/codex_sft_2b_v0; parent weights are never overwritten.
+Inputs are only the 50 accepted train trajectories from the two Codex versions,
+isolated from raw QA and all native/teacher episode files. Fourfold step sampling
+yields 505 entries; 506 optimizer updates cover two complete epochs. Learning
+rate 2e-5, context limit 2048, BF16 vision/NF4 language, rank-16 LoRA. This is
+positive step/route/read/premise alignment, not completed correction training.
+Check live status before launching; prepared code alone is not a training result.
 
 ## Data frozen and uploaded
 
