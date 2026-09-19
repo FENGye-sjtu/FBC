@@ -38,11 +38,14 @@ class Sources:
 
 class QwenBackend:
     representation="independently_encoded_native_crop_tokens"
+    reacquire_on_binding_failure=False
 
-    def __init__(self, model_path, image_path, quantized=False, max_pixels=200704, adapter_path=None, quantize_vision=False):
+    def __init__(self, model_path, image_path, quantized=False, max_pixels=200704, adapter_path=None, quantize_vision=False,
+                 reacquire_on_binding_failure=False):
         import torch
         from transformers import AutoConfig, AutoProcessor, Qwen2_5_VLForConditionalGeneration, Qwen2VLForConditionalGeneration, BitsAndBytesConfig
         self.torch=torch
+        self.reacquire_on_binding_failure=bool(reacquire_on_binding_failure)
         self.image=Image.open(image_path).convert("RGB")
         self.image_digest=hashlib.sha256(self.image.tobytes()+str(self.image.size).encode()).hexdigest()
         self.encoder_config=dict(model=str(model_path),max_pixels=max_pixels,min_pixels=3136,quantized=quantized,
@@ -151,8 +154,20 @@ class QwenBackend:
     def route(self,query):
         if self.audit_kind=="premise":
             return Sources((),(),bool(self.premises))
+        return self._route_source(query)
+
+    def _route_source(self,query,previous_source=None):
+        # Reacquisition receives only the neutral query and failed geometry.
+        # generate() constructs a fresh full-image input without a trace cache.
         whole=Box(0,0,self.image.width,self.image.height)
         prompt=route_prompt(query,self.image.width,self.image.height)
+        if previous_source is not None:
+            previous=dict(boxes=[list(vars(b).values()) for b in previous_source.target],
+                          context_boxes=[list(vars(b).values()) for b in previous_source.context])
+            prompt+=("\nThe previous regions did not establish the requested object's identity or were invalid. "
+                     "Locate the requested object again in the original image. You may replace the target boxes; "
+                     "include spatial or ownership anchors needed to establish its identity in context_boxes. "
+                     "Return only the coordinate JSON requested above. Previous regions: "+json.dumps(previous))
         try:
             from efa.grammar import ROUTE_SCHEMA
             parsed=parse_json(self.generate(prompt,[whole],json_schema=ROUTE_SCHEMA)[0])
@@ -206,6 +221,10 @@ class QwenBackend:
     def refine(self,query,source,failures,round_id):
         if self.audit_kind=="premise":
             return source
+        if self.reacquire_on_binding_failure and (not source.valid or {'binding','invalid'} & set(failures)):
+            # One coordinate-only acquisition consumes this existing repair
+            # round; the controller still bounds rounds and answer proposals.
+            return self._route_source(query,previous_source=source)
         if not source.valid:
             return self.route(query)
         ratio=(0.25,0.75,1.5)[round_id-1]

@@ -26,7 +26,8 @@ def main():
     result=api.upload_folder(repo_id='QC1/FBC',repo_type='dataset',revision='main',
         parent_commit=info.sha,folder_path=str(root),path_in_repo='efa/'+a.version,
         allow_patterns=['*.json','*.jsonl','*.md','LICENSE.txt','images/*.png','images/*.jpg','images/*.jpeg','images/*.webp',
-                        'inspection/*.png','inspection/*.jpg','inspection/*.jpeg','inspection/*.webp','inspection/*.py'],
+                        'inspection/*.png','inspection/*.jpg','inspection/*.jpeg','inspection/*.webp','inspection/*.py',
+                        'provenance/*.py'],
         commit_message=f'Add EFA {a.version}: {manifest["count"]} region records')
     print(json.dumps(dict(commit=result.oid,url=result.commit_url,version=a.version,
                          count=manifest['count'],kind=manifest.get('kind'))))

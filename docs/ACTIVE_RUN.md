@@ -120,11 +120,65 @@ isolated from raw QA and all native/teacher episode files. Fourfold step samplin
 yields 505 entries; 506 optimizer updates cover two complete epochs. Learning
 rate 2e-5, context limit 2048, BF16 vision/NF4 language, rank-16 LoRA. This is
 positive step/route/read/premise alignment, not completed correction training.
-The run is now live: shell PID 1090420, trainer PID 1090557 on GPU 3.
-Observed update 36/506 and about 4012 MiB process GPU memory; precision_policy
-confirms BF16 vision / NF4 language. Check scripts/status_codex_sft.sh for newer
-progress. Do not duplicate this run. A matching reader must be realigned after
-completion before audited inference; the old reader remains a comparison only.
+The last successful remote observation showed completion: 506/506 optimizer
+updates, epoch 2, runtime 444.2282 seconds; both trainer PID 1090557 and launcher
+PID 1090420 had terminated. Precision was BF16 vision / NF4 language. Preserve
+this completed run and its parent adapter; do not restart it. The later SSH
+rechecks on 2026-09-19 timed out before authentication, so these figures describe
+the last observed completed artifact, not a newly polled live process.
+
+Prepared scripts/align_evaluate_codex_2b.sh realigns the reader for 276 updates
+over the 69 reviewed visual atoms / 50 training images, then evaluates the fixed
+three GQA and three CLEVR development cases with unchanged policy. Its status
+script is scripts/status_codex_evaluation.sh. As of the latest recheck, there
+is NO confirmed deployment/start/PID for this pipeline; SSH connection timeouts
+prevented deployment. Before launching, inspect remote processes/artifacts again.
+Do not reuse the old reader for inference with the new Codex adapter.
+
+## Published reviewed corrective supervision
+
+Six accepted DeepEyes training images now have individually reviewed synthetic
+error variants: 12 correct-source/wrong-attribute pairs and four wrong-object,
+same-attribute pairs. Two missing-anchor crops remain excluded from CE/UL.
+The four binding pairs supervise object category only (shirt/skirt and
+gloves/ski boots); the shared true colors are never explicit negative targets.
+They do not establish full ownership identity or actual student repair success.
+Version data/codex_correction_pairs_v1 is published to QC1/FBC at commit
+289825b77774bb6940a9b5dc2a0db779578ded34. All 62 remote file hashes match the
+local frozen version, including the saved runtime-format and packager sources.
+Six original image groups supply 16 pairs; these are not 16 new images.
+
+efa.train_codex_objectives and scripts/train_codex_corrections_2b.sh prepare
+joint shared-LoRA/reader training with all 69 reviewed positive reads replayed.
+With 16 corrective pairs, two shuffled epochs give 170 optimizer updates.
+The adapter learning rate is 1e-6 and reader rate 1e-4; negatives use whole-string
+unlikelihood, not exponentiated length-normalized log probabilities. The launcher
+requires the completed matching Codex reader and writes new run directories.
+No corrective GPU training has been launched or measured yet.
+
+Read-only review of old mixed traces identified a concrete source-repair gap:
+GQA 94674's two proposed boxes cover bushes, and binding rejects them. The
+controller only expands context, so the target remains wrong; the unverified
+fallback ranks horse above the original elephant. This is not a horse PASS.
+CLEVR 10563 also changes one count incorrectly while the comparison's yes answer
+happens to remain unchanged. Source relocation after failed binding needs an
+explicit experiment after the unchanged-policy Codex-data baseline.
+The opt-in --reacquire-on-binding-failure implementation is now available in
+efa.evaluate_episodes. It only exposes neutral query and previous box geometry
+to a fresh original-image route request, records the mode in results/traces,
+and preserves invalid status on acquisition failure. It defaults off so the
+baseline remains comparable. Related controller and corrective-data/loss tests
+pass; this source-relocation experiment has not yet run on the GPU.
+
+## Local data expansion under individual review
+
+data/codex_local32_candidates_v1 stages 32 additional local original images:
+16 ChartQA, ten ZwZ, six DeepEyes. Original splits are retained: 27 train,
+two dev, three calibration. Exact image hashes were checked against earlier
+Codex versions and within the new selection. Qwen produced 27 valid drafts
+and five conversion failures; its process completed. Every image and final
+source crop is being individually reviewed by Codex before acceptance.
+Do not treat the candidate count or teacher draft count as accepted episodes.
 
 ## Data frozen and uploaded
 

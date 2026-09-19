@@ -118,17 +118,22 @@ def main():
                    help='Explicit annotation tier; native and teacher labels require --engineering-only')
     p.add_argument('--limit',type=int,default=2);p.add_argument('--engineering-only',action='store_true')
     p.add_argument('--quantize-vision',action='store_true',help='Historical NF4-vision checkpoint replay')
+    p.add_argument('--reacquire-on-binding-failure',action='store_true',
+                   help='Experimental neutral source relocation after binding/invalid failure; default expands context')
     a=p.parse_args();root=Path(a.root);out=Path(a.output)
     if out.exists() or a.limit<1:raise ValueError('Fresh output and positive case limit required')
     rows=select_episodes(root,a.episode_file,a.split,a.limit,a.engineering_only)
     backend=LatentBackend(a.model,root/rows[0]['image'],True,max_pixels=50176,
-        adapter_path=a.adapter,resampler_path=a.resampler,quantize_vision=a.quantize_vision)
+        adapter_path=a.adapter,resampler_path=a.resampler,quantize_vision=a.quantize_vision,
+        reacquire_on_binding_failure=a.reacquire_on_binding_failure)
+    evaluation_settings=dict(reacquire_on_binding_failure=a.reacquire_on_binding_failure)
     policies={k:Policy(**v) for k,v in json.loads(Path(a.policy).read_text())['strata'].items()}
     out.mkdir(parents=True);records=[]
     with (out/'results.jsonl').open('w') as stream:
         for row in rows:
             result=dict(id=row['id'],split=row['split'],image_sha256=row['image_sha256'],question=row['question'],
                         reference=row['answer'],reference_steps=len(row['steps']),
+                        evaluation_settings=evaluation_settings,
                         annotation_provenance=annotation_provenance(row,a.episode_file))
             result['reads'],result['reference_premise_reads']=reference_components(backend,root,row)
             backend.set_image(root/row['image'])
@@ -142,6 +147,7 @@ def main():
                 correct=canonical(step_only['final']['answer'])==canonical(row['answer']))
             backend.set_image(root/row['image'])
             audited=run(backend,row['question'],policies)
+            audited['evaluation_settings']=evaluation_settings
             (out/(row['id']+'-trace.json')).write_text(json.dumps(audited,indent=2))
             result['efa']=dict(final=audited['final'],budget=audited['budget'],
                 correct=canonical(audited['final']['answer'])==canonical(row['answer']))
@@ -157,6 +163,7 @@ def main():
         step_only_generated_steps=[r['step_only']['budget']['steps'] for r in records],
         efa_correct=sum(r['efa']['correct'] for r in records),**verification_counts(records),
         generated_steps=[r['efa']['budget']['steps'] for r in records],checkpoint=backend.encoder_config,
+        evaluation_settings=evaluation_settings,
         calibrated=False,benchmark_dedup_status='cleared' if all(r.get('benchmark_dedup_status')=='cleared' for r in rows) else 'pending',
         reference_basis={'teacher_reviewed_episodes.jsonl':'native_annotations_and_teacher_checks',
                          'native_episodes.jsonl':'native_program_annotations',
