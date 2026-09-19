@@ -112,9 +112,11 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument('--metadata');p.add_argument('--graphs');p.add_argument('--source',help='Recompile existing original images and programs')
     p.add_argument('--output',required=True);p.add_argument('--limit',type=int,default=512)
+    p.add_argument('--min-steps',type=int,choices=range(3,9),default=3)
     a=p.parse_args();out=Path(a.output)
     if out.exists() or a.limit<1:raise ValueError('Choose a new dataset directory and positive limit')
     if a.source:
+        if a.min_steps!=3:p.error('Source recompilation preserves its existing selection; use metadata for a length-stratified sample')
         import shutil
         source=Path(a.source)
         records=[compile_episode(json.loads(s)) for s in (source/'raw_tasks.jsonl').read_text(encoding='utf-8').splitlines()]
@@ -133,7 +135,7 @@ def main():
     candidates=[]
     for index,line in enumerate(metadata.open(encoding='utf-8')):
         row=json.loads(line)
-        if row['split']=='train' and 3<=len(row.get('reasoning',[]))<=8:
+        if row['split']=='train' and a.min_steps<=len(row.get('reasoning',[]))<=8:
             candidates.append((index,row))
     random.Random(20260920).shuffle(candidates)
     graphs={}
@@ -196,6 +198,7 @@ def main():
         rejected_programs=dict(rejected),source_revision=REVISION,metadata_sha256=hashlib.sha256(metadata.read_bytes()).hexdigest(),
         scene_graph_sha256=graph_sha,compiler_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         construction_complete=True,benchmark_dedup_status='pending',runtime_verified_episodes=0,
+        min_program_steps=a.min_steps,step_lengths=dict(Counter(len(r['steps']) for r in records)),
         independent_visual_review=False,image_edits=False,sampling_seed=20260920,
         license_note='Visual-CoT card: YAML Apache-2.0; body CC-BY-NC-4.0; research use, original image rights retained.')
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2));print(json.dumps(manifest),flush=True)

@@ -54,13 +54,17 @@ def main():
     checked=[r['reviewed'] for r in completed.values() if 'reviewed' in r]
     (out/'teacher_reviewed_episodes.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in checked))
     approved=[r for r in checked if r['annotation_status']=='teacher_reviewed_episode']
+    # Imported caches can contain unrelated experiments. Count only requests
+    # referenced by this slice, once each, including actual reused responses.
+    requests={check['request_sha256']:check for row in checked for check in row['review']['checks']}
     usage=Counter()
-    for path in (out/'teacher_cache').glob('*.json'):
-        usage.update({k:v for k,v in (json.loads(path.read_text(encoding='utf-8')).get('usage') or {}).items() if isinstance(v,int)})
+    for check in requests.values():
+        usage.update({k:v for k,v in (check.get('usage') or {}).items() if isinstance(v,int)})
     manifest=dict(kind='native_program_teacher_source_review',count=len(rows),reviewed=len(checked),
         approved=len(approved),approved_splits=dict(Counter(r['split'] for r in approved)),
         approved_steps=sum(len(r['steps']) for r in approved),errors=sum('error' in r for r in completed.values()),
-        model=a.model,usage=dict(usage),usage_basis='cached_response_usage_including_reused_calls',
+        model=a.model,usage=dict(usage),usage_basis='unique_referenced_response_usage_including_reused_calls',
+        referenced_requests=len(requests),
         benchmark_dedup_status='pending',runtime_verified_episodes=0,
         label_basis='native_programs_with_teacher_checks_not_ground_truth',construction_complete=len(checked)==len(rows))
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2));print(json.dumps(manifest),flush=True)

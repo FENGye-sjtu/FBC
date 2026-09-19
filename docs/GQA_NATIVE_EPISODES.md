@@ -155,3 +155,18 @@ Training-length counts are 120 three-step and six four-step trajectories; dev
 has ten three-step and one four-step trajectory. The student skipped an anchor
 in the four-step example. This motivates collecting longer native chains rather
 than interpreting a fixed three-step output as successful program generalization.
+
+The length-stratified collector now accepts `--min-steps` (3 through 8). A new
+seeded 64-image sample with `--min-steps 4` contains 64 four-step programs and
+256 visual atoms, split 47 train / seven dev / ten calibration. None of its
+decoded-image hashes occur in the prior 512-image reviewed source. Longer than
+four-step coverage is not established by this sample. Native candidates are
+published at `efa/gqa_native_long_v1`, HF commit
+`06d89d5f0ae8956a2179d4b02808d605a30eb192`. Separate target/expanded source
+review is running in `data/gqa_native_long_review_v1`; candidates are not yet
+approved training episodes. Five focused compiler/source-review tests pass.
+
+Review usage accounting now counts unique response hashes actually referenced
+by the reviewed slice. Importing an earlier cache no longer includes unrelated
+responses in that slice's token totals. Reused responses still contribute to
+the reported annotation usage; it is not a claim about newly billed tokens.
