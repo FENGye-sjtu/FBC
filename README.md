@@ -25,9 +25,11 @@ artifacts still require server verification.
   Corrected quantization preserves BF16 vision and uses NF4 language layers;
   the training entry verifies actual module types before optimizer updates.
 
-The native-crop backend is an engineering baseline. An experimental eight-token
-reader is integrated and has completed positive-region alignment runs; the linked
-experiment records distinguish completed results from pending training.
+The native-crop backend is the primary audit path: after complete-trajectory SFT,
+the same frozen VLM performs value-blind routing and teacher-forced evidence scores;
+there is no separately trained verdict classifier. An experimental eight-token
+reader and reviewed negative-value continuation are retained only as ablations;
+their initial six-case run did not improve the primary metrics.
 The step interface supports parent re-audits and regenerates after revocation;
 reliable detection of when to revisit still requires training/evaluation.
 Initial thresholds are uncalibrated. No benchmark

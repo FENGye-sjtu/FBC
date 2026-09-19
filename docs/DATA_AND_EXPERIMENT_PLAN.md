@@ -17,12 +17,11 @@ must teach this interface, not just produce long rationales with decorative boxe
    only neutral identity and predicate. Boxes attached to the whole question are
    never automatically copied to every intermediate step. Deduction atoms name
    explicit parents and inherit their original-image evidence.
-3. **Reading and binding discrimination.** Preserve original images. Construct
-   correct-region/wrong-value and wrong-object/right-value pairs only when native
-   annotations or independent review establish incompatibility. Multiple regions
-   may be required for relations, counting, chart scale/units and ownership.
-   Missing annotations do not justify negative labels. Maintain same-value objects
-   and duplicated evidence instead of forcing positive N/D gaps.
+3. **Automatic source audit.** Preserve original images. After value-blind routing,
+   use the same frozen VLM to teacher-force the incumbent on native target/context,
+   deletion and control crops. Calibrate PASS/REVIEW thresholds on a held-out
+   calibration split; do not train a separate verifier or teacher-label its verdicts.
+   Compact readers and reviewed wrong-value pairs remain optional ablations only.
 4. **Student errors and repairs.** Run the student one step at a time, retain its
    real incumbent, real B/S/N/D scores and all controller actions. Only REVIEW
    permits up to three rounds of three proposals. Retain no-change repairs,
@@ -50,21 +49,25 @@ teacher-pseudo-label status; they are not ground truth. Qwen teacher coordinates
 use a declared 0..1000 frame and are converted to original pixels. Native boxes
 are supplied as answer-free candidates. The deployed student never calls this API.
 
-## Training sequence
+## Primary training sequence
 
 - Completed engineering path: DeepEyesV2's LLaMA-Factory cold-start framework,
   Qwen2.5-VL-3B, four-bit LoRA, region reading/localization smoke. A ten-step run
   tests gradients and checkpoint saving; it is not a quality result.
-- Next: align the eight-token source reader with native region/identity targets;
-  train it jointly with the shared VLM adapters and measured sequence objectives.
-  Its integration and 40-step positive-only alignment smoke are complete; the full
-  objectives, sufficient training data and validation remain to be done.
-- Then: SFT on reviewed step sidecars and predicted/incorrect/incomplete source
-  views, using the same serialization as inference.
-- Then: mine actual student errors with the bounded controller and SFT localized
+- SFT one complete alternating trajectory per reviewed episode. The trajectory
+  keeps all earlier user/assistant turns; value-blind routing remains a linked,
+  isolated call by the same VLM and deterministic controller.
+- Evaluate the resulting adapter directly with native original-image crops and
+  automatic teacher-forced evidence scoring. No resampler or negative-pair
+  continuation is required for the primary result.
+- Mine actual student errors with the bounded controller and SFT localized
   replacements. Train the implemented parent-revisit and suffix-regeneration path.
 - Freeze weights and policy candidates before separate development/calibration
   evaluation. The current engineering thresholds have no calibration claim.
+
+The completed eight-token reader and reviewed positive/negative continuation are
+preserved as exploratory ablations. Their six-case run did not establish a gain and
+must not be used as the primary checkpoint without new evidence.
 
 ## Evidence required for the paper
 

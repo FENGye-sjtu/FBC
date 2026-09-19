@@ -1,7 +1,7 @@
 """Same student/step interface without source audits or repair calls."""
 from dataclasses import asdict
 from efa.core import Budget, Claim
-from efa.format import STEP_END, step_prompt, trajectory_step_prompt
+from efa.format import STEP_END, final_answer_contract, step_prompt, trajectory_step_prompt
 from efa.qwen import parse_json
 from efa.regions import Box
 
@@ -45,7 +45,8 @@ def run_step_only(backend, question, complete_trajectory=False):
         trace.append(dict(step=number,raw=raw,atoms=[asdict(c) for c in claims]))
         if parsed['final'] or number==budget.max_steps:
             final=dict(answer=claims[-1].value,verified=False,
-                       reason='student_final' if parsed['final'] else 'global_step_budget')
+                       reason='student_final' if parsed['final'] else 'global_step_budget',
+                       answer_contract=final_answer_contract(question,claims[-1].value))
             break
     return dict(question=question,final=final,trace=trace,budget=asdict(budget),cost=list(backend.calls),
                 implementation='same_student_numbered_steps_without_audits',

@@ -1,11 +1,40 @@
 # Current experiment handoff
 
-All server paths below are relative to /data_cinema/zqc/VBC. Preserve unrelated
-projects and GPU jobs. Read actual artifacts before restarting anything. SSH was
-reachable again on 2026-09-19; no full-trajectory artifact or matching process
-existed at that check. The manuscript/CVPR objective remains incomplete.
+## Primary native-crop audit path (2026-09-19)
 
-## Complete-trajectory continuation prepared
+The primary pipeline is now complete-trajectory SFT followed directly by automatic
+native-crop scoring with the same frozen VLM. It does not require a compact reader,
+a resampler, reviewed negative-value training, or a learned PASS classifier.
+Value-blind routing is still a separate fresh-context call by the same VLM; cropping
+is deterministic controller code. Premise steps inherit the actual reviewed parent
+regions instead of inventing a deduction crop.
+
+`efa.evaluate_episodes` now requires an explicit audit backend. The new primary run
+uses `--audit-backend native_crop`, rejects a supplied resampler, and records
+`verifier_training=none`. `scripts/evaluate_native_crop_contract_2b.sh` evaluates
+the completed 114-update `codex_full_trajectory_2b_v0` adapter on the fixed three
+GQA and three CLEVR development cases. It started as background launcher PID
+1291887 with evaluation PID 1291897 and writes `native_crop_gqa_2b_v0_contract`
+then `native_crop_clevr_2b_v0_contract`. Check actual processes and artifacts before
+acting; do not restart an existing output directory.
+
+The final-answer contract comparison finished before this run. Both the pre-joint
+and joint compact-reader checkpoints remain GQA EFA 0/3 and verified 0/3. On CLEVR,
+both are EFA 3/3 with one verified result, which is correct; verified-wrong falls
+from the old controller's 1 to 0. The controller fix therefore blocks the observed
+question-domain false verification, but it does not solve GQA trajectory quality.
+These are six uncalibrated engineering cases, not a paper efficacy result.
+
+The earlier 424-update compact-reader and 244-update reviewed positive/negative
+continuation are preserved as exploratory ablations. They are no longer the main
+training recipe. The original immutable result snapshot remains at HF commit
+`627178c5add1dce3b5c136af4b5a02ad74c30bb0`; do not overwrite it.
+
+All server paths below are relative to /data_cinema/zqc/VBC. Preserve unrelated
+projects and GPU jobs. Read actual artifacts before restarting anything. The
+manuscript/CVPR objective remains incomplete.
+
+## Complete-trajectory continuation completed
 
 The SFT exporter now retains one complete alternating user/assistant record per
 reviewed episode. Its assistant turns contain the visible numbered-step text and
@@ -15,15 +44,17 @@ the primary SFT unit without weakening the manuscript's visibility restriction:
 the main trace preserves prior dialogue, while routing and evidence reading still
 run from fresh neutral-query contexts. No runtime PASS/REVIEW record is fabricated.
 
-Across the three frozen Codex-adjudicated sources, the prepared training set has
+Across the three frozen Codex-adjudicated sources, the training set has
 75 train episodes/images, 127 natural assistant steps, 106 visual atoms and 30
-premise atoms. `scripts/train_full_trajectory_2b.sh` continues the completed
-`codex_sft_2b_v0` adapter for three full passes (114 expected optimizer updates),
-with all assistant turns supervised (`mask_history=false`) and prompts masked.
-`scripts/train_full_evidence_2b.sh` then aligns the compact reader for 424 updates,
-trains 16 reviewed negative pairs with all 106 positives replayed for 244 updates,
-and evaluates the fixed GQA/CLEVR development cases using preserved multi-turn
-history. Neither launcher has run yet; check with `scripts/status_full_trajectory.sh`.
+premise atoms. `scripts/train_full_trajectory_2b.sh` continued the completed
+`codex_sft_2b_v0` adapter for three full passes and finished all 114 updates in
+118.132 seconds with training loss 0.497573. All assistant turns were supervised
+(`mask_history=false`) and prompts masked. The exploratory
+`scripts/train_full_evidence_2b.sh` then aligned the compact reader for 424 updates,
+trained 16 reviewed negative pairs with all 106 positives replayed for 244 updates,
+and evaluated the fixed GQA/CLEVR cases. Preserve both completed training jobs and
+do not restart them; the compact/joint path is now an ablation, not the primary
+recipe described above.
 
 The newly frozen `data/codex_local32_adjudicated_v1` contains 32 reviewed images:
 30 accepted episodes and two `needs_review` exclusions, 47 natural steps, and

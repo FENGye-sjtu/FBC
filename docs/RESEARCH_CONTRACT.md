@@ -21,6 +21,10 @@ audit/provenance status. Implementation details may change through experiments.
 - Regions can be source sets. Deduction checks explicit premises and inherits their
   original-image provenance. A single arbitrary box cannot certify a deduction.
 - Use SFT first and a small model when memory is constrained. RL is not a prerequisite.
+- The primary verifier is training-free after trajectory SFT: the same frozen VLM
+  scores the incumbent under independently encoded native crops. A compact reader,
+  negative-value loss or learned PASS classifier is an optional ablation, never a
+  prerequisite for the method.
 
 ## Data
 
@@ -31,6 +35,11 @@ Never fabricate B/S/N/D scores, model repair traces, benchmark numbers or labels
 Teacher labels are distinguished from native annotations and independent adjudication.
 Split by image group before variants; clear overlap with final benchmarks before
 formal training. Small engineering-only exports are explicitly marked.
+
+The primary SFT unit is one complete alternating episode. Region acquisition is a
+linked, value-blind call by the same VLM because the proposed value must not enter
+the routing context. Cropping is deterministic controller code. Runtime PASS/REVIEW
+is computed from model forwards and calibrated thresholds, not copied from SFT data.
 
 ## Server and synchronization
 

@@ -56,7 +56,7 @@ def annotation_provenance(row,episode_file):
         benchmark_dedup_status=row.get('benchmark_dedup_status','pending'))
 
 
-def reference_components(backend,root,row):
+def reference_components(backend,root,row,audit_backend='compact_resampler'):
     """Read supplied visual sources and reference-conditioned text deductions.
 
     All prior reference claims are exposed, matching SFT and runtime ledger
@@ -73,11 +73,20 @@ def reference_components(backend,root,row):
                 boxes=tuple(Box(*b) for b in atom['region']['boxes'])
                 prompt=backend.prompt(query,boxes)
                 native=QwenBackend.generate(backend,prompt,boxes,max_tokens=32)[0]
-                compact=backend.propose(query,Sources(boxes,boxes,True),1)
-                compact=compact[0] if compact else ''
+                if audit_backend=='compact_resampler':
+                    compact=backend.propose(query,Sources(boxes,boxes,True),1)
+                    audit=compact[0] if compact else ''
+                    compact=audit
+                elif audit_backend=='native_crop':
+                    compact=None
+                    audit=native
+                else:
+                    raise ValueError('Unknown audit backend')
                 reads.append(dict(step=step['id'],atom=index,reference=atom['value'],
-                    native=native,compact=compact,native_correct=canonical(native)==canonical(atom['value']),
-                    compact_correct=canonical(compact)==canonical(atom['value']),calls=list(backend.calls)))
+                    native=native,compact=compact,audit=audit,
+                    native_correct=canonical(native)==canonical(atom['value']),
+                    compact_correct=(canonical(compact)==canonical(atom['value']) if compact is not None else None),
+                    audit_correct=canonical(audit)==canonical(atom['value']),calls=list(backend.calls)))
             elif atom['kind']=='premise':
                 if not context:raise ValueError('Premise read requires earlier exposed claims')
                 backend.audit_kind='premise';backend.premises=deepcopy(context)
@@ -112,7 +121,10 @@ def verification_counts(records):
 
 def main():
     p=argparse.ArgumentParser()
-    for key in ['model','adapter','resampler','root','output','policy']:p.add_argument('--'+key,required=True)
+    for key in ['model','adapter','root','output','policy']:p.add_argument('--'+key,required=True)
+    p.add_argument('--resampler')
+    p.add_argument('--audit-backend',choices=('native_crop','compact_resampler'),default='compact_resampler',
+                   help='Use direct native crops or the separately trained compact resampler for all audits')
     p.add_argument('--split',choices=['dev','calibration'],default='dev')
     p.add_argument('--episode-file',choices=tuple(EPISODE_TIERS),default='teacher_reviewed_episodes.jsonl',
                    help='Explicit annotation tier; native and teacher labels require --engineering-only')
@@ -125,11 +137,19 @@ def main():
     a=p.parse_args();root=Path(a.root);out=Path(a.output)
     if out.exists() or a.limit<1:raise ValueError('Fresh output and positive case limit required')
     rows=select_episodes(root,a.episode_file,a.split,a.limit,a.engineering_only)
-    backend=LatentBackend(a.model,root/rows[0]['image'],True,max_pixels=50176,
-        adapter_path=a.adapter,resampler_path=a.resampler,quantize_vision=a.quantize_vision,
-        reacquire_on_binding_failure=a.reacquire_on_binding_failure)
+    if a.audit_backend=='compact_resampler':
+        if not a.resampler:raise ValueError('--resampler is required for compact_resampler audits')
+        backend=LatentBackend(a.model,root/rows[0]['image'],True,max_pixels=50176,
+            adapter_path=a.adapter,resampler_path=a.resampler,quantize_vision=a.quantize_vision,
+            reacquire_on_binding_failure=a.reacquire_on_binding_failure)
+    else:
+        if a.resampler:raise ValueError('--resampler is not allowed for native_crop audits')
+        backend=QwenBackend(a.model,root/rows[0]['image'],True,max_pixels=50176,
+            adapter_path=a.adapter,quantize_vision=a.quantize_vision,
+            reacquire_on_binding_failure=a.reacquire_on_binding_failure)
     evaluation_settings=dict(reacquire_on_binding_failure=a.reacquire_on_binding_failure,
-                             complete_trajectory=a.complete_trajectory)
+                             complete_trajectory=a.complete_trajectory,audit_backend=a.audit_backend,
+                             verifier_training='none' if a.audit_backend=='native_crop' else 'compact_reader')
     policies={k:Policy(**v) for k,v in json.loads(Path(a.policy).read_text())['strata'].items()}
     out.mkdir(parents=True);records=[]
     with (out/'results.jsonl').open('w') as stream:
@@ -138,7 +158,8 @@ def main():
                         reference=row['answer'],reference_steps=len(row['steps']),
                         evaluation_settings=evaluation_settings,
                         annotation_provenance=annotation_provenance(row,a.episode_file))
-            result['reads'],result['reference_premise_reads']=reference_components(backend,root,row)
+            result['reads'],result['reference_premise_reads']=reference_components(
+                backend,root,row,a.audit_backend)
             backend.set_image(root/row['image'])
             direct=backend.generate(row['question']+'\nReturn a short canonical answer.',
                 [Box(0,0,backend.image.width,backend.image.height)],max_tokens=32)[0]
@@ -161,7 +182,10 @@ def main():
     summary=dict(kind='heldout_reviewed_episode_engineering_evaluation' if a.episode_file!='native_episodes.jsonl'
                  else 'heldout_native_episode_engineering_evaluation',count=len(records),split=a.split,
         visual_atoms=len(reads),native_correct=sum(r['native_correct'] for r in reads),
-        compact_correct=sum(r['compact_correct'] for r in reads),direct_correct=sum(r['direct']['correct'] for r in records),
+        audit_correct=sum(r['audit_correct'] for r in reads),audit_backend=a.audit_backend,
+        compact_correct=(sum(r['compact_correct'] for r in reads)
+                         if a.audit_backend=='compact_resampler' else None),
+        direct_correct=sum(r['direct']['correct'] for r in records),
         step_only_correct=sum(r['step_only']['correct'] for r in records),
         step_only_generated_steps=[r['step_only']['budget']['steps'] for r in records],
         efa_correct=sum(r['efa']['correct'] for r in records),**verification_counts(records),

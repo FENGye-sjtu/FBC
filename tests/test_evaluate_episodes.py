@@ -111,6 +111,28 @@ class ReferenceComponentTests(unittest.TestCase):
         first=row['steps'][0]['atoms'][0]
         self.assertEqual(backend.inputs[0][0],read_prompt({k:first[k] for k in ('subject','predicate')},[[0,0,20,20]]))
 
+    def test_native_crop_audit_does_not_invoke_compact_reader(self):
+        class Reader:
+            prompt=QwenBackend.prompt
+            premise_prompt=QwenBackend.premise_prompt
+            propose=QwenBackend.propose
+
+            def set_image(self,path):
+                self.image_digest='digest';self.premises=[];self.audit_kind='visual';self.calls=[]
+
+            def generate(self,prompt,boxes,max_tokens=32,k=1):
+                self.calls.append(dict(operation='native_generate',images=len(boxes)))
+                return ['1' if len(boxes) else 'yes']
+
+        backend=Reader();row=self.fixture()
+        with patch.object(QwenBackend,'generate',new=Reader.generate):
+            visual,premises=reference_components(backend,Path('.'),row,'native_crop')
+        self.assertEqual([r['audit'] for r in visual],['1','1'])
+        self.assertTrue(all(r['compact'] is None for r in visual))
+        self.assertTrue(all(r['compact_correct'] is None for r in visual))
+        self.assertEqual([r['audit_correct'] for r in visual],[True,False])
+        self.assertEqual(len(premises),1)
+
     def test_verified_wrong_is_not_hidden_by_unverified_correct(self):
         records=[dict(efa=dict(final=dict(verified=verified),correct=correct))
                  for verified,correct in ((True,True),(True,False),(False,True),(False,False))]

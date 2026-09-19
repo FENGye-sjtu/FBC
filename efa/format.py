@@ -1,7 +1,22 @@
 """Shared SFT/runtime serialization for one audited step boundary."""
 import json
+import re
 
 STEP_END = "<STEP_END>"
+
+_YES_NO_PREFIXES = (
+    'is ', 'are ', 'was ', 'were ', 'do ', 'does ', 'did ', 'can ', 'could ',
+    'will ', 'would ', 'has ', 'have ', 'had ', 'should ', 'may ', 'might ',
+)
+
+
+def final_answer_contract(question, value):
+    """Apply deterministic answer-domain checks before claiming verification."""
+    normalized_question = re.sub(r'\s+', ' ', question.strip().lower())
+    normalized_value = value.strip().lower().rstrip('.!?') if isinstance(value, str) else ''
+    if normalized_question.startswith(_YES_NO_PREFIXES):
+        return {'kind': 'yes_no', 'accepted': normalized_value in {'yes', 'no'}}
+    return {'kind': 'open', 'accepted': bool(normalized_value)}
 
 
 def binding_prompt(boxes):
@@ -33,6 +48,7 @@ def step_prompt(question, context, number, final_budget=False):
         '"family":"attribute","kind":"visual"}],"final":false}. '
         "Maximum three atoms. For inference use kind=premise and family=deduction. "
         "When ready, final=true and the final answer must be the value of the LAST atom. "
+        "A final atom must directly answer the original question; for a yes/no question its value must be exactly yes or no. "
         "Do not include disputed values in object identities. Earlier unverified values are provisional. "
         'If later evidence requires rechecking an earlier premise, instead return {"review_parent":"exact live node key"} '
         f'followed by {STEP_END}. Do not propose its replacement before the audit. ')
@@ -56,6 +72,7 @@ def trajectory_step_prompt(question, context, number, final_budget=False):
         "The step field must equal the requested step number. The text field is the visible numbered-step content "
         "without a Step prefix or boundary marker. Maximum three atoms. For inference use kind=premise and "
         "family=deduction. When ready, final=true and the final answer must be the value of the LAST atom. "
+        "A final atom must directly answer the original question; for a yes/no question its value must be exactly yes or no. "
         "Do not include disputed values in object identities. Earlier unverified values are provisional. ")
     if final_budget:
         prompt+="This is the final budgeted step: supply the final answer."

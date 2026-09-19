@@ -6,7 +6,7 @@ from pathlib import Path
 from efa.core import Budget,Claim,Ledger,Policy,resolve
 from efa.qwen import QwenBackend,parse_json
 from efa.regions import Box
-from efa.format import step_prompt, trajectory_step_prompt, STEP_END
+from efa.format import final_answer_contract, step_prompt, trajectory_step_prompt, STEP_END
 
 
 def revisit(ledger,key,backend,policies,budget):
@@ -26,8 +26,21 @@ def revisit(ledger,key,backend,policies,budget):
                 replacement=asdict(node) if node else None)
 
 
+def audit_final_answer(question,value,ledger,backend,policies,budget):
+    """Bind the terminal value back to the original question using ledger premises only."""
+    parents=tuple(ledger.live)
+    backend.premises=[dict(key=k,claim=asdict(n.claim),verified=n.effective_verified)
+                      for k,n in ledger.live.items()]
+    claim=Claim(question,'answer',value,'deduction','premise',parents)
+    resolution=resolve(claim,backend,policies.get('deduction',policies['default']),budget)
+    sources=[e['source'] for e in resolution.events if e.get('source')]
+    source_id=sources[-1]['version'] if sources else 'unavailable'
+    node=ledger.append('final.answer',resolution.claim,resolution.local_pass,parents,source_id)
+    return dict(resolution=asdict(resolution),node=asdict(node))
+
+
 def run(backend,question,policies,complete_trajectory=False):
-    ledger=Ledger(); budget=Budget(); trace=[]; final=None; conversation=[]
+    ledger=Ledger(); budget=Budget(); trace=[]; final=None; final_audit=None; conversation=[]
     for attempt in range(1,budget.max_steps+1):
         budget.take_step()
         step=1+max((int(k.split('.')[0].removeprefix('step')) for k in ledger.live),default=0)
@@ -80,14 +93,23 @@ def run(backend,question,policies,complete_trajectory=False):
         text=f"Step {step}: "+"; ".join(f"{x['resolution']['claim']['subject']} / {x['resolution']['claim']['predicate']}: {x['resolution']['claim']['value']}" for x in resolved)
         trace.append(dict(step=step,text=text,student_text=parsed.get('text'),atoms=resolved,exposed_parents=exposed))
         if parsed["final"] or attempt==budget.max_steps:
-            final=dict(answer=resolved[-1]["resolution"]["claim"]["value"],
-                verified=all(n.effective_verified for n in ledger.live.values()),
-                reason="final_audited" if parsed["final"] else "global_step_budget")
-            if not parsed["final"]:
-                final["verified"]=False
+            answer=resolved[-1]["resolution"]["claim"]["value"]
+            if parsed['final']:
+                final_audit=audit_final_answer(question,answer,ledger,backend,policies,budget)
+                answer=final_audit['resolution']['claim']['value']
+                contract=final_answer_contract(question,answer)
+                verified=final_audit['node']['effective_verified'] and contract['accepted']
+                reason='final_audited' if verified else 'final_answer_audit_failed'
+                if not contract['accepted']:
+                    reason='answer_contract_failure'
+                final=dict(answer=answer,verified=verified,reason=reason,answer_contract=contract)
+            else:
+                final=dict(answer=answer,verified=False,reason='global_step_budget',
+                           answer_contract=final_answer_contract(question,answer))
             break
     return dict(question=question,final=final,trace=trace,budget=asdict(budget),cost=backend.calls,
-                implementation=backend.representation,complete_trajectory=complete_trajectory,calibrated=False)
+                final_audit=final_audit,implementation=backend.representation,
+                complete_trajectory=complete_trajectory,calibrated=False)
 
 
 if __name__=="__main__":
