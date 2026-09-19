@@ -1,6 +1,6 @@
 # Current experiment handoff
 
-## Primary native-crop audit path (2026-09-19)
+## Primary native-crop audit path (completed 2026-09-20)
 
 The primary pipeline is now complete-trajectory SFT followed directly by automatic
 native-crop scoring with the same frozen VLM. It does not require a compact reader,
@@ -9,14 +9,27 @@ Value-blind routing is still a separate fresh-context call by the same VLM; crop
 is deterministic controller code. Premise steps inherit the actual reviewed parent
 regions instead of inventing a deduction crop.
 
-`efa.evaluate_episodes` now requires an explicit audit backend. The new primary run
-uses `--audit-backend native_crop`, rejects a supplied resampler, and records
-`verifier_training=none`. `scripts/evaluate_native_crop_contract_2b.sh` evaluates
-the completed 114-update `codex_full_trajectory_2b_v0` adapter on the fixed three
-GQA and three CLEVR development cases. It started as background launcher PID
-1291887 with evaluation PID 1291897 and writes `native_crop_gqa_2b_v0_contract`
-then `native_crop_clevr_2b_v0_contract`. Check actual processes and artifacts before
-acting; do not restart an existing output directory.
+`efa.evaluate_episodes` now requires an explicit audit backend. The completed
+primary run used `--audit-backend native_crop`, rejected a supplied resampler,
+and recorded `verifier_training=none`. It evaluated the completed 114-update
+`codex_full_trajectory_2b_v0` adapter on the fixed three GQA and three CLEVR
+development cases. Both the launcher and evaluation process have terminated; do
+not restart or overwrite either output directory.
+
+GQA direct / step-only / EvidenceFirst accuracy was 2/3, 2/3 and 2/3. One output
+was verified, it was correct, and no verified output was wrong. CLEVR direct /
+step-only / EvidenceFirst accuracy was 3/3, 0/3 and 3/3. Two outputs were verified,
+both were correct, and no verified output was wrong. Combined EvidenceFirst was
+5/6 with three verified-correct and zero verified-wrong outputs. The matched
+complete-trajectory compact-reader run was 0/3 on GQA and 3/3 on CLEVR, with one
+verified-correct output. These six uncalibrated development cases are an
+engineering check, not a paper efficacy result.
+
+The immutable matched package is `data/audit_backend_results_2b_v0`: 18 result
+records and 51 files. It is published under
+`QC1/FBC/efa/audit_backend_results_2b_v0` at exact HF commit
+`a8e10d1d036c0f251899aaf75fc5c7e0176a71d4`; an exact-revision download matched
+all local bytes. The dataset repository was confirmed private.
 
 The final-answer contract comparison finished before this run. Both the pre-joint
 and joint compact-reader checkpoints remain GQA EFA 0/3 and verified 0/3. On CLEVR,
@@ -231,13 +244,14 @@ pass; this source-relocation experiment has not yet run on the GPU.
 
 ## Local data expansion under individual review
 
-data/codex_local32_candidates_v1 stages 32 additional local original images:
-16 ChartQA, ten ZwZ, six DeepEyes. Original splits are retained: 27 train,
-two dev, three calibration. Exact image hashes were checked against earlier
-Codex versions and within the new selection. Qwen produced 27 valid drafts
-and five conversion failures; its process completed. Every image and final
-source crop is being individually reviewed by Codex before acceptance.
-Do not treat the candidate count or teacher draft count as accepted episodes.
+`data/codex_local48_candidates_v1` stages 48 additional original images: 16 ZwZ,
+16 DeepEyesV2 and 16 Visual-CoT/GQA-derived candidates. Original splits are
+retained: 36 train, six dev and six calibration. Exact decoded-image hashes were
+checked against the prior three reviewed batches and within this selection. Qwen
+produced 42 parseable drafts and six malformed drafts. None is approved yet.
+Every original image, target box, context box, step dependency and final answer
+must be visually reviewed before packaging or training. Do not treat candidate
+or teacher-draft counts as accepted episodes.
 
 ## Data frozen and uploaded
 
