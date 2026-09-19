@@ -120,13 +120,16 @@ def main():
     p.add_argument('--quantize-vision',action='store_true',help='Historical NF4-vision checkpoint replay')
     p.add_argument('--reacquire-on-binding-failure',action='store_true',
                    help='Experimental neutral source relocation after binding/invalid failure; default expands context')
+    p.add_argument('--complete-trajectory',action='store_true',
+                   help='Preserve the main user/assistant history used by complete-episode SFT')
     a=p.parse_args();root=Path(a.root);out=Path(a.output)
     if out.exists() or a.limit<1:raise ValueError('Fresh output and positive case limit required')
     rows=select_episodes(root,a.episode_file,a.split,a.limit,a.engineering_only)
     backend=LatentBackend(a.model,root/rows[0]['image'],True,max_pixels=50176,
         adapter_path=a.adapter,resampler_path=a.resampler,quantize_vision=a.quantize_vision,
         reacquire_on_binding_failure=a.reacquire_on_binding_failure)
-    evaluation_settings=dict(reacquire_on_binding_failure=a.reacquire_on_binding_failure)
+    evaluation_settings=dict(reacquire_on_binding_failure=a.reacquire_on_binding_failure,
+                             complete_trajectory=a.complete_trajectory)
     policies={k:Policy(**v) for k,v in json.loads(Path(a.policy).read_text())['strata'].items()}
     out.mkdir(parents=True);records=[]
     with (out/'results.jsonl').open('w') as stream:
@@ -141,12 +144,12 @@ def main():
                 [Box(0,0,backend.image.width,backend.image.height)],max_tokens=32)[0]
             result['direct']=dict(answer=direct,correct=canonical(direct)==canonical(row['answer']),calls=list(backend.calls))
             backend.set_image(root/row['image'])
-            step_only=run_step_only(backend,row['question'])
+            step_only=run_step_only(backend,row['question'],a.complete_trajectory)
             (out/(row['id']+'-step-only.json')).write_text(json.dumps(step_only,indent=2))
             result['step_only']=dict(final=step_only['final'],budget=step_only['budget'],
                 correct=canonical(step_only['final']['answer'])==canonical(row['answer']))
             backend.set_image(root/row['image'])
-            audited=run(backend,row['question'],policies)
+            audited=run(backend,row['question'],policies,a.complete_trajectory)
             audited['evaluation_settings']=evaluation_settings
             (out/(row['id']+'-trace.json')).write_text(json.dumps(audited,indent=2))
             result['efa']=dict(final=audited['final'],budget=audited['budget'],

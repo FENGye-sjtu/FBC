@@ -1,8 +1,36 @@
 # Current experiment handoff
 
-All server paths below are relative to /data_cinema/zqc/VBC. SSH is working.
-Preserve unrelated projects and GPU jobs. Read actual artifacts before restarting
-anything. The manuscript/CVPR objective remains incomplete.
+All server paths below are relative to /data_cinema/zqc/VBC. Preserve unrelated
+projects and GPU jobs. Read actual artifacts before restarting anything. Recent
+SSH attempts timed out before authentication; do not infer a running process from
+the prepared launchers. The manuscript/CVPR objective remains incomplete.
+
+## Complete-trajectory continuation prepared
+
+The SFT exporter now retains one complete alternating user/assistant record per
+reviewed episode. Its assistant turns contain the visible numbered-step text and
+structured atoms. Every episode bundle links its steps to neutral routing targets,
+independent source crops, premise reads and available binding targets. This changes
+the primary SFT unit without weakening the manuscript's visibility restriction:
+the main trace preserves prior dialogue, while routing and evidence reading still
+run from fresh neutral-query contexts. No runtime PASS/REVIEW record is fabricated.
+
+Across the three frozen Codex-adjudicated sources, the prepared training set has
+75 train episodes/images, 127 natural assistant steps, 106 visual atoms and 30
+premise atoms. `scripts/train_full_trajectory_2b.sh` continues the completed
+`codex_sft_2b_v0` adapter for three full passes (114 expected optimizer updates),
+with all assistant turns supervised (`mask_history=false`) and prompts masked.
+`scripts/train_full_evidence_2b.sh` then aligns the compact reader for 424 updates,
+trains 16 reviewed negative pairs with all 106 positives replayed for 244 updates,
+and evaluates the fixed GQA/CLEVR development cases using preserved multi-turn
+history. Neither launcher has run yet; check with `scripts/status_full_trajectory.sh`.
+
+The newly frozen `data/codex_local32_adjudicated_v1` contains 32 reviewed images:
+30 accepted episodes and two `needs_review` exclusions, 47 natural steps, and
+25 train / two dev / three calibration episodes. Its step distribution is 15
+one-step, 13 two-step and two three-step episodes. It is published at HF commit
+`5d2f631720daa822390d5679c41ecdc238b03934`; all 234 remote files match local
+bytes. These are Codex visual adjudications, not human gold or runtime audits.
 
 ## Completed reader comparison
 

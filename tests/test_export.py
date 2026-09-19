@@ -18,6 +18,7 @@ class ExportTests(unittest.TestCase):
             row=dict(id='example',split='train',image='image.png',width=100,height=80,
                 question='How many bags?',answer='2',benchmark_dedup_status='pending',
                 annotation_status='teacher_reviewed_episode',steps=[dict(id=1,parents=[],
+                text='Step 1: There are 2 bags. <STEP_END>',
                 atoms=[dict(subject='bags',predicate='count',value='2',kind='visual',family='count',
                 region=dict(boxes=[[0,0,20,30],[40,30,70,60]],context_boxes=[[0,0,100,80]],insufficient=False))])])
             (root/'raw_tasks.jsonl').write_text(json.dumps(row)+'\n')
@@ -35,6 +36,16 @@ class ExportTests(unittest.TestCase):
             with Image.open(reads[0]['images'][1]) as crop:
                 self.assertEqual(crop.size,(30,30))
             self.assertEqual(json.loads((out/'efa_bindings.json').read_text()),[])
+            trajectories=json.loads((out/'efa_trajectories.json').read_text())
+            self.assertEqual(len(trajectories),1)
+            self.assertEqual([m['role'] for m in trajectories[0]['messages']],['user','assistant'])
+            self.assertEqual(trajectories[0]['messages'][0]['content'].count('<image>'),1)
+            target=trajectories[0]['messages'][1]['content']
+            payload=json.loads(target.removesuffix('<STEP_END>'))
+            self.assertEqual((payload['step'],payload['text'],payload['final']),(1,'There are 2 bags.',True))
+            bundle=json.loads((out/'efa_episode_bundles.jsonl').read_text())
+            self.assertEqual((bundle['id'],len(bundle['steps']),bundle['runtime_audit']),('example',1,None))
+            self.assertEqual(bundle['steps'][0]['atoms'][0]['boxes'],[[0,0,20,30],[40,30,70,60]])
 
     def test_native_binding_uses_ordered_crops_and_neutral_subject_not_answer(self):
         row=compile_episode(gqa_fixtures.NativeProgramTests().fixture())

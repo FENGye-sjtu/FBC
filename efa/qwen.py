@@ -114,6 +114,30 @@ class QwenBackend:
         text=self.processor.apply_chat_template([{"role":"user","content":content}],tokenize=False,add_generation_prompt=True)
         return self.processor(text=[text],images=images or None,return_tensors="pt").to(self.device)
 
+    def conversation_inputs(self,messages):
+        """Build the main multi-turn trace with exactly one original image.
+
+        Evidence routing/reading never calls this function, so their visibility
+        remains restricted to fresh neutral-query forwards.
+        """
+        converted=[];images=[]
+        for index,message in enumerate(messages):
+            content=message['content']
+            marker=content.count('<image>')
+            if marker:
+                if marker!=1 or images or message['role']!='user':
+                    raise ValueError('Complete trajectory requires one original-image marker')
+                content=content.replace('<image>\n','',1).replace('<image>','',1)
+                converted.append(dict(role='user',content=[dict(type='image',image=self.image),
+                    dict(type='text',text=content)]))
+                images.append(self.image)
+            else:
+                converted.append(dict(role=message['role'],content=content))
+        if not images:
+            raise ValueError('Complete trajectory is missing the original image')
+        text=self.processor.apply_chat_template(converted,tokenize=False,add_generation_prompt=True)
+        return self.processor(text=[text],images=images,return_tensors='pt').to(self.device)
+
     def generate(self,prompt,boxes,max_tokens=256,k=1,step_boundary=False,json_schema=None):
         inputs=self.inputs(prompt,boxes)
         start=time.monotonic()
@@ -134,6 +158,25 @@ class QwenBackend:
         self.calls.append(dict(operation="generate",seconds=time.monotonic()-start,images=len(boxes),outputs=k,
                                constrained_serialization=bool(constraints)))
         return values
+
+    def generate_conversation(self,messages,max_tokens=384):
+        inputs=self.conversation_inputs(messages)
+        from lmformatenforcer.integrations.transformers import (build_token_enforcer_tokenizer_data,
+                                                                 build_transformers_prefix_allowed_tokens_fn)
+        from efa.grammar import trajectory_step_parser
+        if not hasattr(self,'_grammar_tokens'):
+            self._grammar_tokens=build_token_enforcer_tokenizer_data(self.processor.tokenizer)
+        allowed=build_transformers_prefix_allowed_tokens_fn(self._grammar_tokens,trajectory_step_parser())
+        start=time.monotonic()
+        with self.torch.inference_mode():
+            output=self.model.generate(**inputs,max_new_tokens=max_tokens,do_sample=False,num_beams=1,
+                num_return_sequences=1,use_cache=True,stop_strings=[STEP_END],
+                tokenizer=self.processor.tokenizer,prefix_allowed_tokens_fn=allowed)
+        value=self.processor.batch_decode(output[:,inputs.input_ids.shape[1]:],skip_special_tokens=True)[0]
+        self.calls.append(dict(operation='generate_complete_trajectory_step',seconds=time.monotonic()-start,
+                               images=1,history_messages=len(messages),outputs=1,
+                               constrained_serialization=True))
+        return value
 
     def logp(self,prompt,boxes,value):
         torch=self.torch

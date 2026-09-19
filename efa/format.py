@@ -39,3 +39,24 @@ def step_prompt(question, context, number, final_budget=False):
     if final_budget:
         prompt+="This is the final budgeted step: supply the final answer."
     return prompt
+
+
+def trajectory_step_prompt(question, context, number, final_budget=False):
+    """Prompt one turn of a complete multi-turn SFT trajectory.
+
+    The natural-language step and machine-readable atoms share one target. The
+    controller still performs routing and evidence reads in isolated forwards;
+    this prompt contains only the main-trace ledger.
+    """
+    prompt=(f"Question: {question}\nAccepted/provisional ledger: {json.dumps(context)}\n"
+        f"Generate exactly Step {number}, then stop. Return JSON followed by {STEP_END}: "
+        f'{{"step":{number},"text":"concise natural-language reasoning for this step",'
+        '"atoms":[{"subject":"neutral referent","predicate":"property","value":"answer",'
+        '"family":"attribute","kind":"visual"}],"final":false}. '
+        "The step field must equal the requested step number. The text field is the visible numbered-step content "
+        "without a Step prefix or boundary marker. Maximum three atoms. For inference use kind=premise and "
+        "family=deduction. When ready, final=true and the final answer must be the value of the LAST atom. "
+        "Do not include disputed values in object identities. Earlier unverified values are provisional. ")
+    if final_budget:
+        prompt+="This is the final budgeted step: supply the final answer."
+    return prompt

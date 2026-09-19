@@ -6,7 +6,7 @@ from pathlib import Path
 from efa.core import Budget,Claim,Ledger,Policy,resolve
 from efa.qwen import QwenBackend,parse_json
 from efa.regions import Box
-from efa.format import step_prompt, STEP_END
+from efa.format import step_prompt, trajectory_step_prompt, STEP_END
 
 
 def revisit(ledger,key,backend,policies,budget):
@@ -26,20 +26,30 @@ def revisit(ledger,key,backend,policies,budget):
                 replacement=asdict(node) if node else None)
 
 
-def run(backend,question,policies):
-    ledger=Ledger(); budget=Budget(); trace=[]; final=None
+def run(backend,question,policies,complete_trajectory=False):
+    ledger=Ledger(); budget=Budget(); trace=[]; final=None; conversation=[]
     for attempt in range(1,budget.max_steps+1):
         budget.take_step()
         step=1+max((int(k.split('.')[0].removeprefix('step')) for k in ledger.live),default=0)
         exposed=tuple(ledger.live)
         context=[dict(key=k,claim=asdict(n.claim),verified=n.effective_verified) for k,n in ledger.live.items()]
         backend.premises=context
-        prompt=step_prompt(question,context,step,attempt==budget.max_steps)
-        raw=backend.generate(prompt,[Box(0,0,backend.image.width,backend.image.height)],max_tokens=384,step_boundary=True)[0]
+        if complete_trajectory:
+            prompt=trajectory_step_prompt(question,context,step,attempt==budget.max_steps)
+            if not conversation:prompt='<image>\n'+prompt
+            conversation.append(dict(role='user',content=prompt))
+            raw=backend.generate_conversation(conversation,max_tokens=384)
+            conversation.append(dict(role='assistant',content=raw))
+        else:
+            prompt=step_prompt(question,context,step,attempt==budget.max_steps)
+            raw=backend.generate(prompt,[Box(0,0,backend.image.width,backend.image.height)],max_tokens=384,step_boundary=True)[0]
         try:
             if not raw.rstrip().endswith(STEP_END):
                 raise ValueError("Missing step boundary")
             parsed=parse_json(raw)
+            if complete_trajectory and parsed.get('review_parent') is None and (
+                    parsed.get('step')!=step or not isinstance(parsed.get('text'),str) or not parsed['text'].strip()):
+                raise ValueError('Invalid complete-trajectory step identity or text')
             if parsed.get('review_parent') is not None:
                 key=parsed['review_parent']
                 if key not in ledger.live or attempt==budget.max_steps:
@@ -68,7 +78,7 @@ def run(backend,question,policies):
             resolved.append(dict(resolution=asdict(resolution),node=asdict(node)))
         # Reconstruct only from audited atoms: no unchecked free-form rewriting.
         text=f"Step {step}: "+"; ".join(f"{x['resolution']['claim']['subject']} / {x['resolution']['claim']['predicate']}: {x['resolution']['claim']['value']}" for x in resolved)
-        trace.append(dict(step=step,text=text,atoms=resolved,exposed_parents=exposed))
+        trace.append(dict(step=step,text=text,student_text=parsed.get('text'),atoms=resolved,exposed_parents=exposed))
         if parsed["final"] or attempt==budget.max_steps:
             final=dict(answer=resolved[-1]["resolution"]["claim"]["value"],
                 verified=all(n.effective_verified for n in ledger.live.values()),
@@ -77,7 +87,7 @@ def run(backend,question,policies):
                 final["verified"]=False
             break
     return dict(question=question,final=final,trace=trace,budget=asdict(budget),cost=backend.calls,
-                implementation=backend.representation,calibrated=False)
+                implementation=backend.representation,complete_trajectory=complete_trajectory,calibrated=False)
 
 
 if __name__=="__main__":
@@ -87,6 +97,7 @@ if __name__=="__main__":
     p.add_argument("--adapter")
     p.add_argument("--resampler")
     p.add_argument('--quantize-vision',action='store_true',help='Historical NF4-vision checkpoint replay')
+    p.add_argument('--complete-trajectory',action='store_true')
     a=p.parse_args(); config=json.loads(Path(a.policy).read_text())
     policies={k:Policy(**v) for k,v in config["strata"].items()}
     if a.resampler:
@@ -94,7 +105,7 @@ if __name__=="__main__":
         backend=LatentBackend(a.model,a.image,a.quantized,adapter_path=a.adapter,resampler_path=a.resampler,quantize_vision=a.quantize_vision)
     else:
         backend=QwenBackend(a.model,a.image,a.quantized,adapter_path=a.adapter,quantize_vision=a.quantize_vision)
-    result=run(backend,a.question,policies)
+    result=run(backend,a.question,policies,a.complete_trajectory)
     out=Path(a.output);out.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(result,indent=2),encoding="utf-8")
     print(json.dumps(result["final"]))

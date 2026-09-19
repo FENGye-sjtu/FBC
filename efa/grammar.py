@@ -10,6 +10,12 @@ STEP_SCHEMA={'type':'object','properties':{
     'final':{'type':'boolean'}},'required':['atoms','final'],'additionalProperties':False}
 REVISIT_SCHEMA={'type':'object','properties':{'review_parent':{'type':'string','minLength':1}},
                 'required':['review_parent'],'additionalProperties':False}
+TRAJECTORY_STEP_SCHEMA={'type':'object','properties':{
+    'step':{'type':'integer','minimum':1},
+    'text':{'type':'string','minLength':1},
+    'atoms':STEP_SCHEMA['properties']['atoms'],
+    'final':{'type':'boolean'}},
+    'required':['step','text','atoms','final'],'additionalProperties':False}
 BOX={'type':'array','items':{'type':'integer','minimum':0},'minItems':4,'maxItems':4}
 ROUTE_SCHEMA={'type':'object','properties':{
     'boxes':{'type':'array','items':BOX,'minItems':1,'maxItems':3},
@@ -21,3 +27,10 @@ def step_parser():
     from lmformatenforcer import JsonSchemaParser,SequenceParser,StringParser,UnionParser
     from efa.format import STEP_END
     return SequenceParser([UnionParser([JsonSchemaParser(STEP_SCHEMA),JsonSchemaParser(REVISIT_SCHEMA)]),StringParser(STEP_END)])
+
+
+def trajectory_step_parser():
+    from lmformatenforcer import JsonSchemaParser,SequenceParser,StringParser,UnionParser
+    from efa.format import STEP_END
+    return SequenceParser([UnionParser([JsonSchemaParser(TRAJECTORY_STEP_SCHEMA),JsonSchemaParser(REVISIT_SCHEMA)]),
+                           StringParser(STEP_END)])

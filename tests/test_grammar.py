@@ -4,7 +4,7 @@ try:
     import lmformatenforcer
 except ImportError:
     lmformatenforcer=None
-from efa.grammar import step_parser
+from efa.grammar import step_parser,trajectory_step_parser
 from efa.format import STEP_END
 
 
@@ -19,6 +19,16 @@ class GrammarTests(unittest.TestCase):
             parser=parser.add_character(char)
         self.assertFalse(parser.can_end())
         for char in STEP_END:
+            self.assertIn(char,parser.get_allowed_characters())
+            parser=parser.add_character(char)
+        self.assertTrue(parser.can_end())
+
+    def test_complete_trajectory_requires_numbered_visible_text(self):
+        parser=trajectory_step_parser()
+        content=json.dumps({'step':2,'text':'Compare the two verified counts.',
+            'atoms':[dict(subject='counts',predicate='comparison',value='yes',family='deduction',kind='premise')],
+            'final':True})+STEP_END
+        for char in content:
             self.assertIn(char,parser.get_allowed_characters())
             parser=parser.add_character(char)
         self.assertTrue(parser.can_end())
