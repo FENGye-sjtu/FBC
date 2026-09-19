@@ -22,8 +22,10 @@ Return JSON only: {"steps":[{"id":1,"text":"Step 1: ...", "parents":[],
 "atoms":[{"subject":"stable neutral referent","predicate":"color",
 "value":"blue","family":"attribute","kind":"visual"}]}]}.
 Use families attribute, identity, text, relation, count, numeric, deduction.
-Each step has 1-3 atoms. Use one step for direct attribute questions. Use multiple
-steps only for genuine dependencies such as comparison, counting or calculation.
+Each step has 1-3 atoms. Use one step for direct attribute questions and simple
+exhaustive counts. Do not create one presence step per counted object. Use multiple
+steps only when they resolve a real dependency: identify an ambiguous referent,
+read the separate inputs of a comparison, or perform a required calculation.
 Do not invent identity or appearance facts to pad a simple answer. Do not repeat
 the final visual answer in an unnecessary deduction step. Parents are earlier step IDs.
 kind MUST be exactly "visual" or "premise"; use kind="premise" for deductions.
