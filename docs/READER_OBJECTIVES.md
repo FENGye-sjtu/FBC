@@ -58,3 +58,12 @@ The next shared-model SFT also exports `efa_bindings` for native object episodes
 This teaches the decoder the same neutral identity interface before compact
 reader alignment. It is restricted to native object sources and excludes whole
 scene counting labels, held-out images and teacher-rejected trajectories.
+
+The v1 three-case evaluation is now complete. Native reads remain 8/10 and
+compact reads 6/10; EFA stays at 1/3. Cat is now correct and unverified, while
+elephant is harmfully changed to horse after deletion/specificity failure.
+The car question returns man with effective verified=true after task-query
+drift. These outcomes establish neither reliable verification nor repair gains.
+The complete result bundle is `efa/gqa_reader_objectives_eval_v1`, HF commit
+`c88b458f931007b4ad82b3a4d23de30977b0ef72`. See `ACTIVE_RUN.md` for the next
+mixed SFT job and its actual status handles.
