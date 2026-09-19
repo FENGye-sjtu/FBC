@@ -4,7 +4,7 @@ source /data_cinema/zqc/VBC/code/scripts/server_env.sh
 cd "$EFA_ROOT/code"
 test -f "$EFA_ROOT/runs/gqa_heldout_2b_v2/summary.json"
 test -f "$EFA_ROOT/runs/gqa_reader_objectives_eval_v1/summary.json"
-test -f "$EFA_ROOT/data/derived/gqa_native_long_review_v1/manifest.json"
+test -f "$EFA_ROOT/data/derived/gqa_native_long_review_v1_completed63/manifest.json"
 gpu=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | awk -F, '$2>=7000 {print $1,$2}' | sort -k2nr | head -n1 | awk '{print $1}')
 if [ -z "$gpu" ]; then echo 'WAIT_FOR_7000_MIB_FREE'; exit 3; fi
 export CUDA_VISIBLE_DEVICES="$gpu"
@@ -15,9 +15,9 @@ from pathlib import Path
 import yaml
 from efa.mix_sft import mix
 root=Path('/data_cinema/zqc/VBC');out=root/'data/derived/mixed_program_sft_2b_v0'
-long=root/'data/derived/gqa_native_long_review_v1'
+long=root/'data/derived/gqa_native_long_review_v1_completed63'
 review=json.loads((long/'manifest.json').read_text())
-if not review['construction_complete'] or review['errors'] or not review['approved_splits'].get('train'):
+if not review['construction_complete'] or review.get('errors',0) or not review['approved_splits'].get('train'):
     raise ValueError('Finish long-chain source review before training')
 manifest=mix([root/'data/derived/gqa_native_review_v2_complete',root/'data/derived/clevr_count_program_v1',long],out,True)
 steps=json.loads((out/'efa_steps.json').read_text())

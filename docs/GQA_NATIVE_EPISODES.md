@@ -170,3 +170,14 @@ Review usage accounting now counts unique response hashes actually referenced
 by the reviewed slice. Importing an earlier cache no longer includes unrelated
 responses in that slice's token totals. Reused responses still contribute to
 the reported annotation usage; it is not a claim about newly billed tokens.
+
+The four-step batch finished 63 source reviews: six approved (five train / one
+dev), 57 rejected. One candidate, `gqa-native-2680`, received provider error
+`data_inspection_failed` twice and remains unreviewed; it is excluded from
+training, not marked a negative. The frozen completed subset is
+`efa/gqa_native_long_review_v1_completed63`, HF commit
+`ed8b84c172ca85a2f2295495cf264d4a481d61a3`. Its manifest retains this exclusion
+and the incomplete parent-batch status. The 504 unique referenced responses
+account for 234,338 prompt and 38,002 completion tokens. Readability and relation
+context failures dominate inspected rejections; six approvals do not establish
+adequate long-chain coverage.

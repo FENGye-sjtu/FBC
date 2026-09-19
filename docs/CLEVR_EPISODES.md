@@ -67,3 +67,10 @@ prompt and ordered target/context crops; its answer is the neutral subject, not
 the current predicate value. Whole-scene CLEVR counts do not receive invented
 single-object identity targets. This changes a training bundle and is not an
 isolated ablation of chain length, counting data or identity supervision.
+
+The three-source local export has now been built: 1,043 unique step examples,
+830 source reads, 830 region targets, 213 image-free premise reads and 404
+native binding targets, 3,320 unique examples from 344 training trajectories.
+Fourfold step sampling yields 6,449 training entries. Only five additional
+four-step training trajectories passed source review, so long-chain coverage
+is still small. Original image groups pass the cross-source split check.

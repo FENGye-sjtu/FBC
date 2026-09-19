@@ -27,6 +27,8 @@ def main():
         approved_splits=dict(Counter(r['split'] for r in approved)),approved_steps=sum(len(r['steps']) for r in approved),
         source_experiment_sha256=hashlib.sha256((source/'experiment.json').read_bytes()).hexdigest(),
         source_version=str(source),construction_complete=True,
+        excluded_api_records=[{k:r[k] for k in ['id','error','provider_code'] if k in r}
+                              for r in latest.values() if 'error' in r],
         parent_batch_complete=json.loads((source/'manifest.json').read_text()).get('construction_complete',False) if (source/'manifest.json').exists() else False,
         runtime_verified_episodes=0,benchmark_dedup_status='pending',label_basis='native_programs_with_teacher_checks')
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2));print(json.dumps(manifest))

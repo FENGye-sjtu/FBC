@@ -44,7 +44,13 @@ def main():
     if pending:os.environ['EFA_TEACHER_API_KEY']=getpass.getpass('Teacher API key: ')
     def process(row):
         try:return dict(id=row['id'],reviewed=review(row,out,out/'teacher_cache'))
-        except urllib.error.HTTPError as error:return dict(id=row['id'],error=f'HTTP {error.code}')
+        except urllib.error.HTTPError as error:
+            # Record the provider's error category, never request headers/body.
+            try:
+                detail=json.loads(error.read()).get('error',{})
+                code=str(detail.get('code','unknown'))[:80]
+            except (ValueError,AttributeError):code='unknown'
+            return dict(id=row['id'],error=f'HTTP {error.code}',provider_code=code)
         except (ValueError,KeyError,TimeoutError,urllib.error.URLError) as error:
             return dict(id=row['id'],error=type(error).__name__+': '+str(error)[:200])
     with ThreadPoolExecutor(max_workers=4) as pool,results.open('a',encoding='utf-8') as stream:
