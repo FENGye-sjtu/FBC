@@ -1,9 +1,9 @@
 # Current experiment handoff
 
 All server paths below are relative to /data_cinema/zqc/VBC. Preserve unrelated
-projects and GPU jobs. Read actual artifacts before restarting anything. Recent
-SSH attempts timed out before authentication; do not infer a running process from
-the prepared launchers. The manuscript/CVPR objective remains incomplete.
+projects and GPU jobs. Read actual artifacts before restarting anything. SSH was
+reachable again on 2026-09-19; no full-trajectory artifact or matching process
+existed at that check. The manuscript/CVPR objective remains incomplete.
 
 ## Complete-trajectory continuation prepared
 

@@ -21,10 +21,12 @@ def prepare(selection_path, output, exclude_roots):
     excluded_hashes = set()
     exclusions = []
     for root in map(Path, exclude_roots):
-        source = root / 'reviewed_episodes.jsonl'
-        payload = source.read_bytes()
-        excluded_hashes.update(json.loads(line)['image_sha256'] for line in payload.decode().splitlines() if line.strip())
-        exclusions.append(dict(file=str(source), sha256=hashlib.sha256(payload).hexdigest()))
+        files=[root/'raw_tasks.jsonl',root/'reviewed_episodes.jsonl']
+        for source in files:
+            if not source.is_file():continue
+            payload = source.read_bytes()
+            excluded_hashes.update(json.loads(line)['image_sha256'] for line in payload.decode().splitlines() if line.strip())
+            exclusions.append(dict(file=str(source), sha256=hashlib.sha256(payload).hexdigest()))
     indices, prepared, images, seen_ids, seen_hashes = {}, [], {}, set(), set()
     for entry in selected:
         root = Path(entry['source_root']).resolve()
