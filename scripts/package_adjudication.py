@@ -197,6 +197,9 @@ def package(root, output):
     decisions = Counter(review["decision"] for review in reviews)
     cache_files = [(path.relative_to(root).as_posix(), path) for path in sorted((root / "teacher_cache").rglob("*")) if path.is_file()]
     artifacts = [("raw_tasks.jsonl", raw_path), ("teacher_draft_results.jsonl", draft_path)]
+    artifacts += [(name, root / name) for name in
+                  ("selection.json", "selection_notes.md", "exclusions.jsonl", "hash_registry_scan.json")
+                  if (root / name).is_file()]
     inspection_files = [(path.relative_to(root).as_posix(), path)
                         for path in sorted((root / "inspection").rglob("*")) if path.is_file()]
     artifacts += sorted(images.items()) + review_files + cache_files + inspection_files
@@ -207,6 +210,8 @@ def package(root, output):
         if checked != path.resolve():
             raise ValueError("Source path mismatch")
         artifact_bytes[relative] = checked.read_bytes()
+    if (root / 'manifest.json').is_file():
+        artifact_bytes['candidate_manifest.json'] = (root / 'manifest.json').read_bytes()
     manifest = dict(
         schema_version="0.1", kind="codex_visually_adjudicated_episodes",
         count=len(accepted), raw_tasks=len(raw), reviews=len(reviews),
@@ -217,7 +222,8 @@ def package(root, output):
         teacher_draft_records=len(drafts), teacher_draft_successes=sum("draft" in row for row in drafts),
         teacher_draft_errors=sum("error" in row for row in drafts), teacher_cache_files=len(cache_files),
         images=len(images), image_edits=False, label_basis=LABEL_BASIS,
-        source_answer_disagreements=sum(row["answer_revised"] for row in accepted),
+        source_answer_string_changes=sum(row["answer_revised"] for row in accepted),
+        source_answer_change_definition="Literal string differences include canonicalization and changed questions; they are not a semantic correction rate.",
         question_rewrites=sum(row["question_revised"] for row in accepted),
         engineering_only=any(row.get("benchmark_dedup_status") != "cleared" for row in raw),
         benchmark_dedup_status="cleared" if raw and all(row.get("benchmark_dedup_status") == "cleared" for row in raw) else "pending",

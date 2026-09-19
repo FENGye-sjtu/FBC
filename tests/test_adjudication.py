@@ -53,7 +53,7 @@ class AdjudicationTests(unittest.TestCase):
         self.assertEqual(episode["codex_review"]["decision"], "revise")
         self.assertIsNone(episode["runtime_audit"])
         self.assertEqual(episode['steps'][0]['atoms'][0]['region']['context_boxes'], [[0,0,16,12]])
-        self.assertEqual(manifest["source_answer_disagreements"], 1)
+        self.assertEqual(manifest["source_answer_string_changes"], 1)
         self.assertTrue(manifest["engineering_only"])
         for name in ("raw_tasks.jsonl", "teacher_draft_results.jsonl", "codex_reviews/review.json", "teacher_cache/request.json", "images/source.png"):
             self.assertEqual((output / name).read_bytes(), (self.root / name).read_bytes())
