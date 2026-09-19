@@ -30,18 +30,27 @@ anything. The manuscript/CVPR objective remains incomplete.
 - The earlier GPU-0 v0 OOM logs remain preserved. GPU-1 v1 finished; no other
   job was killed or modified. Do not restart either experiment.
 
-## Next mixed SFT
+## Completed mixed SFT and matching reader
 
-Server shell PID 1054370 runs tools/continue_mixed_programs_v0.sh. It waits for
-the completed reader evaluation, packages it, then runs the mixed SFT launcher.
-Log: logs/continue_mixed_programs_v0.log. Check scripts/status_mixed_programs.sh
-for actual optimizer progress. Training target: runs/mixed_program_sft_2b_v0.
-Do not submit a duplicate. A missing free GPU or failure exits this pipeline;
-the existence of the shell launch is not evidence of completed training.
-Latest observation: training PID 1054891 on GPU 0 completed update 76/2400.
-Its precision_policy.json verifies BF16 vision and NF4 language module types.
-The trainer estimated about 36 minutes remaining at that point; this is not a
-completion guarantee. No new adapter inference or mixed evaluation has run yet.
+`runs/mixed_program_sft_2b_v0` completed all 2400 updates in 2141.942 seconds,
+with training loss 0.2016731807485246 and epoch 0.744301442084044. Its
+precision_policy.json verifies BF16 vision and NF4 language module types.
+Both trainer and launcher have terminated; do not restart this completed run.
+Authoritative artifacts: all_results.json and trainer_log.jsonl.
+
+`runs/latent_mixed_programs_2b_v0` completed 1660 updates over 830 visual
+atoms from 344 episodes, shuffled across sources for two full passes. Runtime
+495.9614328859898 seconds; peak allocated bytes 3021314560. The checkpoint and
+metrics exist and PID 1076397 has terminated. Source hashes, split checks and
+annotation tiers are recorded in input_sources.json. This is positive-only
+alignment on the old native/teacher datasets, not the new Codex-reviewed batch.
+Do not reuse a reader aligned to another adapter.
+
+Prepared evaluation: scripts/evaluate_mixed_programs_2b.sh uses the same three
+GQA dev IDs (9236, 28788, 94674) and three CLEVR dev IDs (10563, 263129, 231696).
+Outputs: runs/mixed_gqa_heldout_2b_v0 and runs/mixed_clevr_heldout_2b_v0.
+Check scripts/status_mixed_evaluation.sh for actual progress before any launch.
+The original uncalibrated thresholds are unchanged; no results are claimed yet.
 
 The fresh 2B run uses DeepEyesV2's LLaMA-Factory SFT, verified mixed precision,
 rank-16 LoRA, 2,400 updates and fourfold step sampling. Three sources contribute
@@ -49,8 +58,35 @@ rank-16 LoRA, 2,400 updates and fourfold step sampling. Three sources contribute
 reads, 830 routes, 213 premise reads and 404 native-object binding targets.
 Sampling yields 6,449 entries. The new binding examples match the runtime
 prompt and ordered crops. CLEVR whole-scene counts do not acquire fabricated
-single-object binding targets. Compact-reader alignment for this new adapter
-must follow training; the previous adapter's reader cannot be reused at inference.
+single-object binding targets.
+
+## Individually Codex-adjudicated batch
+
+`data/codex_adjudicated_v2` is the current training version, published to
+QC1/FBC/efa/codex_adjudicated_v2 at HF commit
+`a3ecb54213ee41794ba413c32c164c09ff7bca74`. All 17 candidates were visually
+reviewed: 16 accepted, one backpack-count case withheld because a partial bag's
+category remains unresolved. Six questions are explicitly revised derivatives.
+The 16 accepted episodes have 17 steps (15 one-step, one two-step), with
+15 train and one calibration. The train export has 16 reads, 16 routes,
+16 step examples and six binding examples: 54 total. Each review retains the
+original source, image digest, actual inspection evidence and correction reasons.
+These are Codex model annotations, not human gold or measured runtime PASS.
+
+Version v2 supersedes v1 for training: whole-image count routes reuse the already
+inspected target as nonempty context, and the plate example has a newly inspected
+context including its cup anchor. V1 remains an immutable provenance snapshot.
+Both versions remain engineering-only; benchmark decontamination is pending.
+The count cases use the complete image for exhaustiveness and do not supply
+instance-grounding evidence or deletion negatives. New negative/source-error
+variants still need explicit visual review.
+
+The next 48 metadata-selected DeepEyesV2 candidates are listed in
+tmp/deepeyes_next48_candidates.json: four OCR/logo, one chart candidate,
+12 comparisons, 15 relation/reference, 12 attributes, four multi-entity tasks.
+They are not yet image-reviewed or accepted. Upstream source train/dev provenance
+is absent, and the comparison references are heavily yes-biased. The chart row
+422 requires original-image-only reannotation, not reuse of its external tools.
 
 ## Data frozen and uploaded
 

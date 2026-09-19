@@ -22,7 +22,7 @@ def main():
         raise RuntimeError('Expected the existing private research repository')
     result=api.upload_folder(repo_id='QC1/FBC',repo_type='dataset',revision='main',
         parent_commit=info.sha,folder_path=str(root),path_in_repo='efa/'+a.version,
-        allow_patterns=['*.json','*.jsonl','*.md','LICENSE.txt','images/*.png','images/*.jpg','images/*.jpeg','images/*.webp'],
+        allow_patterns=['*.json','*.jsonl','*.md','LICENSE.txt','images/*.png','images/*.jpg','images/*.jpeg','images/*.webp','inspection/*.png'],
         commit_message=f'Add EFA {a.version}: {manifest["count"]} region records')
     print(json.dumps(dict(commit=result.oid,url=result.commit_url,manifest=manifest)))
 
