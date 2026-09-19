@@ -3,7 +3,7 @@ import argparse
 import json
 from pathlib import Path
 from PIL import Image
-from efa.format import step_prompt, route_prompt, read_prompt, premise_prompt, STEP_END
+from efa.format import step_prompt, route_prompt, read_prompt, binding_prompt, premise_prompt, STEP_END
 from efa.native import property_atom
 from efa.review import usable_sources
 
@@ -13,7 +13,7 @@ def export(root, destination, allow_unchecked=False):
     destination.mkdir(parents=True,exist_ok=True)
     (destination/"images").mkdir(exist_ok=True)
     raw=[json.loads(line) for line in (root/"raw_tasks.jsonl").read_text(encoding="utf-8").splitlines()]
-    outputs={"efa_reads":[],"efa_regions":[],"efa_atoms":[],"efa_steps":[],"efa_premises":[]}
+    outputs={"efa_reads":[],"efa_regions":[],"efa_atoms":[],"efa_steps":[],"efa_premises":[],"efa_bindings":[]}
     def pair(question,answer,image):
         images=image if isinstance(image,list) else [image]
         return {"messages":[{"role":"user","content":"<image>\n"*len(images)+question},
@@ -75,6 +75,16 @@ def export(root, destination, allow_unchecked=False):
                             path=destination/'images'/f"{row['id']}-s{number}-a{index}-v{view}.png"
                             original.crop(tuple(box)).save(path);paths.append(path)
                     outputs['efa_reads'].append(pair(read_prompt(query,region['boxes']),atom['value'],paths))
+                    # Native object provenance identifies the first crop's
+                    # subject. Whole-scene count sources do not provide this.
+                    if atom.get('native_evidence',{}).get('object_ids') and row.get('native_program_objects'):
+                        boxes=[list(b) for b in dict.fromkeys(tuple(b) for b in region['boxes']+region['context_boxes'])]
+                        binding_paths=[]
+                        with Image.open(root/row['image']) as original:
+                            for view,box in enumerate(boxes):
+                                path=destination/'images'/f"{row['id']}-s{number}-a{index}-binding-v{view}.png"
+                                original.crop(tuple(box)).save(path);binding_paths.append(path)
+                        outputs['efa_bindings'].append(pair(binding_prompt(boxes),atom['subject'],binding_paths))
                 atoms=[{k:a[k] for k in ("subject","predicate","value","family","kind")} for a in step["atoms"]]
                 target=json.dumps(dict(atoms=atoms,final=number==len(row["steps"])))+STEP_END
                 outputs["efa_steps"].append(pair(step_prompt(row["question"],context,number),target,root/row["image"]))

@@ -45,4 +45,16 @@ Validation: 39 tests pass in a local CPU PyTorch 2.6 environment, including
 unequal-length sequence loss values, gradient directions, unchanged neutral
 prefixes, held-out exclusion and invalid negative provenance. The CLI imports
 and launch shell syntax also pass. GPU execution, memory and actual accuracy
-effects are unmeasured because the server SSH port is currently unreachable.
+effects were unmeasured at that validation checkpoint because SSH was unreachable.
+
+SSH subsequently recovered. The frozen-adapter v1 reader run completed all 768
+updates in 489.317 seconds with peak allocated memory 3,085,314,048 bytes and
+mean combined loss 3.244506. This combined loss is not comparable to the previous
+positive-only mean loss. Its same-three-dev-case evaluation is running; see
+`ACTIVE_RUN.md` for results. An earlier GPU-0 attempt OOMed during a competing
+allocation; the successful training used GPU 1 and preserved all other jobs.
+
+The next shared-model SFT also exports `efa_bindings` for native object episodes.
+This teaches the decoder the same neutral identity interface before compact
+reader alignment. It is restricted to native object sources and excludes whole
+scene counting labels, held-out images and teacher-rejected trajectories.

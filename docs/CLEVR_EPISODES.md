@@ -40,7 +40,7 @@ invented verified statuses. `efa.mix_sft` combines GQA and CLEVR exports, checks
 for train/held-out image collisions across sources and retains component counts.
 `scripts/train_mixed_programs_2b.sh` prepares a new 2B SFT experiment with step,
 region, visual-read and premise-read examples. It requires the existing baseline
-evaluation to finish first; it has not been launched while SSH is unavailable.
+evaluation to finish first. SSH has recovered; see `ACTIVE_RUN.md` for live status.
 
 Local validation currently passes 45 CPU tests, including native execution,
 zero-count labels, reference disagreement, noncausal programs, premise-only
@@ -59,3 +59,11 @@ The actual combined SFT export with approved GQA train episodes has 1,023 step
 examples, 810 source reads, 810 region targets and 213 image-free premise reads,
 2,856 examples in total. Cross-source train/held-out image collision checks pass.
 These are measured data/export counts, not training results.
+
+The next mixed run additionally requires the completed four-step GQA source
+review, uses fourfold sampling of numbered-step examples, and includes native
+object identity SFT (`efa_bindings`). The latter uses the exact runtime binding
+prompt and ordered target/context crops; its answer is the neutral subject, not
+the current predicate value. Whole-scene CLEVR counts do not receive invented
+single-object identity targets. This changes a training bundle and is not an
+isolated ablation of chain length, counting data or identity supervision.
