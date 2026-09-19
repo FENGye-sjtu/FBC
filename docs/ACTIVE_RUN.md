@@ -120,7 +120,11 @@ isolated from raw QA and all native/teacher episode files. Fourfold step samplin
 yields 505 entries; 506 optimizer updates cover two complete epochs. Learning
 rate 2e-5, context limit 2048, BF16 vision/NF4 language, rank-16 LoRA. This is
 positive step/route/read/premise alignment, not completed correction training.
-Check live status before launching; prepared code alone is not a training result.
+The run is now live: shell PID 1090420, trainer PID 1090557 on GPU 3.
+Observed update 36/506 and about 4012 MiB process GPU memory; precision_policy
+confirms BF16 vision / NF4 language. Check scripts/status_codex_sft.sh for newer
+progress. Do not duplicate this run. A matching reader must be realigned after
+completion before audited inference; the old reader remains a comparison only.
 
 ## Data frozen and uploaded
 
