@@ -19,7 +19,7 @@ Official FaithAct port/checkpoint and all 765 original RealWorldQA cases are rea
 Implemented structured atomic steps, processed-image coordinate conversion,
 crop reacquisition, support/entailment gates, CF masking with matched controls,
 uncertain continuation, persistent workers, and explicit BF16 multi-GPU packing.
-24 local and remote tests pass.
+27 local and remote tests pass.
 Code snapshots and per-case records preserve experiment provenance.
 
 ## Measurements (development only)
@@ -37,15 +37,26 @@ preserves the observation and withholds the invalid conclusion. The v3 numbers
 predate this fix. Original traces remain unchanged; reports show parser updates.
 V4 still repeated an exhausted point despite prompt instructions. V5 therefore
 enforces the point budget in the controller and exposes unresolved questions,
-not repeated unverified values, to downstream prompts. Do not claim v5 efficacy
-until its real-model regression and subsequent 16-case run finish.
+not repeated unverified values, to downstream prompts.
+
+Completed v4: online 4/4 and CF 4/4, each with one uncertain answer. V5 targeted
+case-2 regression: both correct B with explicit uncertainty, online 126.37 s,
+CF 308.32 s (v4: 414.17 / 425.01 s). These are shared-hardware debugging times,
+not a speed benchmark. V5's exact-claim repeat guard did NOT fire: reworded
+claims still reopened the same question. V6 additionally remembers every
+normalized evidence question from an exhausted repair cycle, across later steps;
+matching visual retries stop without another audit cycle, while independent
+evidence and conditional deductions remain allowed. This is deterministic
+question matching, not a semantic paraphrase guarantee. V6 real-model results
+are pending; never relabel the completed v5 traces as v6.
 
 ## Live work (relative to /data_cinema/zqc/CVPR)
 
-- `runtime/workers/7b_dev`: job 002 is the four-way v3 pilot; job 003 runs
-  online/CF v4 on four cases; 003a tests v5 on the repeated-point case; 004 is the
+- `runtime/workers/7b_dev`: jobs 002, 003 and 003a completed (v3, v4, v5).
+  Job 004 is running the
   16-case v5 comparison with a declared standardized FaithAct answer-format
-  variant. Log `logs/resident_7b_v2.log`.
+  variant. Job 005 then checks v6 on the repeated-point case.
+  Log `logs/resident_7b_v2.log`. Do not mutate an active job's code snapshot.
 - `runtime/workers/7b_bf16_replication_v3`: job 001 targets all 765 CoT and
   FaithAct examples, BF16, 1003520 max pixels, 512 output tokens.
   Log `logs/bf16_replication_v3.log`. Real predictions are now being produced;
@@ -63,7 +74,7 @@ until its real-model regression and subsequent 16-case run finish.
 
 ## Continue from here
 
-Complete/read v3 and v4 traces; verify BF16 runtime, then let the complete baseline
+Read the 16-case comparison and v6 regression; let the complete BF16 baseline
 finish. Compare with paper Table 2 CoT 70.1% / FaithAct 74.5% only with disclosed
 protocol differences in `REPLICATION.md`. Extend paired development to 16 cases,
 freeze the method, and run full evaluation plus MMStar.

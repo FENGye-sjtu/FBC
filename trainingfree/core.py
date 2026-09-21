@@ -66,6 +66,9 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
     if max_steps < 1 or not 0 <= repairs <= 3:
         raise ValueError('Invalid controller budget')
     ledger, trace = [], []
+    exhausted_questions = set()
+    def key(text):
+        return re.sub(r'\W+', ' ', text.lower()).strip()
     def record(event):
         trace.append(event)
         if on_event is not None:
@@ -79,6 +82,7 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
         feedback = ''
         last_step = None
         last_reason = 'No well-formed candidate was produced.'
+        point_questions = set()
         for attempt in range(repairs + 1):
             try:
                 step = backend.propose(image, question, list(ledger), feedback)
@@ -87,9 +91,16 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
                 record({'step': index, 'attempt': attempt, 'parse_error': str(exc)})
                 continue
             last_step = step
+            question_key = key(step.evidence_question)
+            if step.kind == 'visual' and question_key and question_key in exhausted_questions:
+                record({'step':index,'event':'repeat_of_exhausted_question','candidate':asdict(step)})
+                return finish('This evidence question already exhausted its repair budget; '
+                              'continue to an explicitly uncertain best-effort answer without reopening it.',
+                              'uncertain_answer_synthesis')
+            if question_key:
+                point_questions.add(question_key)
             if ledger and ledger[-1].verification == 'uncertain':
                 prior = ledger[-1].claim.removeprefix('Uncertain whether: ')
-                key = lambda text: re.sub(r'\W+',' ',text.lower()).strip()
                 if key(prior) == key(step.claim):
                     record({'step':index,'event':'repeat_of_exhausted_point','candidate':asdict(step)})
                     return finish('The same exhausted point was proposed again without new committed evidence; '
@@ -123,6 +134,7 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
             last_reason = audit.reason or audit.status
         else:
             # Initial attempt + at most 3 repairs. Do not assert a failed claim as fact.
+            exhausted_questions.update(point_questions)
             unresolved = (f'Uncertain whether: {last_step.claim}' if last_step else
                           'Unresolved evidence point: no valid structured observation was obtained.')
             step = Step(unresolved, kind=last_step.kind if last_step else 'visual',

@@ -53,6 +53,35 @@ class Tests(unittest.TestCase):
         self.assertIn('What color is the light?',text)
         self.assertIn('uncertain',text)
 
+    def test_reworded_claim_cannot_reopen_exhausted_question(self):
+        backend = Scripted([Step('the light is red',evidence_question='What color is the light?')]*4
+                           + [Step('the signal appears green',evidence_question='WHAT color is the light!')],
+                           ['inconclusive']*4)
+        result = solve(backend,None,'q')
+        self.assertEqual(sum('audit' in e for e in result['trace']),4)
+        self.assertEqual(result['trace'][-2]['event'],'repeat_of_exhausted_question')
+        self.assertEqual(result['status'],'answered_with_uncertainty')
+
+    def test_new_evidence_then_conditional_answer_can_continue(self):
+        backend = Scripted([Step('unclear light',evidence_question='What color is the light?')]*4
+                           + [Step('the car is stopped',evidence_question='Is the car moving?'),
+                              Step('conditional conclusion','deduction',evidence_question='What color is the light?',
+                                   final_answer='C')],['inconclusive']*4+['supported']*2)
+        result = solve(backend,None,'q')
+        self.assertEqual(result['answer'],'C')
+        self.assertEqual(len(result['ledger']),3)
+        self.assertEqual(result['status'],'answered_with_uncertainty')
+
+    def test_all_repair_question_aliases_remain_exhausted(self):
+        backend = Scripted([Step('ambiguous light',evidence_question=q) for q in
+                            ['Light color?','Signal color?','Lamp color?','Traffic light color?']]
+                           + [Step('independent fact',evidence_question='Road clear?'),
+                              Step('a reworded light claim',evidence_question='Signal color?')],
+                           ['inconclusive']*4+['supported'])
+        result = solve(backend,None,'q')
+        self.assertEqual(sum('audit' in e for e in result['trace']),5)
+        self.assertEqual(result['trace'][-2]['event'],'repeat_of_exhausted_question')
+
     def test_bf16_placement_never_offloads(self):
         sizes = {'visual':5,'model.embed_tokens':3,'lm_head':3,'model.layers.0':2,'model.layers.1':2}
         placement = pack_modules(sizes,{0:8,1:8})
