@@ -1,4 +1,4 @@
-"""Wait for an actually free GPU, then run the experiment once, never kill jobs."""
+"""Share busy GPUs whenever the requested memory fits; never evict other jobs."""
 import argparse
 import fcntl
 import json
@@ -10,7 +10,7 @@ import time
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--name', required=True)
-    p.add_argument('--min-free-mib', type=int, default=22000)
+    p.add_argument('--min-free-mib', type=int, default=3500)
     p.add_argument('--timeout-hours', type=float, default=48)
     p.add_argument('--assets-ready', action='store_true')
     p.add_argument('command', nargs=argparse.REMAINDER)
@@ -41,7 +41,8 @@ def main():
         raw = subprocess.check_output(['nvidia-smi', '--query-gpu=index,memory.free,utilization.gpu',
                                        '--format=csv,noheader,nounits'], text=True)
         candidates = [row.split(',') for row in raw.strip().splitlines()]
-        eligible = [int(i) for i, free, util in candidates if int(free) >= args.min_free_mib and int(util) <= 5]
+        eligible = [int(i) for i, free, util in sorted(candidates, key=lambda r:int(r[1]), reverse=True)
+                    if int(free) >= args.min_free_mib]
         status.write_text(json.dumps({'state':'waiting', 'assets_ready':ready, 'gpu_snapshot':raw,
                                      'elapsed_seconds':time.time()-start, 'command':command}, indent=2))
         if ready and eligible:
@@ -55,10 +56,11 @@ def main():
             # Recheck after acquiring the lock; external schedulers remain independent.
             fresh = subprocess.check_output(['nvidia-smi', '-i', str(gpu), '--query-gpu=memory.free,utilization.gpu',
                                              '--format=csv,noheader,nounits'], text=True).strip().split(',')
-            if int(fresh[0]) < args.min_free_mib or int(fresh[1]) > 5:
+            if int(fresh[0]) < args.min_free_mib:
                 gpu_lock.close(); time.sleep(30); continue
             import os
-            env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu))
+            env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu),
+                       CVPR_GPU_BUDGET_MIB=str(max(1, int(fresh[0])-256)))
             status.write_text(json.dumps({'state':'running', 'gpu':gpu, 'command':command, 'started':time.time()}, indent=2))
             code = subprocess.call(command, env=env)
             status.write_text(json.dumps({'state':'completed' if code == 0 else 'failed', 'exit_code':code,

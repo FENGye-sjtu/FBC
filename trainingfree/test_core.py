@@ -3,6 +3,10 @@ from PIL import Image
 from .core import Audit, Step, parse_json, solve
 from .online import Online, control_boxes, mask, overlap
 from .run import extract_answer
+from .prompts import task_question, answer_format, cot_prompt
+from .queue_bf16 import select_devices
+from .placement import pack_modules
+from .format_adapter import FinalFormatAdapter
 
 
 class Scripted:
@@ -20,14 +24,71 @@ class Scripted:
     def audit(self, image, question, step, ledger):
         return Audit(next(self.audits))
 
+    def finalize(self, image, question, ledger):
+        return 'B'
+
 
 class Tests(unittest.TestCase):
+    def test_faithact_format_variant_leaves_noun_extraction_unchanged(self):
+        class VLM:
+            def generate(self,image,prompt,**kwargs):
+                return prompt
+        adapter = FinalFormatAdapter(VLM(),'Is a car visible?')
+        self.assertEqual(adapter.generate(None,'Extract nouns'),'Extract nouns')
+        self.assertIn('Yes or No',adapter.generate(object(),'Evidence-conditioned answer'))
+
+    def test_exhausted_point_is_not_given_eighteen_more_repairs(self):
+        backend = Scripted([Step('the light is red')]*5,['inconclusive']*4)
+        result = solve(backend,None,'q',max_steps=6)
+        self.assertEqual(len(backend.contexts),5)
+        self.assertEqual(len(result['ledger']),1)
+        self.assertEqual(result['status'],'answered_with_uncertainty')
+        self.assertEqual(result['trace'][-1]['event'],'uncertain_answer_synthesis')
+
+    def test_unverified_hypothesis_is_not_repeated_as_premise(self):
+        ledger = [Step('Uncertain whether: the light is red',evidence_question='What color is the light?',
+                       verification='uncertain')]
+        text = Online.ledger_text(ledger)
+        self.assertNotIn('the light is red',text)
+        self.assertIn('What color is the light?',text)
+        self.assertIn('uncertain',text)
+
+    def test_bf16_placement_never_offloads(self):
+        sizes = {'visual':5,'model.embed_tokens':3,'lm_head':3,'model.layers.0':2,'model.layers.1':2}
+        placement = pack_modules(sizes,{0:8,1:8})
+        self.assertNotIn('',placement)
+        self.assertTrue(all(isinstance(device,int) for device in placement.values()))
+        for device in (0,1):
+            self.assertLessEqual(sum(size for name,size in sizes.items() if placement[name]==device),8)
+        with self.assertRaises(ValueError):
+            pack_modules(sizes,{0:4,1:4})
+
+    def test_bf16_uses_combined_free_memory(self):
+        self.assertEqual(select_devices([(0,6000),(1,4000)],17000),[])
+        self.assertEqual(select_devices([(0,10000),(1,10000),(2,3000)],17000),[(0,10000),(1,10000)])
+
+    def test_question_instructions_do_not_override_step_or_audit(self):
+        q = 'Is a car visible?\nPlease answer directly with a single word or number.'
+        self.assertEqual(task_question(q), 'Is a car visible?')
+        self.assertIn('Yes or No', answer_format(q))
+        self.assertNotIn('Please answer directly', cot_prompt(q))
+        self.assertIn('option letter', answer_format('Is it red?\nA. Yes\nB. No'))
+
+    def test_localization_uses_processed_not_original_pixels(self):
+        class VLM:
+            def model_image_size(self, image):
+                return (100,200)
+            def generate(self, image, prompt, **kwargs):
+                return '{"box":[25,50,75,150]}'
+        self.assertEqual(Online(VLM()).locate(Image.new('RGB',(1000,2000)), 'region'),
+                         (.25,.25,.75,.75))
+
     def test_counterfactual_gate_runs_target_and_controls(self):
         class VLM:
             def __init__(self):
                 self.scores = iter([.95, .35, .90, .92])
             def generate(self, *args, **kwargs):
-                return '{"box":[0.2,0.2,0.4,0.4]}'
+                return '{"box":[8,8,16,16]}'
             def yes_probability(self, *args):
                 return next(self.scores)
         image = Image.new('RGB', (40,40), 'white')
@@ -42,7 +103,7 @@ class Tests(unittest.TestCase):
             def __init__(self):
                 self.scores = iter([.95, .35, .30, .32])
             def generate(self, *args, **kwargs):
-                return '{"box":[0.2,0.2,0.4,0.4]}'
+                return '{"box":[8,8,16,16]}'
             def yes_probability(self, *args):
                 return next(self.scores)
         result = Online(VLM(), counterfactual=True).audit(
@@ -58,23 +119,47 @@ class Tests(unittest.TestCase):
         self.assertEqual(result['trace'][2]['parents'], [0])
 
     def test_no_silent_pass_on_exhaustion(self):
-        b = Scripted([Step('ambiguous')]*3, ['inconclusive']*3)
-        result = solve(b, None, 'q')
-        self.assertIsNone(result['answer'])
-        self.assertEqual(result['ledger'], [])
-        self.assertEqual(result['status'], 'verification_exhausted')
+        b = Scripted([Step('ambiguous')]*4, ['inconclusive']*4)
+        result = solve(b, None, 'q', max_steps=1)
+        self.assertEqual(result['answer'], 'B')
+        self.assertEqual(result['ledger'][0]['verification'], 'uncertain')
+        self.assertEqual(result['status'], 'answered_with_uncertainty')
+        self.assertEqual(len(b.contexts), 4)  # Initial attempt plus three repairs.
+
+    def test_uncertain_point_continues_and_status_is_inherited(self):
+        b = Scripted([Step('ambiguous')]*4 + [Step('conditional answer', 'deduction', final_answer='C')],
+                     ['inconclusive']*4 + ['supported'])
+        result = solve(b, None, 'q', max_steps=2)
+        self.assertEqual(result['answer'], 'C')
+        self.assertEqual(result['status'], 'answered_with_uncertainty')
+        self.assertEqual(len(result['ledger']), 2)
+        self.assertTrue(b.contexts[4][0][0].startswith('Uncertain whether:'))
+        self.assertEqual(result['ledger'][1]['verification'], 'uncertain')
+
+    def test_third_repair_can_recover(self):
+        b = Scripted([Step('bad')]*3 + [Step('fixed'), Step('answer', 'deduction', final_answer='A')],
+                     ['contradicted']*3 + ['supported']*2)
+        result = solve(b, None, 'q', max_steps=2)
+        self.assertEqual(result['status'], 'verified_by_model')
+        self.assertEqual(result['ledger'][0]['claim'], 'fixed')
+
+    def test_repair_budget_cannot_exceed_three(self):
+        with self.assertRaises(ValueError):
+            solve(Scripted([], []), None, 'q', repairs=4)
 
     def test_first_step_deduction_cannot_bypass_image(self):
         b = Scripted([Step('answer', 'deduction', final_answer='A')], [])
-        self.assertIsNone(solve(b, None, 'q', repairs=0)['answer'])
+        result = solve(b, None, 'q', repairs=0, max_steps=1)
+        self.assertEqual(result['status'], 'answered_with_uncertainty')
+        self.assertEqual(result['ledger'][0]['verification'], 'uncertain')
 
     def test_parse_error_is_bounded(self):
         b = Scripted([ValueError('bad')]*2, [])
-        self.assertEqual(solve(b, None, 'q', repairs=1)['status'], 'verification_exhausted')
+        self.assertEqual(solve(b, None, 'q', repairs=1, max_steps=1)['status'], 'answered_with_uncertainty')
 
     def test_step_limit(self):
         b = Scripted([Step('fact')], ['supported'])
-        self.assertEqual(solve(b, None, 'q', max_steps=1)['status'], 'step_budget_exhausted')
+        self.assertEqual(solve(b, None, 'q', max_steps=1)['status'], 'answered_with_uncertainty')
 
     def test_json_boxes(self):
         self.assertEqual(parse_json('```json\n{"a":1}\n```'), {'a': 1})
@@ -97,9 +182,35 @@ class Tests(unittest.TestCase):
         self.assertEqual(image.getpixel((4,4)), (0,0,255))
         self.assertNotEqual(changed.getpixel((4,4)), image.getpixel((4,4)))
 
-    def test_visual_final_requires_deduction(self):
-        audit = Online(None).audit(None, 'q', Step('fact', box=(0,0,.2,.2), final_answer='A'), [])
-        self.assertNotEqual(audit.status, 'supported')
+    def test_visual_final_is_audited_not_rejected_for_format(self):
+        class VLM:
+            def yes_probability(self, *args):
+                return .95
+        audit = Online(VLM()).audit(Image.new('RGB',(20,20)), 'q', Step('fact', final_answer='A'), [])
+        self.assertEqual(audit.status, 'supported')
+        self.assertEqual(audit.scores['answer_entailment'], .95)
+
+    def test_verified_fact_survives_bad_answer_mapping(self):
+        class VLM:
+            def __init__(self):
+                self.values = iter([.95, .1])
+            def yes_probability(self, *args):
+                return next(self.values)
+        audit = Online(VLM()).audit(Image.new('RGB',(20,20)), 'q', Step('fact', final_answer='A'), [])
+        self.assertEqual(audit.status, 'supported')
+        self.assertTrue(audit.scores['answer_withheld'])
+
+    def test_withheld_answer_does_not_end_reasoning(self):
+        class Withheld(Scripted):
+            def audit(self, image, question, step, ledger):
+                return Audit('supported',{'answer_withheld':not bool(ledger)})
+        backend = Withheld([Step('verified observation',final_answer='A'),
+                            Step('correct conclusion','deduction',final_answer='B')],[])
+        result = solve(backend,None,'q')
+        self.assertEqual(result['answer'],'B')
+        self.assertIsNone(result['ledger'][0]['final_answer'])
+        self.assertEqual(result['ledger'][0]['verification'],'verified')
+        self.assertEqual(len(result['ledger']),2)
 
     def test_answer_extraction(self):
         self.assertEqual(extract_answer('reason\nFINAL ANSWER: B.'), 'B')
@@ -107,6 +218,9 @@ class Tests(unittest.TestCase):
         self.assertEqual(extract_answer('Thus, the answer is **A**.'), 'A')
         self.assertEqual(extract_answer(None), '')
         self.assertEqual(extract_answer('B. A blue car.', 'A. red B. blue'), 'B')
+        self.assertEqual(extract_answer('Thus, the final answer is:\nB. No', 'A. Yes B. No'), 'B')
+        self.assertEqual(extract_answer('Reasoning\nFinal answer:\n\nGreen'), 'Green')
+        self.assertEqual(extract_answer('Reasoning mentions A and B.\nGiven this:\n\nB', 'A. Yes B. No'), 'B')
 
 
 if __name__ == '__main__':

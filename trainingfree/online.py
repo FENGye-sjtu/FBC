@@ -1,35 +1,45 @@
 """Stepwise support gate plus optional localized deletion controls (MVP)."""
-from dataclasses import asdict
+from dataclasses import replace
 import json
 import random
+import re
 
 from .core import Audit, Step, parse_json
+from .prompts import task_question, answer_format
 
 STEP_SCHEMA = {
     'type': 'object', 'additionalProperties': False,
-    'properties': {'claim': {'type':'string', 'minLength':1},
+    'properties': {'claim': {'type':'string', 'minLength':12, 'maxLength':300},
                    'kind': {'enum':['visual','deduction']},
-                   'evidence_question': {'type':'string'},
-                   'box': {'type':'array','items':{'type':'number'},'maxItems':4},
-                   'final_answer': {'type':['string','null']}},
-    'required': ['claim','kind','evidence_question','box','final_answer']}
+                   'evidence_question': {'type':'string', 'maxLength':160},
+                   'final_answer': {'type':['string','null'], 'maxLength':80}},
+    'required': ['claim','kind','evidence_question','final_answer']}
 BOX_SCHEMA = {'type':'object', 'additionalProperties':False,
               'properties': {'box': {'type':'array','items':{'type':'number'},'minItems':4,'maxItems':4}},
               'required':['box']}
 
 PROPOSE = '''Solve the visual question incrementally. Return EXACTLY ONE atomic next
-step, not a full reasoning chain. Treat only the accepted steps as premises.
+step, not a full reasoning chain. The ledger distinguishes verified and uncertain
+points. Only verified points are established facts. Uncertain points are unresolved
+hypotheses, not true premises; reason conditionally or use independent evidence.
+Move forward after an unresolved point; do not get stuck repeating it forever.
 A visual step must state a visible fact; a deduction may only combine accepted
 facts and ordinary logic, and must not introduce any new visual fact.
-When sufficient evidence exists, return a deduction with the final concise answer
-(just the letter for multiple choice); otherwise final_answer must be null.
-Return JSON with kind set to exactly "visual" or exactly "deduction":
-{"claim":"one fact or deduction", "kind":"visual",
-"evidence_question":"neutral description of which region to inspect",
-"box":[x0,y0,x1,y1], "final_answer":null}.
-Box coordinates are normalized to [0,1]; deduction boxes are [].
+As soon as the evidence answers the question, include the concise final_answer
+(option letter for multiple choice, Yes/No for binary questions, otherwise a short
+word or number). A visual claim may include a final_answer; both will be checked.
+Do not repeat an already verified observation: move to a conclusion or a NEW fact.
+Return one JSON object: claim is your actual observation/inference, kind is
+"visual" or "deduction", evidence_question is a neutral region-localization
+query without your proposed answer, final_answer is a string or null.
+The claim MUST be a complete factual sentence, NEVER an option letter or just
+the final answer. The evidence_question must be short and must NOT assert the
+answer or include reasoning. Put the answer only in final_answer.
+Keep the claim short (one sentence). If an earlier point is unresolved after
+repair, do not repeat that same point as a new visual step. Inspect a DIFFERENT
+relevant fact, or make a conditional deduction to the best-supported answer.
 Question: %s
-Accepted steps: %s
+Evidence ledger (preserve uncertainty labels): %s
 Repair instruction (not an accepted premise): %s'''
 
 
@@ -71,46 +81,106 @@ class Online:
     def __init__(self, vlm, counterfactual=False, support=.8, specificity=.05):
         self.vlm, self.counterfactual = vlm, counterfactual
         self.support, self.specificity = support, specificity
+        self.last_candidate, self.repair_round = None, 0
+
+    @staticmethod
+    def ledger_text(ledger):
+        # Internal normalized boxes are NOT a generation target; do not expose
+        # them as pixel examples and accidentally renormalize copied coordinates.
+        return json.dumps([({'claim':s.claim,'verification':s.verification} if s.verification!='uncertain'
+                            else {'unresolved_question':s.evidence_question or 'Unresolved visual evidence for the task',
+                                  'verification':'uncertain','reason':s.uncertainty_reason}) for s in ledger])
+
+    def locate(self, image, query):
+        width, height = self.vlm.model_image_size(image) if hasattr(self.vlm, 'model_image_size') else image.size
+        prompt = ('Locate the image region needed to inspect the following query; do not answer it. '
+                  f'Query: {query}\nImage PIXEL dimensions as shown to you: width={width}, height={height}. '
+                  'Return JSON with box=[left,top,right,bottom] in PIXELS.')
+        value = parse_json(self.vlm.generate(image, prompt, max_tokens=100, schema=BOX_SCHEMA))
+        box = tuple(v / (width,height)[i % 2] for i,v in enumerate(value['box']))
+        return Step.from_dict({'claim':'localized evidence','box':box}).box
+
+    @staticmethod
+    def crop(image, box):
+        return image.crop(pixel_box(box, image.size))
 
     def propose(self, image, question, ledger, feedback):
-        prompt = PROPOSE % (question, json.dumps([asdict(s) for s in ledger]), feedback)
-        return Step.from_dict(parse_json(self.vlm.generate(image, prompt, schema=STEP_SCHEMA)))
+        box, view = (), image
+        if not feedback:
+            self.last_candidate, self.repair_round = None, 0
+        elif self.last_candidate is not None:
+            self.repair_round += 1
+            try:
+                box = self.locate(image, self.last_candidate.evidence_question or question)
+                pad = (.10, .25, .45)[min(self.repair_round-1, 2)]
+                dx, dy = (box[2]-box[0])*pad, (box[3]-box[1])*pad
+                box = (max(0,box[0]-dx), max(0,box[1]-dy), min(1,box[2]+dx), min(1,box[3]+dy))
+                view = [image, self.crop(image, box)]
+            except (ValueError, TypeError, KeyError):
+                box = ()
+        prompt = PROPOSE % (task_question(question), self.ledger_text(ledger), feedback)
+        prompt += '\nFor final_answer only: ' + answer_format(question)
+        if box:
+            prompt += '\nImage 1 is the full scene. Image 2 is a magnified evidence region; use it to correct the previous step.'
+        raw = self.vlm.generate(view, prompt, max_tokens=256, schema=STEP_SCHEMA)
+        try:
+            value = parse_json(raw)
+            # Some real outputs append their answer after the localization question.
+            # Do not pass that appended assertion into the independent box call.
+            query = value.get('evidence_question','')
+            if '?' in query:
+                value['evidence_question'] = query.split('?',1)[0]+'?'
+            step = replace(Step.from_dict(value), box=box)
+            if re.fullmatch(r'[A-Ea-e]|[Yy]es|[Nn]o|[\d.]+', step.claim.strip(' .')):
+                raise ValueError('State a complete visual fact, not a bare answer label')
+            if step.claim.lower().strip() in ('one fact or deduction','one fact','your actual observation/inference'):
+                raise ValueError('Placeholder text is not an observation')
+            self.last_candidate = step
+            return step
+        except (ValueError, KeyError, TypeError) as exc:
+            raise ValueError(f'{exc}; raw candidate={raw[:1200]}') from exc
+
+    def finalize(self, image, question, ledger):
+        prompt = ('Give the best available concise answer to the question using the image '
+                  'and evidence ledger. Prefer verified facts. Uncertain statements are NOT '
+                  'established facts; do not silently assume them true. If uncertainty remains, '
+                  'choose the best-supported answer; the controller records its uncertainty. '
+                  'Return ONLY the option letter for multiple choice, otherwise a word or number.\n'
+                  f'Question: {task_question(question)}\nLedger: {self.ledger_text(ledger)}\n'
+                  + answer_format(question))
+        return self.vlm.generate(image, prompt, max_tokens=64)
 
     def audit(self, image, question, step, ledger):
         if step.kind == 'deduction':
-            prompt = ('Check the inference using ONLY the accepted premises below. '
+            prompt = ('Check the inference using ONLY the labeled premises below. '
+                      'Uncertain premises may support a conditional inference but are not proven facts. '
                       'Reject any new visual fact not entailed by them. Is the entire proposed '
                       'claim justified, and, if supplied, does its final answer correctly answer '
                       'the question from these premises? Reply only Yes or No.\n'
-                      f'Question: {question}\nPremises: {json.dumps([s.claim for s in ledger])}\n'
+                      f'Question: {task_question(question)}\nPremises: {self.ledger_text(ledger)}\n'
                       f'Claim: {step.claim}\nFinal answer: {step.final_answer}')
             score = self.vlm.yes_probability(None, prompt)
             return Audit('supported' if score >= self.support else 'inconclusive',
                          {'entailment': score}, 'Deduction entailment gate')
-        if not step.box:
-            return Audit('inconclusive', reason='Missing evidence box; localize and retry.')
-        # Final answers are only emitted by a separately checked deduction.
-        if step.final_answer is not None:
-            return Audit('inconclusive', reason='First verify the visual fact, then derive the final answer.')
+        def view(img):
+            return [img, self.crop(img, step.box)] if step.box else img
         prompt = ('Is the following visual claim fully supported by the image? '
                   'Missing, ambiguous, partially true, or unsupported evidence means No. '
                   'Reply only Yes or No.\nClaim: ' + step.claim)
-        original = self.vlm.yes_probability(image, prompt)
+        if step.box:
+            prompt += '\nImage 1 is the original scene; image 2 is a magnified region from it.'
+        original = self.vlm.yes_probability(view(image), prompt)
         scores = {'support': original, 'box': step.box}
         if original < self.support:
             return Audit('contradicted' if original < 1-self.support else 'inconclusive',
                          scores, 'Insufficient original-image support; reinspect or correct the claim.')
         if not self.counterfactual:
-            return Audit('supported', scores, 'Original-image support gate')
+            return self.check_final(question, step, ledger, scores, 'Original-image support gate')
         # Reacquire the region in an independent context without the proposed answer.
-        route_prompt = ('Locate the smallest region containing all evidence needed to inspect: '
-                        + step.evidence_question + '. Return only JSON {"box":[x0,y0,x1,y1]}, '
-                        'normalized [0,1]. Do not answer the question.')
         if not step.evidence_question.strip():
             return Audit('inconclusive', scores, 'Need a neutral evidence question for localization.')
         try:
-            routed = parse_json(self.vlm.generate(image, route_prompt, max_tokens=100, schema=BOX_SCHEMA))
-            box = Step.from_dict({'claim': 'localization', 'box': routed['box']}).box
+            box = self.locate(image, step.evidence_question)
             if not box:
                 raise ValueError('Empty routed box')
         except (ValueError, TypeError, KeyError):
@@ -119,12 +189,27 @@ class Online:
         controls = control_boxes(box)
         if len(controls) < 2:
             return Audit('inconclusive', scores, 'Region too broad for matched deletion controls; localize more precisely.')
-        removed = self.vlm.yes_probability(mask(image, box), prompt)
-        control_scores = [self.vlm.yes_probability(mask(image, b), prompt) for b in controls]
+        removed = self.vlm.yes_probability(view(mask(image, box)), prompt)
+        control_scores = [self.vlm.yes_probability(view(mask(image, b)), prompt) for b in controls]
         specific = (original - removed) - sum(original-c for c in control_scores)/len(controls)
         scores.update(target_mask=removed, control_scores=control_scores,
                       control_boxes=controls, specificity=specific)
         if specific < self.specificity:
             return Audit('inconclusive', scores,
                          'Localized counterfactual dependence is weak; reacquire evidence or revise.')
-        return Audit('supported', scores, 'Original support and localized counterfactual specificity passed')
+        return self.check_final(question, step, ledger, scores,
+                                'Original support and localized counterfactual specificity passed')
+
+    def check_final(self, question, step, ledger, scores, reason):
+        if step.final_answer is not None:
+            prompt = ('Does the proposed final answer correctly follow from the visual fact and '
+                      'labeled premises for this question? Check the exact option mapping if present. '
+                      'Do not invent additional visual facts. Reply only Yes or No.\n'
+                      f'Question: {task_question(question)}\nPremises: {self.ledger_text(ledger)}\n'
+                      f'Verified visual fact: {step.claim}\nProposed answer: {step.final_answer}')
+            scores['answer_entailment'] = self.vlm.yes_probability(None, prompt)
+            if scores['answer_entailment'] < self.support:
+                scores['answer_withheld'] = True
+                return Audit('supported', scores,
+                             'Visual fact supported; withhold proposed answer and derive a corrected conclusion next.')
+        return Audit('supported', scores, reason)

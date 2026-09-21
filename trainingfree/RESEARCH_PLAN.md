@@ -4,8 +4,11 @@
 
 A speculative visual premise can contaminate subsequent reasoning. The proposed
 inference controller therefore does not expose a candidate to the next reasoning
-step until evidence verification accepts it. A rejected candidate is repaired at
-the same boundary. This is not full-chain generation followed by rethink.
+step as a verified premise until evidence verification accepts it. A rejected
+candidate is repaired at the same boundary for at most three repair rounds after
+the initial check. If still unresolved, mark that point uncertain and CONTINUE;
+never silently treat it or its dependent conclusions as verified. This is not
+full-chain generation followed by rethink (latest user clarification).
 
 The backbone remains frozen. Start from FaithAct's released inference/tool code,
 not the older project's SFT pipeline. Our lightweight verifier reuses the frozen
@@ -40,7 +43,8 @@ and a declared development split from the final score report.
 
 Canonical code: `FENGye-sjtu/FBC`, `main`, directory `trainingfree/`.
 Do not commit someone else's dirty `efa/` working tree. Before changes fetch main;
-after verified changes commit/rebase/push without force. Runtime artifacts belong
+sync completed research milestones in batches, not every edit, without force.
+Runtime artifacts belong
 in HF dataset `QC1/FBC` under a separate `trainingfree/` prefix when published.
 
 Server layout (all new writes confined here):
@@ -56,3 +60,7 @@ Server layout (all new writes confined here):
 Existing Python packages and public pretrained weights may be read from older
 directories. Never install into their environments, rewrite their caches, kill
 their tasks, or overwrite their files.
+
+GPU policy: ignore utilization; share occupied GPUs whenever memory fits. Use
+quantization/small engineering models for tight memory, clearly separate those
+numbers from original-precision replication. Do not wait for an idle GPU.

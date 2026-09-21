@@ -3,26 +3,34 @@
 Latest user instruction (2026-09-21): prioritize actual accuracy and runnable
 experiments. Frozen MLLM; **one step -> evidence audit -> repair or commit -> next
 step**. No complete speculative chain followed by cleanup in our method.
-Backtracking is deferred. This directory is separate from the older `efa/` SFT
+After an initial failed audit, repair up to THREE rounds. If still unresolved,
+commit an explicit uncertain point and continue, carrying uncertainty into
+dependent conclusions. This is not automatic failure/abstention. Backtracking is
+deferred. This directory is separate from the older `efa/` SFT
 project; it neither changes its files nor interrupts its jobs.
 
 ## What is implemented
 
 - `faithact.py`: port of official FaithAct object extraction, GroundingDINO,
   trained CLIP poll, 0.7/0.3 fusion, 0.4/0.6 thresholds and official prompts.
-- `core.py`: tentative vs committed steps, failure-only repair, bounded budgets,
-  accepted-premise-only continuation, final deduction audit and complete trace.
+- `core.py`: tentative vs verified vs uncertain steps, three-round repair,
+  uncertainty-aware continuation, final deduction audit and complete trace.
 - `online.py`: frozen VLM support scoring, separate deduction entailment, optional
   independently localized box deletion versus two equal-area low-overlap controls.
 - `run.py`: same input/decoding settings across CoT, FaithAct, online, online-CF;
   per-case trace, latency/token counts, resumable runs, exact-match accuracy.
 - `prepare.py`, `queue.py`, `experiment.sh`: pinned asset preparation and one-shot
   resource-aware experiment launch under the authorized CVPR roots only.
+- `worker.py`: persistent frozen weights with controller reload between queued
+  jobs; `queue_bf16.py` fits unquantized weights across spare GPU memory.
+- `report.py`: paired answer accuracy, actual CF executions, accepted repairs,
+  uncertain continuation and reference-blind parser corrections from saved traces.
 
 The CF MVP uses image-mean masking (not learned causal interventions). Scores and
 thresholds are engineering defaults, not calibrated confidence or correctness
-guarantees. Insufficient evidence is not silently accepted. Exhausted cases are
-unanswered and counted wrong in end-task accuracy. No claimed score improvement
+guarantees. Insufficient evidence is not silently labeled verified. Exhausted
+points continue as uncertain; a bounded finalization produces a best-effort answer
+without claiming it passed verification. No claimed score improvement
 exists until real experiment outputs support it.
 
 ## FaithAct provenance and reproduction targets
@@ -38,6 +46,9 @@ MMHal ratings **3.40 / 3.48** (ratings, not accuracy). These are published targe
 **not our measurements**. Primary first replication is all 765 RealWorldQA cases.
 
 Known port choices that must be resolved before declaring paper parity:
+
+See `REPLICATION.md` for the complete known/unknown protocol checklist and
+`paper/positioning.md` for the distinction between FaithAct's paper and release.
 
 1. Upstream imports an absent `qwen_inference.py`; our adapter supplies the missing
    model generation implementation. Original raw-CoT prompt/decoding not fully
@@ -66,13 +77,19 @@ cd "$CVPR_ROOT/code"
 # Read-only reuse of installed Python/packages; no installs into the old project.
 PY=/data_cinema/zqc/VBC/envs/efa/bin/python
 $PY -B -m trainingfree.prepare
-$PY -B -m trainingfree.queue --name faithact_reproduction_v1 --assets-ready -- \
-  bash "$CVPR_ROOT/code/trainingfree/experiment.sh"
+$PY -B -m trainingfree.queue --name shared_7b_nf4_uncertain_v1 \
+  --min-free-mib 6200 --assets-ready -- \
+  bash "$CVPR_ROOT/code/trainingfree/experiment_shared.sh"
 ```
 
-The queue does not reserve or evict anyone else's GPU. It waits for >=22 GB free
-and <=5% utilization, checks again under a project lock, and exits after 48h if
-unavailable. Pilot failures stop progression, not all future research.
+The queue ignores utilization and shares busy cards when the selected model fits.
+NF4 7B pilot uses a 6200 MiB launch floor and 448x448-equivalent pixel budget;
+these are engineering settings, not original-precision paper parity. The allocator
+is capped to the launch-time free-memory budget minus 256 MiB. No other task is
+evicted. BF16 replication also supports `queue_bf16.py` with `--device auto`,
+combining launch-time spare memory across busy GPUs without quantization or CPU
+offload. Queues expire after 48h. Sync code/data only at research milestones,
+not on every implementation edit (latest user instruction).
 
 Next research iterations: inspect the paired pilot's real failures, improve
 step/region prompts and gate utility, expand accuracy comparison, then add

@@ -43,6 +43,15 @@ def main():
                         sftp.mkdir(str(item))
                     sftp.put(str(Path(request['upload'])), str(target))
                 print(json.dumps({'uploaded': str(target)}), flush=True)
+            elif 'download' in request:
+                source = PurePosixPath(request['download'])
+                if '..' in source.parts or not any(r in source.parents for r in ROOTS):
+                    raise ValueError('Download outside authorized CVPR directories')
+                target = Path(request['target']).resolve()
+                target.parent.mkdir(parents=True,exist_ok=True)
+                with client.open_sftp() as sftp:
+                    sftp.get(str(source),str(target))
+                print(json.dumps({'downloaded':str(target)}),flush=True)
             else:
                 _, stdout, stderr = client.exec_command(request['cmd'])
                 print(stdout.read().decode('utf-8', errors='replace'), flush=True)

@@ -1,0 +1,1 @@
+{"args":["--model","/data_cinema/zqc/CVPR/models/Qwen2.5-VL-7B-Instruct","--dataset","/data_cinema/zqc/CVPR/data/realworldqa/cases.jsonl","--quantization","nf4","--max-pixels","200704","--max-new-tokens","384","--repairs","3","--methods","online,online_cf","--limit","1","--output","/data_cinema/zqc/CVPR/runs/realworldqa_7b_nf4_stepfix1_v2"]}

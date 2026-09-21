@@ -8,5 +8,6 @@ huggingface-hub>=0.30,<1
 pyarrow>=18
 requests>=2.31
 lm-format-enforcer==0.10.11
+bitsandbytes==0.50.2
 # Windows deployment helper only; not needed for server inference.
 paramiko>=3.5

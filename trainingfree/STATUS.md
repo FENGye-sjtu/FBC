@@ -1,52 +1,76 @@
-# Handoff — 2026-09-21
+# Training-free CVPR2027 status — 2026-09-22
 
-This is an implemented and deployed **first engineering version**, not a
-completed paper or a successful reproduction claim.
+Implemented research prototype with measured outputs, not a completed paper or
+a successful replication claim. Read live files, not process-launch status.
 
-## Verified now
+## Fixed scope
 
-- Code is isolated in `trainingfree/`, synced to `FENGye-sjtu/FBC:main` and
-  deployed to `/data_cinema/zqc/CVPR/code/trainingfree`.
-- 12 CPU unit tests pass locally and on the server (controller, repair context,
-  counters, image interventions and matched-control gate logic).
-- Real Qwen2.5-VL-3B direct generation ran on CPU. First online smoke exposed
-  malformed step JSON; schema-constrained generation was added and the second
-  real-model smoke was launched. Do not treat these one-case tests as accuracy
-  evidence or claim the second run passed before reading its output.
-- Official FaithAct `best.pt` downloaded and SHA256 verified. GroundingDINO and
-  CLIP architecture/tokenizer files are available. The full classifier checkpoint
-  contains CLIP encoders; strict state loading is exercised by the tool smoke.
-- GitHub push succeeded. HF authenticated identity is QC1; QC1/FBC is accessible
-  and private. No fabricated benchmark artifacts were published.
+Frozen MLLM; one step then audit; initial audit plus at most THREE repair rounds;
+unresolved evidence stays explicitly uncertain and reasoning continues.
+A verified visual fact survives a failed attached answer: withhold the answer,
+commit only the fact, and derive a corrected conclusion next.
+All remote writes stay under the two CVPR roots. VBC/covt resources are read-only.
+Share spare GPU memory regardless of utilization; never evict others' jobs.
+Batch publication at meaningful milestones, not every edit.
 
-## Running / queued at handoff preparation
+## Verified implementation
 
-Read live files instead of assuming these transient states remain unchanged:
+Official FaithAct port/checkpoint and all 765 original RealWorldQA cases are ready.
+Implemented structured atomic steps, processed-image coordinate conversion,
+crop reacquisition, support/entailment gates, CF masking with matched controls,
+uncertain continuation, persistent workers, and explicit BF16 multi-GPU packing.
+24 local and remote tests pass.
+Code snapshots and per-case records preserve experiment provenance.
 
-| Job | PID at launch | Live record |
-|---|---:|---|
-| Asset preparation / pretrained 7B weight hash verification | 3678436 | `runtime/assets.json`, `logs/prepare_v3.log` |
-| CPU real-model structured-step smoke | 3674804 | `logs/cpu_adapter_smoke_v2.log`, `runs/cpu_adapter_smoke_v2/` |
-| CPU real FaithAct tool smoke | 3678438 | `logs/tools_smoke.log`, `runtime/tools_smoke.json` |
-| 16-case paired pilot, then 765-case baseline | 3678437 | `runtime/faithact_reproduction_v1.json`, `logs/faithact_reproduction_v1.log` |
+## Measurements (development only)
 
-All paths in this table are relative to `/data_cinema/zqc/CVPR`.
-The queue waits for complete assets and a GPU with >=22 GB free and <=5% usage;
-it does not evict other jobs. Four GPUs were occupied. It times out after 48h.
-Only this track's own asset/queue processes were restarted during implementation.
-Older VBC/covt files and all pre-existing GPU tasks were left unchanged.
+Run `realworldqa_7b_nf4_pilot4_stepfix_v3`: CoT 3/4 after reference-blind
+terminal-option parser correction; FaithAct 2/4; online 4/4. One online answer
+used uncertain fallback. CF completed at 3/4, also with one uncertain fallback;
+it did NOT outperform online. Its 26 actual counterfactual audits are recorded.
+Do not infer benchmark gains from four development examples, or mix versions.
+The older FaithAct 4/4 used a different prompt/run and is not pooled here.
 
-## Next work
+Case 2 revealed that a supported yellow-light observation was discarded when its
+answer failed entailment. Later drafts repeated a red-light claim. Version v4
+preserves the observation and withholds the invalid conclusion. The v3 numbers
+predate this fix. Original traces remain unchanged; reports show parser updates.
+V4 still repeated an exhausted point despite prompt instructions. V5 therefore
+enforces the point budget in the controller and exposes unresolved questions,
+not repeated unverified values, to downstream prompts. Do not claim v5 efficacy
+until its real-model regression and subsequent 16-case run finish.
 
-1. Inspect the two real smoke outputs and fix any adapter/runtime errors first.
-2. Confirm all five asset entries are ready. The 7B source is an existing official
-   snapshot, read-only and checked against pinned HF LFS hashes. RealWorldQA must
-   contain exactly 765 records.
-3. Read the paired pilot table and traces. Improve actual failure modes, not a
-   large collection of peripheral experiments. Run full baseline reproduction and
-   record deviations from paper protocol before comparing its reported scores.
-4. Publish measured traces/summaries to `QC1/FBC/trainingfree/` without changing
-   older datasets; keep code and coordination documents on GitHub main.
+## Live work (relative to /data_cinema/zqc/CVPR)
 
-Fixed design and experiment priorities: `RESEARCH_PLAN.md`. Operational commands
-and reproduction caveats: `README.md`. Do not switch this task back to SFT.
+- `runtime/workers/7b_dev`: job 002 is the four-way v3 pilot; job 003 runs
+  online/CF v4 on four cases; 003a tests v5 on the repeated-point case; 004 is the
+  16-case v5 comparison with a declared standardized FaithAct answer-format
+  variant. Log `logs/resident_7b_v2.log`.
+- `runtime/workers/7b_bf16_replication_v3`: job 001 targets all 765 CoT and
+  FaithAct examples, BF16, 1003520 max pixels, 512 output tokens.
+  Log `logs/bf16_replication_v3.log`. Real predictions are now being produced;
+  `runtime_model.json` confirms all 729 parameter tensors are torch.bfloat16
+  and all placements are GPUs. The full reproduction score is still pending.
+  Do not change `faithact.py` or pinned upstream templates during this run: its
+  older harness imports the FaithAct class only after the CoT phase completes.
+- BF16 v1 FAILED before predictions because automatic placement offloaded to
+  disk. V2 FAILED because a root device-map entry moved sharded modules onto one
+  GPU during dispatch. V3 removes that root entry and is operational.
+- Old NF4 full baseline was intentionally stopped at 107 CoT cases to free memory
+  for BF16. Results are preserved, but this is not a completed reproduction.
+- Old 3B one-case online/CF diagnostic completed; its worker was stopped.
+  The unstarted four-case 3B request is deferred, not failed or completed.
+
+## Continue from here
+
+Complete/read v3 and v4 traces; verify BF16 runtime, then let the complete baseline
+finish. Compare with paper Table 2 CoT 70.1% / FaithAct 74.5% only with disclosed
+protocol differences in `REPLICATION.md`. Extend paired development to 16 cases,
+freeze the method, and run full evaluation plus MMStar.
+
+Completed v3 raw traces, code snapshots and corrected report were published to
+HF `trainingfree/milestones/20260922_pilot4_v3`, commit
+`e0db220bee7f1527965cbf2963e77363dbf4162c`. GitHub code publication is batched at
+this milestone. Preserve other-computer changes. No current score justifies a superiority
+claim. `paper/positioning.md` notes that FaithAct's paper already discusses
+online verification, unlike the structure of its released Qwen script.
