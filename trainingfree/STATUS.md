@@ -19,8 +19,11 @@ Official FaithAct port/checkpoint and all 765 original RealWorldQA cases are rea
 Implemented structured atomic steps, processed-image coordinate conversion,
 crop reacquisition, support/entailment gates, CF masking with matched controls,
 uncertain continuation, persistent workers, and explicit BF16 multi-GPU packing.
-27 local and remote tests pass.
+28 local and remote tests pass.
 Code snapshots and per-case records preserve experiment provenance.
+The report parser now also recognizes a single colon-labeled MCQ answer (e.g.
+`A: 2 green lights`) and handles empty predictions. Apply the same parser to all
+methods after completion; never rewrite raw outputs or use references to extract.
 
 ## Measurements (development only)
 

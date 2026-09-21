@@ -251,6 +251,12 @@ class Tests(unittest.TestCase):
         self.assertEqual(extract_answer('Reasoning\nFinal answer:\n\nGreen'), 'Green')
         self.assertEqual(extract_answer('Reasoning mentions A and B.\nGiven this:\n\nB', 'A. Yes B. No'), 'B')
 
+    def test_empty_and_colon_labeled_answers(self):
+        self.assertEqual(extract_answer('  \n'), '')
+        self.assertEqual(extract_answer('A: 2 green lights','A. 2 B. 3'), 'A')
+        self.assertEqual(extract_answer('A: 2 B: 3','A. 2 B. 3'), 'A: 2 B: 3')
+        self.assertEqual(extract_answer('A: a label in open text','Describe the label'), 'A: a label in open text')
+
 
 if __name__ == '__main__':
     unittest.main()

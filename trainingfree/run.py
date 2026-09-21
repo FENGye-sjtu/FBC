@@ -17,6 +17,8 @@ def extract_answer(text, question=''):
     if text is None:
         return ''
     text = text.strip()
+    if not text:
+        return ''
     tail = text.splitlines()[-1].strip(' *`.')
     if re.fullmatch(r'[A-E]', tail) and re.search(r'\bA[.)]\s', question) and re.search(r'\bB[.)]\s', question):
         return tail
@@ -29,8 +31,8 @@ def extract_answer(text, question=''):
     letter = re.fullmatch(r'\(?([A-E])\)?[.)]?', text)
     if not letter and re.search(r'\bA[.)]\s', question) and re.search(r'\bB[.)]\s', question):
         # Accept a single explicit option label plus its wording, not a list of options.
-        labels = re.findall(r'\b([A-E])[.)]\s', text)
-        if len(labels) == 1 and re.match(r'^[A-E][.)]\s', text):
+        labels = re.findall(r'\b([A-E])[.):]\s', text)
+        if len(labels) == 1 and re.match(r'^[A-E][.):]\s', text):
             return labels[0]
     return letter.group(1) if letter else text
 
