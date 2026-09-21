@@ -22,6 +22,33 @@ class Scripted:
 
 
 class Tests(unittest.TestCase):
+    def test_counterfactual_gate_runs_target_and_controls(self):
+        class VLM:
+            def __init__(self):
+                self.scores = iter([.95, .35, .90, .92])
+            def generate(self, *args, **kwargs):
+                return '{"box":[0.2,0.2,0.4,0.4]}'
+            def yes_probability(self, *args):
+                return next(self.scores)
+        image = Image.new('RGB', (40,40), 'white')
+        result = Online(VLM(), counterfactual=True).audit(
+            image, 'q', Step('visible object', evidence_question='object region', box=(.2,.2,.4,.4)), [])
+        self.assertEqual(result.status, 'supported')
+        self.assertAlmostEqual(result.scores['specificity'], .56)
+        self.assertEqual(len(result.scores['control_scores']), 2)
+
+    def test_counterfactual_global_damage_is_not_specific_evidence(self):
+        class VLM:
+            def __init__(self):
+                self.scores = iter([.95, .35, .30, .32])
+            def generate(self, *args, **kwargs):
+                return '{"box":[0.2,0.2,0.4,0.4]}'
+            def yes_probability(self, *args):
+                return next(self.scores)
+        result = Online(VLM(), counterfactual=True).audit(
+            Image.new('RGB', (40,40)), 'q', Step('fact', evidence_question='region', box=(.2,.2,.4,.4)), [])
+        self.assertEqual(result.status, 'inconclusive')
+
     def test_repair_does_not_pollute_next_context(self):
         b = Scripted([Step('wrong'), Step('right'), Step('therefore', 'deduction', final_answer='A')],
                      ['contradicted', 'supported', 'supported'])
