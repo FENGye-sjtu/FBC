@@ -1,0 +1,128 @@
+{
+  "dataset": "/data_cinema/zqc/CVPR/data/vlmevalkit/cases.jsonl",
+  "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+  "parser_sha256": "6d7c3d98c5ef949f73a9d982e2503f6cdcd79e89d81062c028247221856fcb8d",
+  "parser_version": "committed_answer_v4",
+  "reference_blind_extraction": true,
+  "methods": {
+    "direct": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_controls_v7/direct.jsonl",
+      "n": 16,
+      "correct": 9,
+      "manifest_path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_controls_v7/manifest.json",
+      "input_budget": {
+        "model": "/data_cinema/zqc/CVPR/models/Qwen2.5-VL-7B-Instruct",
+        "quantization": "nf4",
+        "max_pixels": 1003520,
+        "max_new_tokens": 512,
+        "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+      },
+      "accuracy": 0.5625,
+      "accuracy_wilson95": [
+        0.33178195606776517,
+        0.7690163666481448
+      ],
+      "uncertain": 0,
+      "with_evidence": 0,
+      "mean_seconds": 2.045929479310871,
+      "status_counts": {
+        "direct": 16
+      },
+      "parser_changes": []
+    },
+    "v18_online": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_v18_evidence_first/evidence_first.jsonl",
+      "n": 16,
+      "correct": 8,
+      "manifest_path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_v18_evidence_first/manifest.json",
+      "input_budget": {
+        "model": "/data_cinema/zqc/CVPR/models/Qwen2.5-VL-7B-Instruct",
+        "quantization": "nf4",
+        "max_pixels": 1003520,
+        "max_new_tokens": 512,
+        "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+      },
+      "accuracy": 0.5,
+      "accuracy_wilson95": [
+        0.2799923761135083,
+        0.7200076238864916
+      ],
+      "uncertain": 12,
+      "with_evidence": 0,
+      "mean_seconds": 108.79573257474112,
+      "status_counts": {
+        "answered_with_uncertainty": 12,
+        "verified_by_model": 4
+      },
+      "parser_changes": []
+    },
+    "v19_online": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_v19_evidence_first/evidence_first.jsonl",
+      "n": 16,
+      "correct": 9,
+      "manifest_path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_v19_evidence_first/manifest.json",
+      "input_budget": {
+        "model": "/data_cinema/zqc/CVPR/models/Qwen2.5-VL-7B-Instruct",
+        "quantization": "nf4",
+        "max_pixels": 1003520,
+        "max_new_tokens": 512,
+        "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+      },
+      "accuracy": 0.5625,
+      "accuracy_wilson95": [
+        0.33178195606776517,
+        0.7690163666481448
+      ],
+      "uncertain": 13,
+      "with_evidence": 0,
+      "mean_seconds": 118.04502418993798,
+      "status_counts": {
+        "answered_with_uncertainty": 13,
+        "verified_by_model": 3
+      },
+      "parser_changes": []
+    }
+  },
+  "paired": {
+    "v18_online_vs_direct": {
+      "n": 16,
+      "left_correct": 9,
+      "right_correct": 8,
+      "wins": [],
+      "losses": [
+        "3"
+      ],
+      "net_correct": -1,
+      "mcnemar_exact_p": 1.0,
+      "input_budget_matched": true,
+      "input_budget_differences": {},
+      "comparison_scope": "matched_input_budget"
+    },
+    "v19_online_vs_direct": {
+      "n": 16,
+      "left_correct": 9,
+      "right_correct": 9,
+      "wins": [],
+      "losses": [],
+      "net_correct": 0,
+      "mcnemar_exact_p": 1.0,
+      "input_budget_matched": true,
+      "input_budget_differences": {},
+      "comparison_scope": "matched_input_budget"
+    },
+    "v19_online_vs_v18_online": {
+      "n": 16,
+      "left_correct": 8,
+      "right_correct": 9,
+      "wins": [
+        "3"
+      ],
+      "losses": [],
+      "net_correct": 1,
+      "mcnemar_exact_p": 1.0,
+      "input_budget_matched": true,
+      "input_budget_differences": {},
+      "comparison_scope": "matched_input_budget"
+    }
+  }
+}

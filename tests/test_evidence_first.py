@@ -52,6 +52,7 @@ class EvidenceFirstTests(unittest.TestCase):
         self.assertIsNone(step.final_answer)
         _, evidence_prompt, kwargs = vlm.calls[1]
         self.assertNotIn('max_tokens', vlm.calls[0][2])
+        self.assertTrue(vlm.calls[0][1].endswith('Think step by step.'))
         self.assertNotIn('A. Two bars', evidence_prompt)
         self.assertNotIn('B. Three bars', evidence_prompt)
         self.assertNotIn('candidate answer', evidence_prompt.lower())
@@ -74,7 +75,10 @@ class EvidenceFirstTests(unittest.TestCase):
                          ['string', 'null'])
 
     def test_insufficient_deduction_can_defer_answer_and_acquire_more_evidence(self):
-        vlm = FakeVLM(['A', evidence(), incomplete_deduction(), evidence()])
+        new_fact = {'claim':'A fourth bar is partly hidden behind the frame.',
+                    'kind':'visual', 'evidence_question':'Is another bar hidden by the frame?',
+                    'final_answer':None}
+        vlm = FakeVLM(['A', evidence(), incomplete_deduction(), new_fact])
         backend = EvidenceFirstOnlineRepair(vlm)
         first = backend.propose(self.image, QUESTION, [], '')
         ledger = [replace_verified(first)]
@@ -87,7 +91,10 @@ class EvidenceFirstTests(unittest.TestCase):
         self.assertNotIn('A. Two bars', vlm.calls[3][1])
 
     def test_failed_deduction_routes_to_new_option_blind_evidence(self):
-        vlm = FakeVLM(['A', evidence(), deduction(), evidence()])
+        new_fact = {'claim':'One additional bar extends behind the wooden post.',
+                    'kind':'visual', 'evidence_question':'What extends behind the post?',
+                    'final_answer':None}
+        vlm = FakeVLM(['A', evidence(), deduction(), new_fact])
         backend = EvidenceFirstOnlineRepair(vlm)
         initial = backend.propose(self.image, QUESTION, [], '')
         ledger = [replace_verified(initial)]
@@ -113,6 +120,35 @@ class EvidenceFirstTests(unittest.TestCase):
         self.assertIn('answer was withheld', vlm.calls[0][1])
         self.assertNotIn('A. Two bars', vlm.calls[0][1])
 
+    def test_visual_repair_does_not_relabel_a_deduction_as_observation(self):
+        vlm = FakeVLM([
+            'A', evidence(),
+            {'observation':'Three bars are visible.', 'remaining_question':'',
+             'evidence_complete':True},
+            deduction(),
+        ])
+        backend = EvidenceFirstOnlineRepair(vlm)
+        initial = backend.propose(self.image, QUESTION, [], '')
+        with patch.object(backend, 'locate', return_value=(.1, .1, .5, .5)):
+            with self.assertRaisesRegex(ValueError, 'not a deduction'):
+                backend.propose(self.image, QUESTION, [], 'Previous visual audit failed')
+        self.assertEqual(initial.kind, 'visual')
+
+    def test_visual_repair_does_not_reverify_same_claim_with_new_question(self):
+        vlm = FakeVLM([
+            'A', evidence(),
+            {'observation':'Three bars are visible.', 'remaining_question':'',
+             'evidence_complete':True},
+            {'claim':'Three distinct bars are visible.', 'kind':'visual',
+             'evidence_question':'Which bars can be seen?', 'final_answer':None},
+        ])
+        backend = EvidenceFirstOnlineRepair(vlm)
+        initial = backend.propose(self.image, QUESTION, [], '')
+        with patch.object(backend, 'locate', return_value=(.1, .1, .5, .5)):
+            with self.assertRaisesRegex(ValueError, 'repeats a verified fact'):
+                backend.propose(self.image, QUESTION, [replace_verified(initial)],
+                                'Previous visual audit failed')
+
     def test_no_passed_deduction_preserves_direct_anchor(self):
         vlm = FakeVLM(['A', evidence()])
         backend = EvidenceFirstOnlineRepair(vlm)
@@ -120,7 +156,7 @@ class EvidenceFirstTests(unittest.TestCase):
             result = solve(backend, self.image, QUESTION, max_steps=1, repairs=0)
         self.assertEqual(result['answer'], 'A')
         self.assertEqual(result['status'], 'answered_with_uncertainty')
-        self.assertEqual(backend.last_finalization['source'], 'tentative_direct_anchor')
+        self.assertEqual(backend.last_finalization['source'], 'tentative_paper_literal_cot_anchor')
 
     def test_negative_claim_does_not_use_nonidentifying_deletion_cf(self):
         vlm = FakeVLM([])

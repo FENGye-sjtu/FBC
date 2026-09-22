@@ -191,8 +191,22 @@ a deduction may overwrite a valid, different direct anchor. With only one fact,
 the claim may stay verified but its changed answer is withheld and the next step
 acquires another option-blind fact. It also strips any answer-bearing suffix after
 the first `?` in a generated evidence question. V18-CF was skipped after this
-diagnosis, and V19 is now running on the same spare-memory worker; it replaces
-V18 in the pending BF16-128 job. No gain is claimed before V19 finishes.
+diagnosis; V19 then ran on the same spare-memory worker.
+
+V19 online completes at 9/16, exactly matching its direct anchor (zero gains,
+zero losses) and repairing V18's sole ID 3 regression. This validates the
+disagreement gate as a no-regression correction on the pilot, but it does not
+raise accuracy. V20 therefore replaces the direct anchor with the strongest
+open initial prompt found in the FaithAct audit: paper-literal `Think step by
+step.` (94/128 on BF16 development). Only its extracted answer is retained as
+an unverified fallback; the generated chain is never inserted into the verified
+ledger. All option-blind evidence, bounded repair and two-fact disagreement
+requirements remain unchanged. V20 completed NF4-16 at 10/16 for both online
+and image-CF, equal to their own CoT anchors with no corrections or regressions;
+its separate BF16-128 evidence-first request remains pending. The V21 guard
+rejects deduction-shaped visual repairs and exact repeats of verified visual
+claims under renamed evidence questions. Its independent NF4-16 run must be
+scored before making any claim about answer accuracy.
 
 ## Implementation and evaluation commitments
 

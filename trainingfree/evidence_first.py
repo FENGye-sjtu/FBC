@@ -15,7 +15,7 @@ from .answers import extract_answer
 from .core import Audit, Step, parse_json
 from .online import STEP_SCHEMA, question_stem, sanitize_evidence_question
 from .online_repair import OnlineRepair
-from .prompts import answer_format, task_question
+from .prompts import answer_format, cot_prompt, task_question
 
 
 EVIDENCE_STEP_SCHEMA = deepcopy(STEP_SCHEMA)
@@ -34,7 +34,7 @@ DEDUCTION_STEP_SCHEMA['properties']['final_answer'] = {
 class EvidenceFirstOnlineRepair(OnlineRepair):
     """Keep option selection out of evidence acquisition and repair."""
 
-    protocol_version = 'evidence_first_v6_anchor_disagreement_gate'
+    protocol_version = 'evidence_first_v8_repair_kind_and_duplicate_guard'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -47,10 +47,12 @@ class EvidenceFirstOnlineRepair(OnlineRepair):
         self.pending_readback = None
         self.last_candidate = None
         self.repair_round = 0
-        # This call deliberately matches the declared direct baseline prompt.
-        # It supplies a no-regression fallback, never a verified premise.
+        # The prompt audit found the paper-literal CoT to be the strongest
+        # inspectable open baseline (94/128 on the development slice).  Keep
+        # its answer as a no-regression fallback, but never expose its chain as
+        # verified evidence to the stepwise controller.
         self.anchor_raw = self.vlm.generate(
-            image, question + '\nReturn only the concise answer.')
+            image, cot_prompt(question, 'faithact_paper_cot_literal'))
         self.anchor_answer = extract_answer(self.anchor_raw, question)
         self.fallback_answer = self.anchor_answer
 
@@ -80,9 +82,18 @@ class EvidenceFirstOnlineRepair(OnlineRepair):
         step = sanitize_evidence_question(Step.from_dict(value), stem)
         if re.fullmatch(r'[A-Ea-e]|[Yy]es|[Nn]o|[\d.]+', step.claim.strip(' .')):
             raise ValueError('Evidence must be a complete visible fact, not an answer label')
+        self._reject_repeated_visual_claim(step, ledger)
         self.last_candidate = step
         self.pending_readback = None
         return step
+
+    @staticmethod
+    def _reject_repeated_visual_claim(step, ledger):
+        claim_key = re.sub(r'\W+', ' ', step.claim.lower()).strip()
+        if any(item.kind == 'visual' and item.verification == 'verified'
+               and re.sub(r'\W+', ' ', item.claim.lower()).strip() == claim_key
+               for item in ledger):
+            raise ValueError('Visual claim repeats a verified fact; inspect a different cue')
 
     def _deduction_proposal(self, image, question, ledger):
         prompt = (
@@ -132,7 +143,10 @@ class EvidenceFirstOnlineRepair(OnlineRepair):
         # must still pass the ordinary support/CF audit.
         stem = question_stem(question)
         step = super().propose(image, stem, ledger, feedback)
+        if step.kind != 'visual':
+            raise ValueError('Visual repair must be a directly visible observation, not a deduction')
         step = replace(step, kind='visual', final_answer=None)
+        self._reject_repeated_visual_claim(step, ledger)
         self.last_candidate = step
         return step
 
@@ -183,10 +197,10 @@ class EvidenceFirstOnlineRepair(OnlineRepair):
         valid = (self.anchor_answer.upper() in labels if labels else bool(self.anchor_answer))
         if valid:
             self.last_finalization = {
-                'source': 'tentative_direct_anchor',
+                'source': 'tentative_paper_literal_cot_anchor',
                 'verification': 'uncertain',
                 'answer': self.anchor_answer.upper() if labels else self.anchor_answer,
-                'policy': 'preserve_anchor_when_no_deduction_passes',
+                'policy': 'preserve_paper_literal_anchor_when_no_deduction_passes',
             }
             return self.last_finalization['answer']
         self.last_finalization = {

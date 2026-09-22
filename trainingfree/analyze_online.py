@@ -11,6 +11,12 @@ from .answers import PARSER_VERSION, answer_source, choices_from_question, extra
 from .run import normalize
 
 
+PAPER_LITERAL_ANCHOR_PROTOCOLS = {
+    'evidence_first_v7_paper_literal_anchor',
+    'evidence_first_v8_repair_kind_and_duplicate_guard',
+}
+
+
 def read_rows(path):
     snapshot = Path(path).read_bytes()
     rows = [json.loads(line) for line in snapshot.decode('utf-8').splitlines() if line.strip()]
@@ -124,13 +130,22 @@ def diagnose_row(row, case=None):
         finalization_source = 'accepted_step'
     else:
         finalization_source = 'not_recorded'
+    recorded_finalization_source = finalization.get('source')
+    if (row.get('controller_protocol') in PAPER_LITERAL_ANCHOR_PROTOCOLS
+            and finalization_source == 'tentative_direct_anchor'):
+        # Early v7 runs persisted the old label after switching to a CoT anchor.
+        # Preserve the recorded field while correcting only its report provenance.
+        finalization_source = 'tentative_paper_literal_cot_anchor'
     comparable = initial_correct is not None and final_correct is not None
     return {
         'id':case_id, 'status':row.get('status',''), 'reference':reference,
         'initial_raw_answer':initial_raw, 'initial_answer':initial_answer,
-        'initial_answer_source':('tentative_direct_anchor' if
-                                 row.get('controller_protocol','').startswith('evidence_first_')
-                                 else 'first_step_candidate'),
+        'initial_answer_source':(
+            'tentative_paper_literal_cot_anchor'
+            if row.get('controller_protocol') in PAPER_LITERAL_ANCHOR_PROTOCOLS
+            else 'tentative_direct_anchor'
+            if row.get('controller_protocol','').startswith('evidence_first_')
+            else 'first_step_candidate'),
         'initial_answer_missing': initial_correct is None, 'initial_correct':initial_correct,
         'initial_unavailable_reason':initial_unavailable_reason,
         'initial_attempt':initial_event.get('attempt'), 'initial_step':initial_event.get('step'),
@@ -155,7 +170,9 @@ def diagnose_row(row, case=None):
         'support_scores':support, 'mean_support':mean(item['value'] for item in support),
         'answer_withheld':answer_withheld,
         'logged_readback_n':len(readbacks), 'readbacks':readbacks,
-        'finalization_source':finalization_source, 'finalization':finalization,
+        'finalization_source':finalization_source,
+        'recorded_finalization_source':recorded_finalization_source,
+        'finalization':finalization,
         'elapsed_seconds':row.get('elapsed_seconds'), 'calls':row.get('calls')}
 
 

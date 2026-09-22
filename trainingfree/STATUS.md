@@ -218,8 +218,21 @@ as the missing FaithAct Table-2 CoT protocol. See the
   may change a valid direct anchor. The duplicate old-queue V18 request was
   marked superseded before it could write a second row. V19 replaces V18 in the
   pending BF16 validation job on the same IDs. V18-CF was intentionally skipped
-  after the online diagnosis; V19 is now running on the independent spare-memory
-  worker instead of spending another arm on a superseded gate.
+  after the online diagnosis. V19 online is complete at 9/16, exactly matching
+  direct with zero gains and zero losses; it fixes V18's ID 3 regression and
+  records one anchor-disagreement answer withholding. V19-CF continues on the
+  spare-memory worker. V20 is queued next and replaces V19 in BF16: it uses the
+  empirically stronger paper-literal CoT answer as the unverified safety anchor
+  while keeping that chain out of the verified evidence ledger.
+  V20 NF4 first-16 online and image-CF have both finished at 10/16, exactly their
+  paper-literal CoT initial accuracy: zero corrections and zero regressions.
+  CF used 11 target masks and 22 controls but did not change an answer. The
+  V20 run saved an outdated `tentative_direct_anchor` label; the analyzer now
+  reports its actual CoT provenance without changing raw records or accuracy.
+  An observed repair path also mislabeled a deduction as a visual fact and
+  replayed an accepted claim. V21 rejects both; it has an independent NF4
+  16-case job using a frozen snapshot, not a measured improvement yet. See
+  `reports/20260923_v20_repair_guard_diagnostic.md` and `HANDOFF_CODEX_APP.md`.
 - V12 was stopped after an empty visual-question field bypassed the exhausted-
   point key; its events are retained. V13 fills that missing key from the neutral
   public question and uses independent rereading during repair. It retains the

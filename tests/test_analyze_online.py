@@ -128,15 +128,41 @@ class AnalyzeOnlineTests(unittest.TestCase):
         self.assertEqual(detail['initial_unavailable_reason'],'public_question_unavailable')
         self.assertFalse(detail['gain'])
 
-    def test_evidence_first_uses_recorded_direct_anchor_for_paired_changes(self):
+    def test_evidence_first_uses_recorded_cot_anchor_for_paired_changes(self):
         row = {'id':'0','question':QUESTION,'reference':'B','answer':'B','correct':True,
-               'controller_protocol':'evidence_first_v5_ground_then_commit',
+               'controller_protocol':'evidence_first_v7_paper_literal_anchor',
                'anchor_answer':'A','trace':[audit(None)]}
         detail = diagnose_row(row)
-        self.assertEqual(detail['initial_answer_source'],'tentative_direct_anchor')
+        self.assertEqual(detail['initial_answer_source'],'tentative_paper_literal_cot_anchor')
         self.assertEqual(detail['initial_answer'],'A')
         self.assertFalse(detail['initial_correct'])
         self.assertTrue(detail['gain'])
+
+    def test_older_evidence_first_keeps_direct_anchor_provenance(self):
+        row = {'id':'0','question':QUESTION,'reference':'B','answer':'A','correct':False,
+               'controller_protocol':'evidence_first_v6_anchor_disagreement_gate',
+               'anchor_answer':'A','trace':[audit(None)]}
+        self.assertEqual(diagnose_row(row)['initial_answer_source'],
+                         'tentative_direct_anchor')
+
+    def test_persisted_v7_direct_label_is_corrected_without_rewriting_raw_record(self):
+        row = {'id':'0','question':QUESTION,'reference':'A','answer':'A','correct':True,
+               'controller_protocol':'evidence_first_v7_paper_literal_anchor',
+               'anchor_answer':'A','trace':[audit(None)],
+               'finalization':{'source':'tentative_direct_anchor', 'answer':'A'}}
+        detail = diagnose_row(row)
+        self.assertEqual(detail['finalization_source'], 'tentative_paper_literal_cot_anchor')
+        self.assertEqual(detail['recorded_finalization_source'], 'tentative_direct_anchor')
+        self.assertEqual(row['finalization']['source'], 'tentative_direct_anchor')
+
+    def test_v8_keeps_cot_anchor_provenance(self):
+        row = {'id':'0','question':QUESTION,'reference':'A','answer':'A','correct':True,
+               'controller_protocol':'evidence_first_v8_repair_kind_and_duplicate_guard',
+               'anchor_answer':'A','trace':[audit(None)],
+               'finalization':{'source':'tentative_paper_literal_cot_anchor'}}
+        detail = diagnose_row(row)
+        self.assertEqual(detail['initial_answer_source'], 'tentative_paper_literal_cot_anchor')
+        self.assertEqual(detail['finalization_source'], 'tentative_paper_literal_cot_anchor')
 
 
 if __name__ == '__main__':

@@ -21,12 +21,16 @@ project; it neither changes its files nor interrupts its jobs.
 - `online_repair.py`: failure-only independent evidence rereading, with a
   neutral acquisition query and explicitly tentative best-supported fallback.
 - `evidence_first.py`: option-blind visual acquisition and repair followed by a
-  separate ledger-only deduction; a direct answer is retained only as an
+  separate ledger-only deduction; a tentative answer is retained only as an
   explicitly uncertain no-regression anchor. V18 grounds the relevant region
   before each atomic observation and permits an insufficient deduction to defer
   its answer and acquire another verified fact instead of forcing an option.
   V19 requires two distinct verified facts before changing a disagreeing direct
   anchor and removes answer-bearing suffixes from localization questions.
+  V20 uses the stronger paper-literal CoT answer as its unverified fallback while
+  keeping that chain out of the verified evidence ledger.
+  V21 rejects repaired deductions and repeated visual claims in acquisition;
+  its first-16 NF4 comparison is a separate experiment, not an established gain.
 - `run.py`: same input/decoding settings across CoT, FaithAct, online, online-CF;
   declared CoT prompt variants, reference-blind conclusion/option extraction,
   per-case trace, latency/token counts, and resumable runs.
