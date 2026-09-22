@@ -54,9 +54,26 @@ claim. Obvious causal/conclusion language is rejected from visual claims, and
 deductions are capped at 180 characters. The original three-repair limit,
 explicit uncertainty and forward-only ledger remain unchanged.
 
-An NF4 16-case diagnostic is running from the isolated snapshot. V22 is not an
-accuracy improvement until the completed paired output says so; CF remains
-deferred until the non-CF diagnostic is worth the added cost.
+V21 completed its non-CF 16-case guard run at 10/16, exactly its 10/16 anchor,
+with zero corrections and zero regressions. It produced 181 rejected/invalid
+proposal events, so the integrity guard did not improve accuracy and added
+substantial control churn.
+
+V22's first case showed that the candidate-blind read can strongly reject an
+unsupported candidate, but its lexical inference-language gate then rejected
+the corrected reread wording repeatedly. The case retained the wrong anchor and
+took 551 seconds. That diagnostic was stopped after one preserved row rather
+than spending the remaining 15 cases on a known control-flow defect.
+
+V23 keeps the candidate-blind semantic audit and removes the brittle lexical
+gate. Its separate four-case NF4 regression run is active. CF remains deferred
+until the non-CF diagnostic is worth the added cost.
+
+The same frozen unanimity gate was also tested on the existing BF16 online
+validation output. It reduced the 96/128 layout anchor to 92/128 (two corrections
+and six regressions). Therefore unanimity is not treated as a generic selector;
+the 97/128 development result still requires the like-for-like FaithAct
+validation below.
 
 ## Active server paths
 
@@ -65,5 +82,6 @@ deferred until the non-CF diagnostic is worth the added cost.
 - BF16 validation run: `runs/paper_literal_faithact_validation128_bf16`
 - V22 queue: `queues/v22_blind_read_nf4`
 - V22 run: `runs/v22_blind_read_nf4_pilot16`
+- V23 queue: `queues/v23_blind_semantic_nf4`
+- V23 run: `runs/v23_blind_semantic_nf4_pilot4`
 - Development selector result: `analysis/selective_faithact_v1_dev128.jsonl`
-
