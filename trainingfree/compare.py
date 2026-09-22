@@ -5,8 +5,28 @@ import hashlib
 import json
 from pathlib import Path
 import statistics
+import math
 
 from .run import extract_answer, normalize
+
+
+def wilson_interval(correct, n, z=1.96):
+    if not n:
+        return [None, None]
+    p = correct/n
+    denominator = 1 + z*z/n
+    center = (p + z*z/(2*n))/denominator
+    radius = z*math.sqrt(p*(1-p)/n + z*z/(4*n*n))/denominator
+    return [center-radius, center+radius]
+
+
+def mcnemar_exact(wins, losses):
+    """Two-sided exact binomial p-value on discordant paired outcomes."""
+    n = wins + losses
+    if not n:
+        return 1.0
+    tail = sum(math.comb(n, k) for k in range(min(wins, losses)+1)) / 2**n
+    return min(1.0, 2*tail)
 
 
 def load_jsonl(path):
@@ -42,9 +62,11 @@ def compare(dataset, predictions):
         rows = load_jsonl(path)
         decisions, changes = score_rows(rows, cases)
         indexed[name] = decisions
+        correct = sum(decisions.values())
         report['methods'][name] = {
             'path':str(path), 'n':len(rows), 'correct':sum(decisions.values()),
             'accuracy':sum(decisions.values())/len(rows) if rows else None,
+            'accuracy_wilson95':wilson_interval(correct, len(rows)),
             'uncertain':sum(row.get('status') == 'answered_with_uncertainty' for row in rows),
             'with_evidence':sum(bool(row.get('evidence')) for row in rows),
             'mean_seconds':statistics.mean(row.get('elapsed_seconds',0) for row in rows) if rows else None,
@@ -60,7 +82,8 @@ def compare(dataset, predictions):
             losses = sorted((i for i in common if indexed[left][i] and not indexed[right][i]), key=int)
             report['paired'][f'{right}_vs_{left}'] = {
                 'n':len(common), 'wins':wins, 'losses':losses,
-                'net_correct':len(wins)-len(losses)}
+                'net_correct':len(wins)-len(losses),
+                'mcnemar_exact_p':mcnemar_exact(len(wins), len(losses))}
     return report
 
 

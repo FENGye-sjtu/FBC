@@ -3,7 +3,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from trainingfree.compare import compare
+from trainingfree.compare import compare, mcnemar_exact, wilson_interval
 
 
 class CompareTests(unittest.TestCase):
@@ -23,6 +23,13 @@ class CompareTests(unittest.TestCase):
             self.assertEqual(result['methods']['method']['correct'], 1)
             self.assertEqual(result['paired']['method_vs_base']['wins'], ['0'])
             self.assertTrue(result['reference_blind_extraction'])
+
+    def test_confidence_and_paired_statistics(self):
+        low, high = wilson_interval(50, 100)
+        self.assertLess(low, .5)
+        self.assertGreater(high, .5)
+        self.assertEqual(mcnemar_exact(0, 0), 1.)
+        self.assertAlmostEqual(mcnemar_exact(3, 0), .25)
 
 
 if __name__ == '__main__':
