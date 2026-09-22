@@ -52,7 +52,7 @@ No external judge API is assumed. If a judge is later used, record its identity,
 prompt, version and outputs; do not send ground-truth answers as extraction input.
 We do not adopt random fallback answer assignment in some third-party evaluators.
 
-## Completed CoT reproduction and evaluator triangulation
+## Completed prompt-packaging diagnostic and evaluator triangulation
 
 Pinned evaluator sources: VLMEvalKit commit
 `302cbce81a64b83b14fe3459a7390b3ff21b3e46` and AGS commit
@@ -64,13 +64,18 @@ to the pinned xai images, then inference was rerun with the VLMEvalKit MCQ promp
 |---|---|---:|---:|
 | original xai mixed format | project final-answer parser | 479 | 62.61% |
 | original xai mixed format | AGS `getResult_nlp.py` | 478 | 62.48% |
-| VLMEvalKit MCQ, fresh inference | project final-answer parser | 539 | 70.46% |
-| VLMEvalKit MCQ, fresh inference | AGS `getResult_nlp.py` | 539 | 70.46% |
-| VLMEvalKit MCQ, fresh inference | VLMEvalKit `can_infer` exact matching | 513 | 67.06% |
+| VLMEvalKit MCQ, fresh inference (directive-dominated) | project final-answer parser | 539 | 70.46% |
+| VLMEvalKit MCQ, fresh inference (directive-dominated) | AGS `getResult_nlp.py` | 539 | 70.46% |
+| VLMEvalKit MCQ, fresh inference (directive-dominated) | VLMEvalKit `can_infer` | 513 | 67.06% |
 
-The 70.46% result is +0.36 percentage points from the paper's 70.1% CoT
-number, with all 765 cases answered and no runtime errors. AGS and the
-reference-blind project parser agree exactly. Current VLMEvalKit exact matching
+The 70.46% result is numerically +0.36 percentage points from the paper's 70.1%
+CoT number, with all 765 cases answered and no runtime errors. It is not yet a
+CoT parity claim: inspection showed that VLMEvalKit's appended "Please select"
+directive dominated the later reasoning instruction, so most outputs were only
+an option letter and could not drive FaithAct's blank-line step extractor. A new
+run removes that conflicting answer-only directive before appending the CoT
+instruction. AGS and the reference-blind project parser agree exactly on the
+completed diagnostic. Current VLMEvalKit exact matching
 marks 26 otherwise-correct outputs as `Z`: every disagreement is a false
 negative caused by outputs that place the same option letter both on the first
 line and after `FINAL ANSWER`; `can_infer_option` tests the first occurrence's
@@ -84,8 +89,9 @@ converted benchmark expects option letters.
 
 Raw runs and evaluator records are under server paths
 `runs/realworldqa_vlmevalkit_7b_bf16_cot_v1` and `runs/eval_protocols`.
-The full released-template FaithAct pass reuses exactly this saved CoT and is
-running separately; its score is not yet claimed.
+An invalid FaithAct pass that reused these mostly direct outputs was stopped and
+preserved after 261 cases. The replacement reasoned CoT run and its dependent
+released-template FaithAct job are queued serially; neither score is claimed yet.
 
 ## Separately labeled controlled-format variant
 

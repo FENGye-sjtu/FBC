@@ -73,9 +73,12 @@ If all three repairs remain inconclusive or contradicted, the controller commits
 an explicitly unresolved proposition ("uncertain whether c"), not c as a fact.
 The raw tentative proposition is retained in the trace, while downstream prompts
 expose its unresolved evidence question rather than repeatedly asserting the
-unverified value. If the next step merely repeats the exhausted claim without
-new committed evidence, the controller continues to uncertain answer synthesis
-instead of granting the same point a new three-round budget.
+unverified value. If a later proposal returns to the exhausted question, it is
+not audited and receives no new repair budget. The controller requests a
+different evidence point or a conditional deduction. Two ignored redirections
+trigger uncertain answer synthesis; a successful redirect continues the ordinary
+step budget. Hiding the exhausted question during redirection was tested and
+rejected because it increased latency without improving the targeted accuracy.
 Deductions inherit uncertainty
 from exposed uncertain premises; the current implementation conservatively records
 all exposed ledger entries as parents. Independent visual facts can still receive

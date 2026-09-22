@@ -51,25 +51,32 @@ question but prematurely finalized its real case-2 regression; both variants
 regressed to wrong A. V7 keeps the no-reopen invariant and redirects twice toward
 independent evidence or a conditional deduction. Its case-2 trace exercised that
 path, but the model ignored both redirects and both variants still answered A.
-A 16-case v7 comparison is running. This is deterministic question matching,
+The 16-case v7 online result is 9/16 versus v5's 11/16 (no wins, losses on cases
+2 and 6). V7 CF is also 9/16 with identical answers, but raises uncertainty from
+7 to 11 cases and mean latency from 84.66 s to 125.42 s. A v8 attempt to hide
+exhausted-question text during redirection was 2/5, identical to v7 on those
+cases but much slower, and is rejected. This is deterministic question matching,
 not a semantic paraphrase guarantee.
 
-## Completed BF16 CoT reproduction
+## Completed BF16 packaging diagnostic
 
 Fresh inference with the official VLMEvalKit RealWorldQA MCQ packaging completed
 all 765 cases: 539/765 = 70.46% under both the reference-blind final-answer parser
-and official AGS rule scorer, versus the paper's 70.1%. Current VLMEvalKit exact
+and official AGS rule scorer, versus the paper's 70.1%. This is not yet CoT parity:
+the embedded "Please select" directive suppressed reasoning in most outputs.
+Current VLMEvalKit exact
 matching reports 513/765 = 67.06%; its 26 disagreements all reject duplicated
 first-line/final explicit option letters as `Z`. Original xai packaging was
 479/765 = 62.61% (AGS 478/765). See `REPLICATION.md`; do not mix these protocols.
 
 ## Live work (relative to /data_cinema/zqc/CVPR)
 
-- `runtime/queues/vlmeval_bf16`: the same-protocol CoT job and one-case FaithAct
-  smoke completed. A full 765-case released-template FaithAct run is active and
-  reuses the hashed CoT file. Log `logs/vlmeval_faithact_bf16_v1.log`.
-- `runtime/queues/pilot16_v7`: active 16-case online/online-CF comparison after
-  the completed 0/1 case-2 regression. Log `logs/pilot16_v7.log`.
+- `runtime/queues/reasoned_bf16`: a clean 765-case CoT run removes the conflicting
+  direct-answer directive; its queued FaithAct job will reuse that hashed output.
+  The earlier 261-case directive-dominated FaithAct diagnostic is preserved and
+  stopped. Log `logs/reasoned_bf16_v2.log`.
+- `runtime/queues/pilot16_v7`: completed 16-case online/online-CF comparison;
+  both are 9/16. Log `logs/pilot16_v7.log`.
 - `runs/eval_protocols`: pinned AGS and VLMEvalKit conversion, per-case decisions,
   source hashes, and score outputs for both inference packagings.
 - BF16 v1 FAILED before predictions because automatic placement offloaded to
@@ -82,7 +89,7 @@ first-line/final explicit option letters as `Z`. Original xai packaging was
 
 ## Continue from here
 
-Read the v7 16-case comparison and full same-protocol FaithAct run. Compare with
+Read the v7/v8 comparisons and clean reasoned CoT/FaithAct run. Compare with
 paper Table 2 FaithAct 74.5% only after all 765 cases complete. Then freeze the
 stepwise method and run full RealWorldQA plus MMStar.
 

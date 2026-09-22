@@ -6,6 +6,7 @@ def task_question(question):
     for directive in (
         'Please answer directly with only the letter of the correct option and nothing else.',
         'Please answer directly with a single word or number.',
+        'Please select the correct answer from the options above.',
     ):
         question = question.replace(directive, '')
     return question.strip()

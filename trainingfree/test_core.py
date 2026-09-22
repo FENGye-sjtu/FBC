@@ -127,6 +127,8 @@ class Tests(unittest.TestCase):
         self.assertIn('Yes or No', answer_format(q))
         self.assertNotIn('Please answer directly', cot_prompt(q))
         self.assertIn('option letter', answer_format('Is it red?\nA. Yes\nB. No'))
+        vlmeval = 'Question: What?\nOptions:\nA. one\nB. two\nPlease select the correct answer from the options above.'
+        self.assertNotIn('Please select', cot_prompt(vlmeval))
 
     def test_localization_uses_processed_not_original_pixels(self):
         class VLM:

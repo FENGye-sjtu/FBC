@@ -25,6 +25,8 @@ project; it neither changes its files nor interrupts its jobs.
   jobs; `queue_bf16.py` fits unquantized weights across spare GPU memory.
 - `report.py`: paired answer accuracy, actual CF executions, accepted repairs,
   uncertain continuation and reference-blind parser corrections from saved traces.
+- `eval_protocols.py`: deterministic AGS JSONL conversion, pinned VLMEvalKit
+  `can_infer` scoring, and exact RealWorldQA prompt-packaging materialization.
 
 The CF MVP uses image-mean masking (not learned causal interventions). Scores and
 thresholds are engineering defaults, not calibrated confidence or correctness
@@ -61,9 +63,10 @@ See `REPLICATION.md` for the complete known/unknown protocol checklist and
    device differences and token/pixel budgets are logged.
 4. Preserve sigmoid(logit_yes), blank-line first/last-step exclusion, and empty
    negative-object descriptions as upstream actually implements them.
-5. Our strict normalized exact-match is an initial metric. Validate against the
-   official dataset evaluation protocol before calling scores directly matched.
-   Do not compare FaithEvi F-chain values with task accuracy.
+5. Report our final-answer parser, AGS rule extraction and VLMEvalKit exact
+   matching side by side. The latter has 26 known false negatives on repeated
+   first-line/final option letters in the completed 765-case diagnostic. Do not
+   compare FaithEvi F-chain values with task accuracy.
 
 ## Commands
 
