@@ -1,6 +1,8 @@
 """Separate dataset task content from incompatible answer-only instructions."""
 import re
 
+from .answers import choices_from_question
+
 
 def task_question(question):
     for directive in (
@@ -21,18 +23,81 @@ def answer_format(question):
     return 'Return a short word, object name, or number that answers the question.'
 
 
+def compact_initial_prompt(question):
+    """One tentative visual step; the controller still audits it before use."""
+    choices = choices_from_question(question)
+    stem = re.sub(r'^\s*Question\s*:\s*', '', task_question(question), flags=re.I)
+    if choices:
+        answer_domain = 'one of ' + ', '.join(choices)
+    elif re.match(r'(?i)^(is|are|can|does|do|has|have|was|were|will|would|could|should)\b', stem):
+        answer_domain = 'Yes or No'
+    else:
+        answer_domain = 'a short word or number'
+    return (
+        'Inspect the image and propose exactly one visual evidence step for this question.\n'
+        'Return one JSON object using the supplied schema:\n'
+        '- kind: "visual".\n'
+        '- claim: one short sentence stating a relevant visible fact, not an option label '
+        'or a full reasoning chain.\n'
+        '- evidence_question: a short neutral question about what should be inspected, '
+        'without suggesting its answer.\n'
+        '- final_answer: if this observation is sufficient to answer the question, use '
+        + answer_domain + '; otherwise use JSON null, not the string "null".\n'
+        'The observation and any proposed answer are tentative and must pass the audit.\n\n'
+        'Question: ' + task_question(question))
+
+
 def cot_prompt(question, style='reasoned_v2'):
     """Build declared CoT variants without changing the benchmark content.
 
     ``reasoned_v2`` is retained byte-for-byte for reproducibility.  The v3
     variants test the hypothesis that long, generic CoT causes needless visual
     speculation on RealWorldQA.  Both still expose blank-line-separated evidence
-    units for FaithAct and the online verifier.
+    units for FaithAct and the online verifier.  The v4 variants scope answer
+    formatting to the final line and reserve a separate header paragraph, since
+    the released FaithAct reader discards the first and last paragraphs.
     """
     if style == 'reasoned_v2':
         return (task_question(question) + '\nReason step by step. Start with a short introduction, '
                 'separate numbered reasoning steps by blank lines, and finish with FINAL ANSWER: '
                 + answer_format(question))
+    if style == 'evidence_layout_v5':
+        choices = choices_from_question(question)
+        stem = re.sub(r'^\s*Question\s*:\s*', '', task_question(question), flags=re.I)
+        if choices:
+            final_value, placeholder = 'a single option letter', '<option>'
+        elif re.match(r'(?i)^(is|are|can|does|do|has|have|was|were|will|would|could|should)\b', stem):
+            final_value, placeholder = 'Yes or No', '<answer>'
+        else:
+            final_value, placeholder = 'a short word or number', '<answer>'
+        return (task_question(question) + '\n\n'
+                'Give one or two short numbered facts from the image that are needed to answer. '
+                'Copy the blank-line layout below exactly, replacing the placeholders with your text. '
+                'Evidence: must be its own paragraph. Leave an empty line after it, between '
+                'numbered facts, and before FINAL ANSWER. Add a second fact only if needed, '
+                'as a separate numbered paragraph. Do not output placeholders or a code fence. '
+                'Only the final answer line should contain ' + final_value + '.\n\n'
+                'Evidence:\n\n1. <visible fact>\n\nFINAL ANSWER: ' + placeholder)
+    if style in ('evidence_brief_v4', 'evidence_adaptive_v4'):
+        if re.search(r'(?m)^\s*A[.)]\s', question):
+            final_value = 'the single option letter'
+        elif re.match(r'(?i)^(is|are|can|does|do|has|have|was|were|will|would|could|should)\b',
+                      task_question(question).lstrip()):
+            final_value = 'Yes or No'
+        else:
+            final_value = 'a short word, object name, or number'
+        evidence_instruction = (
+            'Give one or two short numbered statements of the visible evidence that determines the answer.'
+            if style == 'evidence_brief_v4' else
+            'Give the minimum numbered evidence steps needed to answer. '
+            'Use one step when the answer is clear; add steps only to resolve a relevant ambiguity. '
+            'Base each step on what is visible in the image.')
+        return (task_question(question) + '\n\n'
+                + evidence_instruction + '\n'
+                'Start with the literal header Evidence: as its own paragraph. '
+                'Separate the header, each numbered evidence step, and the final answer with a blank line. '
+                'Finish with FINAL ANSWER: <answer>, where <answer> is ' + final_value + '. '
+                'This short-answer format applies only to the final line; include the evidence before it.')
     instruction = (
         'Inspect only the visual evidence needed to choose among the given options. '
         'Write 1 to 3 short numbered evidence statements, separating them with blank lines. '

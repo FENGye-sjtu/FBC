@@ -1,0 +1,10 @@
+{
+  "repo": "QC1/FBC",
+  "repo_type": "dataset",
+  "revision": "main",
+  "destination": "trainingfree/milestones/20260922_eval_repair",
+  "commit": "15ca6ded503bcecf3b699eb3b73bc58d52c8296d",
+  "files": 261,
+  "payload_bytes": 8491867,
+  "contents": "Three full BF16 generation/evaluation records, brief-v4 prompt128, completed V9/V10-smoke/V13-online diagnostics, raw outputs and code snapshots. Later-finishing V13-CF/adaptive/layout results remain on the server for the next batch."
+}

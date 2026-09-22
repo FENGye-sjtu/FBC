@@ -90,7 +90,7 @@ class Tests(unittest.TestCase):
     def test_new_evidence_then_conditional_answer_can_continue(self):
         backend = Scripted([Step('unclear light',evidence_question='What color is the light?')]*4
                            + [Step('the car is stopped',evidence_question='Is the car moving?'),
-                              Step('conditional conclusion','deduction',evidence_question='What color is the light?',
+                              Step('conditional conclusion','deduction',evidence_question='',
                                    final_answer='C')],['inconclusive']*4+['supported']*2)
         result = solve(backend,None,'q')
         self.assertEqual(result['answer'],'C')

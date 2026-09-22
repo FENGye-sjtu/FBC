@@ -1,0 +1,249 @@
+{
+  "dataset": "/data_cinema/zqc/CVPR/data/vlmevalkit/cases.jsonl",
+  "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+  "parser_sha256": "49c5a365e342cf423be14fb4ef9d59e49e1bcf4f98f1036f101f0a71c1140a83",
+  "parser_version": "committed_answer_v3",
+  "reference_blind_extraction": true,
+  "methods": {
+    "directive": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_cot_v1/cot.jsonl",
+      "n": 765,
+      "correct": 541,
+      "manifest_path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_cot_v1/manifest.json",
+      "input_budget": {
+        "model": "/data_cinema/zqc/CVPR/models/Qwen2.5-VL-7B-Instruct",
+        "quantization": "none",
+        "max_pixels": 1003520,
+        "max_new_tokens": 512,
+        "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+      },
+      "accuracy": 0.7071895424836602,
+      "accuracy_wilson95": [
+        0.673971510482825,
+        0.7383370846816406
+      ],
+      "uncertain": 0,
+      "with_evidence": 0,
+      "mean_seconds": 2.311856598060067,
+      "status_counts": {
+        "cot": 765
+      },
+      "parser_changes": [
+        {
+          "id": "122",
+          "stored_answer": "A\n\nThe blue tape is located at the bottom of the pole, which is below the sign",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true,
+          "answer_source": "raw"
+        },
+        {
+          "id": "577",
+          "stored_answer": "A\n\nThe blue house is located further up the street on the right side of the image",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true,
+          "answer_source": "raw"
+        }
+      ]
+    },
+    "reasoned_v2": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_cot_v2_reasoned/cot.jsonl",
+      "n": 765,
+      "correct": 526,
+      "manifest_path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_cot_v2_reasoned/manifest.json",
+      "input_budget": {
+        "model": "/data_cinema/zqc/CVPR/models/Qwen2.5-VL-7B-Instruct",
+        "quantization": "none",
+        "max_pixels": 1003520,
+        "max_new_tokens": 512,
+        "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+      },
+      "accuracy": 0.6875816993464052,
+      "accuracy_wilson95": [
+        0.6538692026867989,
+        0.719419651610367
+      ],
+      "uncertain": 0,
+      "with_evidence": 0,
+      "mean_seconds": 2.793907715732786,
+      "status_counts": {
+        "cot": 765
+      },
+      "parser_changes": [
+        {
+          "id": "93",
+          "stored_answer": "B\n\nThe right most bottle appears to be the smallest in comparison to the others",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true,
+          "answer_source": "raw"
+        },
+        {
+          "id": "358",
+          "stored_answer": "A\n\nThe tree is positioned to the right of the bush when looking at the image",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true,
+          "answer_source": "raw"
+        },
+        {
+          "id": "485",
+          "stored_answer": "B\n\nThe man in the striped track suit is on the right side of the street, standing near a parked car",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true,
+          "answer_source": "raw"
+        },
+        {
+          "id": "510",
+          "stored_answer": "A\n\nThe face that has its eyes open is positioned in the middle of the six other figures",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true,
+          "answer_source": "raw"
+        }
+      ]
+    },
+    "layout_v5_validation": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_layout_v5_validation128/cot.jsonl",
+      "n": 128,
+      "correct": 96,
+      "manifest_path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_layout_v5_validation128/manifest.json",
+      "input_budget": {
+        "model": "/data_cinema/zqc/CVPR/models/Qwen2.5-VL-7B-Instruct",
+        "quantization": "none",
+        "max_pixels": 1003520,
+        "max_new_tokens": 512,
+        "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+      },
+      "accuracy": 0.75,
+      "accuracy_wilson95": [
+        0.668442772812453,
+        0.816988229238493
+      ],
+      "uncertain": 0,
+      "with_evidence": 0,
+      "mean_seconds": 2.3280750607264054,
+      "status_counts": {
+        "cot": 128
+      },
+      "parser_changes": []
+    }
+  },
+  "paired": {
+    "reasoned_v2_vs_directive": {
+      "n": 765,
+      "left_correct": 541,
+      "right_correct": 526,
+      "wins": [
+        "5",
+        "72",
+        "88",
+        "111",
+        "165",
+        "239",
+        "492",
+        "526",
+        "545",
+        "613",
+        "642",
+        "731"
+      ],
+      "losses": [
+        "3",
+        "23",
+        "34",
+        "35",
+        "51",
+        "73",
+        "116",
+        "120",
+        "121",
+        "147",
+        "169",
+        "206",
+        "216",
+        "264",
+        "326",
+        "373",
+        "402",
+        "460",
+        "464",
+        "476",
+        "484",
+        "507",
+        "576",
+        "599",
+        "623",
+        "713",
+        "749"
+      ],
+      "net_correct": -15,
+      "mcnemar_exact_p": 0.023702702470473014,
+      "input_budget_matched": true,
+      "input_budget_differences": {},
+      "comparison_scope": "matched_input_budget"
+    },
+    "layout_v5_validation_vs_directive": {
+      "n": 128,
+      "left_correct": 91,
+      "right_correct": 96,
+      "wins": [
+        "132",
+        "160",
+        "165",
+        "183",
+        "189",
+        "194",
+        "195",
+        "197",
+        "204",
+        "230",
+        "253"
+      ],
+      "losses": [
+        "147",
+        "169",
+        "200",
+        "206",
+        "215",
+        "223"
+      ],
+      "net_correct": 5,
+      "mcnemar_exact_p": 0.332305908203125,
+      "input_budget_matched": true,
+      "input_budget_differences": {},
+      "comparison_scope": "matched_input_budget"
+    },
+    "layout_v5_validation_vs_reasoned_v2": {
+      "n": 128,
+      "left_correct": 89,
+      "right_correct": 96,
+      "wins": [
+        "132",
+        "160",
+        "183",
+        "189",
+        "194",
+        "195",
+        "197",
+        "204",
+        "216",
+        "230",
+        "253"
+      ],
+      "losses": [
+        "200",
+        "215",
+        "223",
+        "239"
+      ],
+      "net_correct": 7,
+      "mcnemar_exact_p": 0.11846923828125,
+      "input_budget_matched": true,
+      "input_budget_differences": {},
+      "comparison_scope": "matched_input_budget"
+    }
+  }
+}

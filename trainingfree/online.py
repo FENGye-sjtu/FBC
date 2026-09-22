@@ -5,7 +5,7 @@ import random
 import re
 
 from .core import Audit, Step, parse_json
-from .prompts import task_question, answer_format
+from .prompts import task_question, answer_format, compact_initial_prompt
 
 STEP_SCHEMA = {
     'type': 'object', 'additionalProperties': False,
@@ -25,6 +25,10 @@ hypotheses, not true premises; reason conditionally or use independent evidence.
 Move forward after an unresolved point; do not get stuck repeating it forever.
 A visual step must state a visible fact; a deduction may only combine accepted
 facts and ordinary logic, and must not introduce any new visual fact.
+For a visual step, evidence_question MUST be a nonempty neutral question about
+the visible evidence being checked, even when that evidence is ambiguous.
+For a deduction, set evidence_question to an empty string: it introduces no
+new image observation and must state its dependence on uncertain premises.
 As soon as the evidence answers the question, include the concise final_answer
 (option letter for multiple choice, Yes/No for binary questions, otherwise a short
 word or number). A visual claim may include a final_answer; both will be checked.
@@ -41,6 +45,21 @@ relevant fact, or make a conditional deduction to the best-supported answer.
 Question: %s
 Evidence ledger (preserve uncertainty labels): %s
 Repair instruction (not an accepted premise): %s'''
+
+
+def question_stem(question):
+    """Retain the public task without answer choices or answer-only directives."""
+    stem = task_question(question)
+    stem = re.split(r'(?im)^\s*(?:Options\s*:|[A-E][.)]\s)', stem, maxsplit=1)[0]
+    return re.sub(r'^\s*Question\s*:\s*', '', stem, flags=re.I).strip()
+
+
+def sanitize_evidence_question(step, question):
+    """Give empty visual queries a stable budget key without rejecting the step."""
+    query = step.evidence_question.strip()
+    if step.kind == 'visual' and not query:
+        query = question_stem(question) or 'What relevant visual evidence is present?'
+    return replace(step, evidence_question=query)
 
 
 def pixel_box(box, size):
@@ -78,9 +97,12 @@ def mask(image, box):
 
 
 class Online:
-    def __init__(self, vlm, counterfactual=False, support=.8, specificity=.05):
+    def __init__(self, vlm, counterfactual=False, support=.8, specificity=.05, initial_style='full'):
+        if initial_style not in ('full', 'compact_v1'):
+            raise ValueError(f'Unknown initial proposal style: {initial_style}')
         self.vlm, self.counterfactual = vlm, counterfactual
         self.support, self.specificity = support, specificity
+        self.initial_style = initial_style
         self.last_candidate, self.repair_round = None, 0
         self.fallback_answer = None
 
@@ -124,8 +146,11 @@ class Online:
                 view = [image, self.crop(image, box)]
             except (ValueError, TypeError, KeyError):
                 box = ()
-        prompt = PROPOSE % (task_question(question), self.ledger_text(ledger), feedback)
-        prompt += '\nFor final_answer only: ' + answer_format(question)
+        if self.initial_style == 'compact_v1' and not ledger and not feedback:
+            prompt = compact_initial_prompt(question)
+        else:
+            prompt = PROPOSE % (task_question(question), self.ledger_text(ledger), feedback)
+            prompt += '\nFor final_answer only: ' + answer_format(question)
         if box:
             prompt += '\nImage 1 is the full scene. Image 2 is a magnified evidence region; use it to correct the previous step.'
         raw = self.vlm.generate(view, prompt, max_tokens=256, schema=STEP_SCHEMA)
@@ -136,7 +161,7 @@ class Online:
             query = value.get('evidence_question','')
             if '?' in query:
                 value['evidence_question'] = query.split('?',1)[0]+'?'
-            step = replace(Step.from_dict(value), box=box)
+            step = sanitize_evidence_question(replace(Step.from_dict(value), box=box), question)
             if re.fullmatch(r'[A-Ea-e]|[Yy]es|[Nn]o|[\d.]+', step.claim.strip(' .')):
                 raise ValueError('State a complete visual fact, not a bare answer label')
             if step.claim.lower().strip() in ('one fact or deduction','one fact','your actual observation/inference'):
@@ -244,15 +269,18 @@ class Online:
         if not (len(labels) >= 2 and proposed in labels and
                 hasattr(self.vlm, 'log_probability')):
             return None
-        # Each alternative is a semantic counterfactual to the proposed option.
-        # Score all labels in the same grounded context instead of accepting a
-        # high Yes probability for a plausible but non-discriminative claim.
+        # This is independent answer-consistency scoring, NOT an image
+        # counterfactual intervention. Keep the historical function/trace keys
+        # for compatibility; spatial masking in audit() is the CF component.
         contrast_prompt = (
             'Independently choose the single best option from the image. Do not assume that '
             'the candidate claim or candidate answer is correct. Return only the option letter.\n'
             'Question: ' + task_question(question))
-        option_scores = {label: self.vlm.log_probability(image, contrast_prompt, label)
-                         for label in labels}
+        if hasattr(self.vlm, 'option_log_probabilities'):
+            option_scores = self.vlm.option_log_probabilities(image, contrast_prompt, labels)
+        else:
+            option_scores = {label: self.vlm.log_probability(image, contrast_prompt, label)
+                             for label in labels}
         best = max(option_scores, key=option_scores.get)
         scores['option_counterfactual_scores'] = option_scores
         scores['option_counterfactual_best'] = best

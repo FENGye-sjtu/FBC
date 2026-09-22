@@ -1,0 +1,1 @@
+{"state":"superseded","job":"job001.json","completed_n":0,"reason":"Stopped during first-case diagnostics after empty visual evidence_question bypassed the exhausted-question key. Events preserved. V13 fills missing visual keys from the public question. No V12 accuracy is reported.","output":"/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_v12_online_reread"}

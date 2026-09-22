@@ -1,0 +1,104 @@
+{
+  "expected_n": 765,
+  "completed_n": 765,
+  "is_partial": false,
+  "allow_partial": false,
+  "missing_ids": [],
+  "correct": 541,
+  "accuracy": 0.7071895424836602,
+  "valid_label_n": 760,
+  "mcq_n": 765,
+  "with_evidence_n": 0,
+  "with_interior_cot_n": 24,
+  "interior_cot_block_n": 33,
+  "stored_correctness_changed_n": 2,
+  "stored_answer_changed_n": 4,
+  "answer_disagreement_n": 40,
+  "correctness_disagreement_n": 28,
+  "disagreement_n": 40,
+  "reference_blind_extraction": true,
+  "parser_version": "committed_answer_v3",
+  "canonical_final_protocol": "VLMEval can_infer receives only reference-blind extracted answer",
+  "predictions": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_cot_v1/cot.jsonl",
+  "raw_sha256": "24bd011d0f2ea526194cb11913acdfd04bb1eb4a22743161273249605294ebe1",
+  "raw_snapshot": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/directive/raw_predictions.jsonl",
+  "dataset": "/data_cinema/zqc/CVPR/data/vlmevalkit/cases.jsonl",
+  "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+  "dataset_snapshot": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/directive/cases.jsonl",
+  "details": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/directive/details.jsonl",
+  "details_sha256": "54a0056bf7d0e96040af91f904be6f6a7b4cf200a1b440909af2e80a1944c439",
+  "disagreements": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/directive/disagreements.jsonl",
+  "disagreements_sha256": "d5c3be3ecd3c79f9daa23c5544e0c25fab00f99944faec239d9cfd4a76b5f946",
+  "sources": {
+    "extractor": {
+      "path": "/data_cinema/zqc/CVPR/code/trainingfree/answers.py",
+      "sha256": "49c5a365e342cf423be14fb4ef9d59e49e1bcf4f98f1036f101f0a71c1140a83"
+    },
+    "normalizer": {
+      "path": "/data_cinema/zqc/CVPR/code/trainingfree/run.py",
+      "sha256": "a22ddcbcec3a902942f68c33edb7b0cc83ac72199784d898286c5f029a521518"
+    },
+    "vlmeval_loader": {
+      "path": "/data_cinema/zqc/CVPR/code/trainingfree/eval_protocols.py",
+      "sha256": "91dda4c27f98abe7fbca293bb1edc6893f1f7e5093411310e155ad0820114d18"
+    },
+    "evaluation_suite": {
+      "path": "/data_cinema/zqc/CVPR/code/trainingfree/evaluation_suite.py",
+      "sha256": "bb3b86fd4bb0952523805f1c0ea9f9e8d378d194df198ad15ab66f328c71b038"
+    },
+    "vlmeval_matching": {
+      "path": "/data_cinema/zqc/CVPR/upstream/VLMEvalKit/vlmeval/utils/matching_util.py",
+      "sha256": "06088ed4da68cd9d8c3018e7630d0503f1365e6dd31f651cbedd8aa44dc14466"
+    },
+    "ags_evaluator": {
+      "path": "/data_cinema/zqc/CVPR/upstream/AGS/extract_ans/getResult_nlp.py",
+      "sha256": "af658c6961d9c8c4a78bfc576e6de39bf7032632faa1a39b3520c088d8e71141"
+    }
+  },
+  "scorers": {
+    "committed_answer": {
+      "n": 765,
+      "correct": 541,
+      "accuracy": 0.7071895424836602,
+      "valid_label_n": 760
+    },
+    "vlmeval_raw": {
+      "n": 765,
+      "correct": 513,
+      "accuracy": 0.6705882352941176,
+      "valid_label_n": 725
+    },
+    "vlmeval_canonical_final": {
+      "n": 765,
+      "correct": 541,
+      "accuracy": 0.7071895424836602,
+      "valid_label_n": 760
+    },
+    "ags_raw": {
+      "protocol": "unmodified AGS extract_ans/getResult_nlp.py on raw model output",
+      "n": 765,
+      "correct": 539,
+      "accuracy": 0.7045751633986929,
+      "per_case_available": false,
+      "per_case_note": "Released stdout is preserved; per-case decisions are not reimplemented.",
+      "source": "/data_cinema/zqc/CVPR/upstream/AGS/extract_ans/getResult_nlp.py",
+      "source_sha256": "af658c6961d9c8c4a78bfc576e6de39bf7032632faa1a39b3520c088d8e71141",
+      "input": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/directive/ags_input.jsonl",
+      "input_sha256": "69eaa58a97326dc362de18f0bbb62a8ee27be15f1978a7b63ad941ef0a47f700",
+      "stdout": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/directive/ags_stdout.txt",
+      "stdout_sha256": "814971c19cb1ff8eabca95afa9ee37d104f4c572c21869e55e898828f48981a2",
+      "stderr": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/directive/ags_stderr.txt",
+      "stderr_sha256": "2cabeeed5861753959982e4b38577dae2afa94c7a5b3a0ba5578642e4225a1ec",
+      "command": [
+        "/data_cinema/zqc/VBC/envs/efa/bin/python",
+        "/data_cinema/zqc/CVPR/upstream/AGS/extract_ans/getResult_nlp.py",
+        "--input-files",
+        "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/directive/ags_input.jsonl",
+        "--show-errors",
+        "765"
+      ]
+    }
+  },
+  "run_manifest": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_cot_v1/manifest.json",
+  "run_manifest_sha256": "604ed12d176a1000850a499973b571dae4bd79ef11214d60e550b11ffdaacffd"
+}

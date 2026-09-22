@@ -1,0 +1,1514 @@
+{
+  "summary": {
+    "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_v13_cf_reread/online_cf_repair.jsonl",
+    "raw_sha256": "bcab2cd3e3df58119de9c0e492513dc052afe871a53644cb1947d1a997dd540d",
+    "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+    "completed_n": 16,
+    "scored_n": 16,
+    "correct": 7,
+    "accuracy": 0.4375,
+    "uncertain_n": 9,
+    "verified_n": 7,
+    "error_n": 0,
+    "status_counts": {
+      "answered_with_uncertainty": 9,
+      "verified_by_model": 7
+    },
+    "initial_answer_n": 15,
+    "initial_missing_n": 1,
+    "initial_correct": 8,
+    "initial_accuracy": 0.5333333333333333,
+    "paired_n": 15,
+    "paired_initial_correct": 8,
+    "paired_final_correct": 6,
+    "gains_ids": [
+      "8"
+    ],
+    "losses_ids": [
+      "9",
+      "12",
+      "15"
+    ],
+    "initial_missing_ids": [
+      "7"
+    ],
+    "stored_rescore_disagreement_ids": [],
+    "with_repairs_n": 10,
+    "mean_support": 0.6901454177753228,
+    "min_support": 0.037326883524656296,
+    "max_support": 0.9947799444198608,
+    "finalization_source_counts": {
+      "highest_support_tentative_candidate": 6,
+      "accepted_step": 7,
+      "verified_ledger_synthesis": 3
+    },
+    "mean_latency_seconds": 137.1883316631247,
+    "mean_calls": 17.8125,
+    "trace_count_note": "Counts cover recorded trace events; failed or unlogged model calls cannot be reconstructed.",
+    "final_accuracy_protocol": "Use saved boolean correct when present; otherwise reference-blind extraction then exact match.",
+    "reference_blind_extraction": true,
+    "audits": 53,
+    "repair_attempts": 30,
+    "repair_audits": 30,
+    "parse_errors": 0,
+    "uncertainty_commits": 7,
+    "cf_checks": 16,
+    "cf_target_masks": 16,
+    "cf_control_masks": 32,
+    "cf_mask_calls": 48,
+    "option_consistency_checks": 7,
+    "repeated_question_events": 21,
+    "repeated_events_total": 29,
+    "answer_withheld": 5,
+    "logged_readback_n": 25
+  },
+  "details": [
+    {
+      "id": "0",
+      "status": "answered_with_uncertainty",
+      "reference": "C",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 6,
+      "audit_status_counts": {
+        "inconclusive": 5,
+        "contradicted": 1
+      },
+      "repair_attempts": 4,
+      "has_repair": true,
+      "repair_audits": 4,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.7057850360870361,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.7057850360870361,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.14804719388484955,
+          "audit_status": "contradicted"
+        }
+      ],
+      "mean_support": 0.5198724220196406,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The front wheel of the car on the right side appears to be facing towards the viewer, as indicated by the visible portion of the tire and the angle of the wheel relative to the car's body. The car is positioned at an angle that suggests it is moving forward or has recently moved forward along the street. There is no clear indication of the direction the car is heading due to the limited view provided by the zoomed-in perspective of Image 2. The rear portion of the car is not visible, so the direction of the rear wheels cannot be determined from this image alone. The front wheel's orientation,则",
+          "remaining_question": "",
+          "evidence_complete": false,
+          "repair_round": 1,
+          "inspection_query": "In which direction is the front wheel of the car on the right side facing?",
+          "inspection_box": [
+            0.8360714285714286,
+            0.38474489795918365,
+            1.0,
+            0.9277551020408162
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The front wheel of the car on the right side appears to be facing towards the viewer, as indicated by the visible portion of the tire and the angle of the wheel relative to the car's body. The car is positioned at an angle that suggests it is moving forward or has recently moved forward along the street. There is no clear indication of the direction the car is heading due to the limited view provided by the zoomed-in perspective of Image 2. The rear portion of the car is not visible, so the direction of the rear wheels cannot be determined from this image alone. The front wheel's orientation,则",
+          "remaining_question": "",
+          "evidence_complete": false,
+          "repair_round": 2,
+          "inspection_query": "In which direction is the front wheel of the car on the right side facing?",
+          "inspection_box": [
+            0.8360714285714286,
+            0.38474489795918365,
+            1.0,
+            0.9277551020408162
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The front wheel of the car on the right side appears to be facing towards the viewer. The angle suggests it is positioned as if the car is moving forward along the street. There are no visible obstructions or barriers that would suggest otherwise. The wheel's orientation is consistent with the car being parked or moving in a forward direction on the road shown in the image. However, the exact direction cannot be determined without additional information such as the vehicle's make, model, or the specific angle of the photograph relative to the car's orientation in space. The wheel's position is",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "In which direction is the front wheel of the car on the right side facing?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "highest_support_tentative_candidate",
+      "finalization": {
+        "answer": "B",
+        "support": 0.7057850360870361,
+        "claim": "The front wheel of the car on the right side appears to be facing towards the viewer, indicating a forward direction of travel or recent movement forward along the street. However, the exact direction the car is heading cannot be definitively determined from this image alone due to the limited view.",
+        "candidate_index": 1,
+        "audit_status": "inconclusive",
+        "source": "highest_support_tentative_candidate",
+        "verification": "uncertain",
+        "tie_break": "latest_candidate"
+      },
+      "elapsed_seconds": 224.70716300298227,
+      "calls": 23
+    },
+    {
+      "id": "1",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 4,
+      "audit_status_counts": {
+        "inconclusive": 4
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 3,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.7772998809814453,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.9149009585380554,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.9149009585380554,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.622459352016449,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.8073902875185013,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "There are two horizontal metal bars connected by vertical wooden posts. The bars are positioned at different heights, creating a structure that resembles a small obstacle course or exercise equipment. The bars appear to be part of a larger structure, possibly a park or recreational area, given the grassy surroundings and trees in the background. The metal bars are secured between the wooden posts, which are embedded in the ground. There is also a sign attached to one of the posts, but the text on the sign is not clearly readable due to the angle and distance from the camera. The ground beneath",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "How many bars are here?",
+          "inspection_box": [
+            0.08671428571428572,
+            0.18693379790940767,
+            0.9525714285714286,
+            0.8993031358885017
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "There are two horizontal metal bars connected by vertical wooden posts. The bars are positioned at different heights, creating a structure that resembles a small obstacle course or exercise equipment. The bars appear to be part of a larger structure, possibly a park or recreational area, given the grassy surroundings and trees in the background. The metal bars are secured between the wooden posts, which are embedded in the ground. There is also a sign attached to one of the posts, but the text on the sign is not clearly readable due to the angle and distance from the camera. The ground beneath",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "How many bars are here?",
+          "inspection_box": [
+            0.08671428571428572,
+            0.18693379790940767,
+            0.9525714285714286,
+            0.8993031358885017
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "There are three horizontal metal bars connected by vertical wooden posts. The bars form a structure that appears to be part of a park or outdoor recreational area. The bars are positioned at different heights, creating a ladder-like structure. There is also a small box attached to one of the vertical posts, which seems to have some kind of informational sign or mechanism on it, possibly related to the structure's purpose. The ground beneath the structure is a mix of dirt and patches of grass, indicating an outdoor setting. The surrounding area includes trees and a grassy field, suggesting a公园或",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "How many bars are here?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "highest_support_tentative_candidate",
+      "finalization": {
+        "answer": "A",
+        "support": 0.9149009585380554,
+        "claim": "There are two horizontal metal bars connected by vertical wooden posts in the photo",
+        "candidate_index": 2,
+        "audit_status": "inconclusive",
+        "source": "highest_support_tentative_candidate",
+        "verification": "uncertain",
+        "tie_break": "latest_candidate"
+      },
+      "elapsed_seconds": 152.41220048896503,
+      "calls": 18
+    },
+    {
+      "id": "2",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 4,
+      "audit_status_counts": {
+        "inconclusive": 4
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 3,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 4,
+      "cf_target_masks": 4,
+      "cf_control_masks": 8,
+      "cf_mask_calls": 12,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9890130758285522,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.9324532747268677,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.9324532747268677,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.9947799444198608,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.9621748924255371,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "There are no pedestrians visible in either image. The street appears empty of people, with only vehicles and construction equipment present on the road and sidewalk areas respectively. The images show a nighttime urban street scene with no human figures discernible in the frame. The absence of pedestrians is consistent across both images, as they are both taken from the same perspective showing the same area of the street at night. There are no indications of movement or presence of individuals that could suggest the presence of pedestrians, such as shadows or silhouettes that might be hidden.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "how many pedestrians are there?",
+          "inspection_box": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "There are no pedestrians visible in either image. The street appears empty of people, with only vehicles and construction equipment present on the road and sidewalk areas respectively. The images show a nighttime urban street scene with no human figures discernible in the frame. The absence of pedestrians is consistent across both images, as they are both taken from the same perspective showing the same area of the street at night. There are no indications of movement or presence of individuals that could suggest the presence of pedestrians, such as shadows or silhouettes that might be hidden.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "how many pedestrians are there?",
+          "inspection_box": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "There are no pedestrians visible in the image. The street appears to be empty of people, with only vehicles and some construction equipment present. The scene is captured at night, and the area is illuminated by streetlights, which cast shadows but do not reveal any individuals on the sidewalk or street surface. The wet pavement suggests recent rain, and the absence of footprints or human figures further supports the lack of pedestrians in the image. The construction equipment includes a portable toilet and some cones, indicating ongoing work in the area, but these are not pedestrians either.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "how many pedestrians are there?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "highest_support_tentative_candidate",
+      "finalization": {
+        "answer": "A",
+        "support": 0.9890130758285522,
+        "claim": "There are no pedestrians visible in the image at night on this street corner with wet pavement and parked cars along the sides of the road",
+        "candidate_index": 0,
+        "audit_status": "inconclusive",
+        "source": "highest_support_tentative_candidate",
+        "verification": "uncertain",
+        "tie_break": "latest_candidate"
+      },
+      "elapsed_seconds": 197.48766832600813,
+      "calls": 32
+    },
+    {
+      "id": "3",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 4,
+      "audit_status_counts": {
+        "inconclusive": 4
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 3,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.7310585379600525,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.7981867790222168,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.851952850818634,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.9525741338729858,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.8334430754184723,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The road appears to be slightly uphill as there are more vehicles parked on the right side compared to the left, suggesting a gentle incline towards the right. The trees and buildings also seem to be positioned higher on the right side of the street, which supports the idea of an uphill slope. However, the exact angle of the incline cannot be determined from the image alone",
+          "remaining_question": "What is the specific angle of the incline on the road?",
+          "evidence_complete": false,
+          "repair_round": 1,
+          "inspection_query": "Is the road that the vehicle is on uphill, downhill or flat?",
+          "inspection_box": [
+            0.0,
+            0.42831632653061225,
+            1.0,
+            1.0
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The road appears to be uphill as it ascends towards the horizon. The vehicles are positioned at varying heights along the street, suggesting a gradient increase in elevation as one moves forward. There are no visible signs indicating the exact angle of the incline, but the perspective suggests a noticeable upward slope from the viewer's position looking down the street toward the distant hills.",
+          "remaining_question": "What is the specific angle of the incline on the road?",
+          "evidence_complete": false,
+          "repair_round": 2,
+          "inspection_query": "What is the specific angle of the incline on the road?",
+          "inspection_box": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The road appears to be uphill as there are more vehicles parked on the lower side of the street compared to the higher side. The perspective suggests a gradual incline towards the background where the road seems to converge into a distant point, which is typical of uphill streets in hilly areas. The presence of trees and buildings also aligns with urban areas known for having such topography, like San Francisco's hilly neighborhoods. However, the exact angle cannot be determined from the image alone without additional context or a reference point indicating the direction of the slope.",
+          "remaining_question": "What is the specific angle of the slope of the road?",
+          "evidence_complete": false,
+          "repair_round": 3,
+          "inspection_query": "Is the road that the vehicle is on uphill, downhill or flat?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "highest_support_tentative_candidate",
+      "finalization": {
+        "answer": "A",
+        "support": 0.9525741338729858,
+        "claim": "The road appears to be uphill as there are more vehicles parked on the lower side of the street compared to the higher side. The perspective suggests a gradual incline towards the background where the road seems to converge into a distant point, which is typical of uphill streets in hilly areas. The",
+        "candidate_index": 3,
+        "audit_status": "inconclusive",
+        "source": "highest_support_tentative_candidate",
+        "verification": "uncertain",
+        "tie_break": "latest_candidate"
+      },
+      "elapsed_seconds": 190.8383172280155,
+      "calls": 18
+    },
+    {
+      "id": "4",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 1,
+      "audit_status_counts": {
+        "supported": 1
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9902915358543396,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9902915358543396,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 33.761231847980525,
+      "calls": 8
+    },
+    {
+      "id": "5",
+      "status": "verified_by_model",
+      "reference": "A",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 1,
+      "audit_status_counts": {
+        "supported": 1
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.8354835510253906,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.8354835510253906,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 26.679069541976787,
+      "calls": 8
+    },
+    {
+      "id": "6",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 7,
+      "audit_status_counts": {
+        "inconclusive": 7
+      },
+      "repair_attempts": 5,
+      "has_repair": true,
+      "repair_audits": 5,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.6791787147521973,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.622459352016449,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.9046505093574524,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.622459352016449,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.7071869820356369,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The image shows a street scene with cars parked along both sides of the road. There is a crosswalk in the foreground, and the road appears to be clear except for one car moving towards the viewer. The environment suggests a residential area with trees lining the street. There are no visible traffic lights or signs indicating whether vehicles need to stop at this point. The magnified section does not provide any additional information regarding traffic rules or signals that might be present further down the road or on the side streets.",
+          "remaining_question": "What specific traffic rules or signs are present in the area that could indicate whether vehicles need to stop at this intersection or point on the road?",
+          "evidence_complete": false,
+          "repair_round": 1,
+          "inspection_query": "Are we required to stop?",
+          "inspection_box": [
+            0.4345454545454545,
+            0.48270408163265305,
+            0.44207792207792207,
+            0.49306122448979595
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The image shows a street view with parked cars along both sides of the road and a few vehicles moving. There are no visible traffic lights or stop signs in the immediate foreground. The road appears to be a two-lane street with a crosswalk in the center. Trees line the street, and there's a clear sky above. The magnified section in Image 2 does not provide any additional information about traffic rules or signs related to stopping at the intersection or road point shown in Image 1. It seems to be focused on a small part of the street, possibly a pedestrian crossing or a specific area of the t.",
+          "remaining_question": "What specific traffic rules or signs are present in the area that could indicate whether vehicles need to stop at this intersection or point on the road? Could there be a stop sign or a yield sign out",
+          "evidence_complete": false,
+          "repair_round": 2,
+          "inspection_query": "What specific traffic rules or signs are present in the area that could indicate whether vehicles need to stop at this intersection or point on the road?",
+          "inspection_box": [
+            0.6037337662337663,
+            0.41867346938775507,
+            0.6178571428571429,
+            0.4512244897959184
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The image shows a street scene with cars parked along both sides of the road. There are no visible traffic lights, signs indicating stop conditions, or clear markings that would suggest a stop requirement. The road appears to be a two-lane street with a center line, but there are no visible stop signs or yield signs. The perspective is from the middle of the road looking down the street, and there are no pedestrians or other vehicles in immediate view that would necessitate stopping. The sky is overcast, which might affect visibility, but it does not provide any specific indication of a stop.",
+          "remaining_question": "Is there a stop sign or a yield sign further down the street that is not visible in the current frame?",
+          "evidence_complete": false,
+          "repair_round": 3,
+          "inspection_query": "Are we required to stop?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "highest_support_tentative_candidate",
+      "finalization": {
+        "answer": "B",
+        "support": 0.9046505093574524,
+        "claim": "There are no visible traffic lights or stop signs indicating the need to stop at this intersection or point on the road in Image 1",
+        "candidate_index": 2,
+        "audit_status": "inconclusive",
+        "source": "highest_support_tentative_candidate",
+        "verification": "uncertain",
+        "tie_break": "latest_candidate"
+      },
+      "elapsed_seconds": 306.1969106470351,
+      "calls": 32
+    },
+    {
+      "id": "7",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 6,
+      "audit_status_counts": {
+        "inconclusive": 4,
+        "supported": 2
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 3,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 2,
+      "cf_target_masks": 2,
+      "cf_control_masks": 4,
+      "cf_mask_calls": 6,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.6791787147521973,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 0,
+          "value": 0.562176525592804,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.7191260308027267,
+      "answer_withheld": 2,
+      "logged_readback_n": 2,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The bicyclist appears to be facing forward, as indicated by the position of their body and the direction of the handlebars. The bicycle's wheels are visible, suggesting the rider is standing upright on the bike rather than lying down or leaning back significantly. However, the exact angle of the head or any other part of the cyclist that could confirm the direction of gaze is not visible due to the angle and framing of the photo. The rear of the bicycle is not clearly visible, so we cannot determine if the cyclist is facing away from the camera based on the rear view alone. The presence of a '",
+          "remaining_question": "What is the cyclist wearing, which might provide clues about their orientation?",
+          "evidence_complete": false,
+          "repair_round": 1,
+          "inspection_query": "Is the bicyclist in this image facing?",
+          "inspection_box": [
+            0.9018181818181817,
+            0.46734693877551026,
+            1.0,
+            0.9038265306122448
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "observation": "The bicyclist appears to be facing forward, as indicated by the position of their body and the direction of the handlebars. The bicycle's wheels are visible, suggesting the rider is standing upright on the bike rather than lying down or leaning back significantly. However, the exact angle of the head or any other part of the cyclist that could confirm the direction of gaze is not visible due to the angle and framing of the photo. The rear of the bicycle is not clearly visible, so we cannot determine if the cyclist is facing away from the camera based on the rear view alone. The presence of a '",
+          "remaining_question": "What is the cyclist wearing, which might provide clues about their orientation?",
+          "evidence_complete": false,
+          "repair_round": 1,
+          "inspection_query": "Is the bicyclist in this image facing?",
+          "inspection_box": [
+            0.9018181818181817,
+            0.46734693877551026,
+            1.0,
+            0.9038265306122448
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "verified_ledger_synthesis",
+      "finalization": {
+        "source": "verified_ledger_synthesis",
+        "verification": "uncertain"
+      },
+      "elapsed_seconds": 283.79458873398835,
+      "calls": 34
+    },
+    {
+      "id": "8",
+      "status": "answered_with_uncertainty",
+      "reference": "C",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "C",
+      "final_correct": true,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": true,
+      "loss": false,
+      "audits": 3,
+      "audit_status_counts": {
+        "supported": 1,
+        "inconclusive": 2
+      },
+      "repair_attempts": 1,
+      "has_repair": true,
+      "repair_audits": 1,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9241418242454529,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9241418242454529,
+      "answer_withheld": 1,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "verified_ledger_synthesis",
+      "finalization": {
+        "source": "verified_ledger_synthesis",
+        "verification": "uncertain"
+      },
+      "elapsed_seconds": 130.4641104969778,
+      "calls": 19
+    },
+    {
+      "id": "9",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": true,
+      "audits": 6,
+      "audit_status_counts": {
+        "contradicted": 2,
+        "supported": 1,
+        "inconclusive": 3
+      },
+      "repair_attempts": 4,
+      "has_repair": true,
+      "repair_audits": 4,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_verified_point": 1,
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 4,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.18242551386356354,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.851952850818634,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.2018132209777832,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 2,
+          "value": 0.2018132209777832,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 3,
+          "value": 0.037326883524656296,
+          "audit_status": "contradicted"
+        }
+      ],
+      "mean_support": 0.29506633803248405,
+      "answer_withheld": 1,
+      "logged_readback_n": 4,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The pickup truck is positioned on a multi-lane road, and the nearest curb to it is visible on the left side of the image. The truck appears to be in the rightmost lane, and the curb is adjacent to the edge of the road. There is no direct measurement provided, but the truck is clearly separated from the curb by a significant distance due to the width of the road and the presence of other vehicles and infrastructure elements like the guardrail and signage above the truck. The exact horizontal distance cannot be determined from the image alone without a scale reference or specific measurements of",
+          "remaining_question": "",
+          "evidence_complete": false,
+          "repair_round": 1,
+          "inspection_query": "What's the horizontal distance between the pickup truck and the nearest curb to it?",
+          "inspection_box": [
+            0.0,
+            0.49056122448979594,
+            0.2349350649350649,
+            0.6829081632653061
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "observation": "The pickup truck is positioned on a multi-lane road, and the nearest curb to it is visible on the left side of the image. The truck appears to be in the rightmost lane, and the curb is adjacent to the edge of the road. There is no direct measurement provided, but the truck is clearly separated from the curb by a significant distance due to the width of the road and the presence of other vehicles and infrastructure elements like the guardrail and signage above the truck. The exact horizontal distance cannot be determined from the image alone without a scale reference or specific measurements of",
+          "remaining_question": "",
+          "evidence_complete": false,
+          "repair_round": 1,
+          "inspection_query": "What's the horizontal distance between the pickup truck and the nearest curb to it?",
+          "inspection_box": [
+            0.0,
+            0.49056122448979594,
+            0.2349350649350649,
+            0.6829081632653061
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 1,
+          "attempt": 2,
+          "observation": "The pickup truck is positioned on a multi-lane road, and the nearest curb to it is visible on the left side of the image. The truck appears to be in the rightmost lane, and the curb is adjacent to the edge of the road. There is no direct measurement provided, but the truck is clearly separated from the curb by a significant distance due to the width of the road and the presence of other vehicles and infrastructure elements like the guardrail and signage above the truck. The exact horizontal distance cannot be determined from the image alone without a scale reference or specific measurements of",
+          "remaining_question": "",
+          "evidence_complete": false,
+          "repair_round": 2,
+          "inspection_query": "What's the horizontal distance between the pickup truck and the nearest curb to it?",
+          "inspection_box": [
+            0.0,
+            0.49056122448979594,
+            0.2349350649350649,
+            0.6829081632653061
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 1,
+          "attempt": 3,
+          "observation": "The pickup truck is positioned on a multi-lane highway. The nearest curb to the truck is on the left side of the image, but the exact distance cannot be determined from the image alone. The curb appears to be part of a concrete barrier separating the highway lanes. The truck is facing away from the camera, showing its rear end. There are other vehicles in the adjacent lanes, but their positions do not affect the measurement of the distance between the truck and the curb. The background includes urban buildings and a sign indicating 'Seventh St' as an exit only route.",
+          "remaining_question": "What is the exact length of the concrete barrier separating the highway lanes?",
+          "evidence_complete": false,
+          "repair_round": 3,
+          "inspection_query": "What's the horizontal distance between the pickup truck and the nearest curb to it?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "verified_ledger_synthesis",
+      "finalization": {
+        "source": "verified_ledger_synthesis",
+        "verification": "uncertain"
+      },
+      "elapsed_seconds": 245.1398726570187,
+      "calls": 29
+    },
+    {
+      "id": "10",
+      "status": "verified_by_model",
+      "reference": "A",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 2,
+      "audit_status_counts": {
+        "supported": 2
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 1
+      },
+      "repeated_events_total": 1,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9669140577316284,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9669140577316284,
+      "answer_withheld": 1,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 63.477113913046196,
+      "calls": 11
+    },
+    {
+      "id": "11",
+      "status": "verified_by_model",
+      "reference": "C",
+      "initial_raw_answer": "C",
+      "initial_answer": "C",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "C",
+      "final_correct": true,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 1,
+      "audit_status_counts": {
+        "supported": 1
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9875683188438416,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9875683188438416,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 31.910542552999686,
+      "calls": 8
+    },
+    {
+      "id": "12",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": true,
+      "audits": 4,
+      "audit_status_counts": {
+        "contradicted": 1,
+        "inconclusive": 3
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 3,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.11920291930437088,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.3208213150501251,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.3208213150501251,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.9241418242454529,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.4212468434125185,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The vehicle appears to be facing towards the right side of the frame. The front end, including the cab and the front wheels, is visible, indicating that the vehicle's orientation is towards the right. The rear end, including the back wheels and the extended boom, is also visible, suggesting the vehicle is positioned sideways within the frame. The logo 'Cresco Equipment Rental' on the side panel further supports the vehicle's orientation as it is clearly visible on the side facing the viewer, which would be the right side if the vehicle were facing forward towards the right.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "Which direction is this vehicle facing?",
+          "inspection_box": [
+            0.0,
+            0.1719047619047619,
+            1.0,
+            0.9935714285714285
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The vehicle appears to be facing towards the right side of the frame. The front end, including the cab and the front wheels, is visible, indicating that the vehicle's orientation is towards the right. The rear end, including the back wheels and the extended boom, is also visible, suggesting the vehicle is positioned sideways within the frame. The logo 'Cresco Equipment Rental' on the side panel further supports the vehicle's orientation as it is clearly visible on the side facing the viewer, which would be the right side if the vehicle were facing forward towards the right.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "Which direction is this vehicle facing?",
+          "inspection_box": [
+            0.0,
+            0.1719047619047619,
+            1.0,
+            0.9935714285714285
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The vehicle is facing towards the left side of the image frame. The front end, including the cab and the front wheels, is visible, indicating the direction it is oriented. The rear end, including the back wheels and the extended boom arm, is on the right side of the frame. The vehicle's branding and model number 'TL943D' are clearly visible on the side, along with the 'Cresco Equipment Rentals' logo and contact information. The large tires and the structure of the vehicle suggest it is designed for heavy-duty tasks, likely in construction or industrial settings. The surrounding environment, a晴",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "Which direction is this vehicle facing?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "highest_support_tentative_candidate",
+      "finalization": {
+        "answer": "A",
+        "support": 0.9241418242454529,
+        "claim": "The vehicle is facing towards the left side of the image frame. The front end, including the cab and the front wheels, is visible, indicating the direction it is oriented. The rear end, including the back wheels and the extended boom arm, is on the right side of the frame. The vehicle's branding and",
+        "candidate_index": 3,
+        "audit_status": "inconclusive",
+        "source": "highest_support_tentative_candidate",
+        "verification": "uncertain",
+        "tie_break": "latest_candidate"
+      },
+      "elapsed_seconds": 172.94924631499453,
+      "calls": 17
+    },
+    {
+      "id": "13",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 1,
+      "audit_status_counts": {
+        "supported": 1
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.8807970285415649,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.8807970285415649,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 31.47803192801075,
+      "calls": 8
+    },
+    {
+      "id": "14",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 1,
+      "audit_status_counts": {
+        "supported": 1
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.851952850818634,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.851952850818634,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 30.592782586987596,
+      "calls": 8
+    },
+    {
+      "id": "15",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": true,
+      "audits": 2,
+      "audit_status_counts": {
+        "contradicted": 1,
+        "supported": 1
+      },
+      "repair_attempts": 1,
+      "has_repair": true,
+      "repair_audits": 1,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.10669060051441193,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.9149009585380554,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.5107957795262337,
+      "answer_withheld": 0,
+      "logged_readback_n": 1,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "There is one car visible in the opposite lane that appears to be still driving. It is a silver sedan positioned near the center of the frame in Image 2, which is a close-up of the parking lot area shown in Image 1. The car's front is facing towards the camera, indicating it is moving forward within the lane. There are no other cars clearly visible in the opposite lane in the provided images, suggesting only this single vehicle is still driving in the opposite direction as seen in the zoomed-in view of the parking lot.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "How many cars are in the opposite lane that are still driving?",
+          "inspection_box": [
+            0.2237987012987013,
+            0.49765306122448977,
+            0.33301948051948055,
+            0.6056632653061225
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 73.1244563430082,
+      "calls": 12
+    }
+  ]
+}

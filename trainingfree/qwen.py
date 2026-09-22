@@ -155,6 +155,20 @@ class Qwen:
         self.input_tokens += inputs.input_ids.shape[1]
         return score
 
+    def option_log_probabilities(self, image, prompt, labels):
+        """Score single-token options with one shared prefix forward pass."""
+        encoded = {label: self.processor.tokenizer.encode(label, add_special_tokens=False)
+                   for label in labels}
+        if not all(len(ids) == 1 for ids in encoded.values()):
+            return {label:self.log_probability(image, prompt, label) for label in labels}
+        inputs = self.inputs(image, prompt)
+        with self.torch.inference_mode():
+            logits = self._last_logits(inputs, 1)[0, -1].log_softmax(-1)
+            result = {label:logits[ids[0]].item() for label, ids in encoded.items()}
+        self.calls += 1
+        self.input_tokens += inputs.input_ids.shape[1]
+        return result
+
     def _last_logits(self, inputs, count):
         # Transformers 4.51 Qwen does not expose logits_to_keep. Project only
         # needed final hidden states instead of allocating the full prefix vocabulary.

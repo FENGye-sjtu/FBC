@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import time
@@ -12,6 +13,7 @@ from collections import Counter
 from .core import solve
 from .online import Online
 from .prompts import cot_prompt
+from .answers import PARSER_VERSION, extract_answer, raw_answer
 
 
 def choices_from_question(question):
@@ -24,7 +26,7 @@ def _answer_text(text):
     return re.sub(r'[^a-z0-9]+', ' ', str(text).lower()).strip()
 
 
-def extract_answer(text, question=''):
+def legacy_extract_answer(text, question=''):
     if text is None:
         return ''
     text = text.strip()
@@ -91,9 +93,14 @@ def main(argv=None, shared=None):
     p.add_argument('--max-new-tokens', type=int, default=512)
     p.add_argument('--max-pixels', type=int, default=1003520)
     p.add_argument('--max-steps', type=int, default=6)
-    p.add_argument('--cot-style', choices=['reasoned_v2','grounded_concise_v3','preserve_select_v3'],
+    p.add_argument('--cot-style', choices=['reasoned_v2','grounded_concise_v3','preserve_select_v3',
+                                         'evidence_brief_v4','evidence_adaptive_v4','evidence_layout_v5'],
                    default='reasoned_v2')
     p.add_argument('--repairs', type=int, choices=range(4), default=3)
+    p.add_argument('--initial-style', choices=['full','compact_v1'], default='full',
+                   help='Only changes the first atomic proposal; all audits and repairs are unchanged')
+    p.add_argument('--repair-style', choices=['reread','atomic_v1'], default='reread',
+                   help='Optional concise repair observation/claim variant; no audit bypass')
     p.add_argument('--support', type=float, default=.8)
     p.add_argument('--specificity', type=float, default=.05)
     p.add_argument('--upstream', type=Path)
@@ -106,8 +113,14 @@ def main(argv=None, shared=None):
     p.add_argument('--cot-cache', type=Path,
                    help='Completed CoT JSONL to reuse for FaithAct (recorded and hashed in manifest)')
     args = p.parse_args(argv)
+    if args.tool_device == 'auto':
+        args.tool_device_requested = 'auto'
+        args.tool_device = os.environ.get('CVPR_TOOL_DEVICE', '')
+        if not args.tool_device.startswith('cuda:'):
+            p.error('--tool-device auto requires a dedicated tool GPU from queue_bf16')
     methods = args.methods.split(',')
-    if not set(methods) <= {'direct', 'cot', 'faithact', 'online', 'online_cf'}:
+    if not set(methods) <= {'direct', 'cot', 'faithact', 'online', 'online_cf',
+                            'online_repair', 'online_cf_repair'}:
         p.error('Unknown method')
     if 'faithact' in methods and not all([args.upstream, args.clip, args.dino, args.poll_checkpoint]):
         p.error('FaithAct requires upstream, clip, dino and poll-checkpoint')
@@ -119,6 +132,7 @@ def main(argv=None, shared=None):
     if args.cot_cache:
         manifest['cot_cache_sha256'] = hashlib.sha256(args.cot_cache.read_bytes()).hexdigest()
     manifest['metric'] = 'strict_normalized_exact_match; unanswered/errors count incorrect'
+    manifest['parser_version'] = PARSER_VERSION
     manifest['protocol'] = 'engineering_port_v1_not_yet_paper_matched'
     manifest['code_sha256'] = {f.name: hashlib.sha256(f.read_bytes()).hexdigest()
                                for f in sorted(Path(__file__).parent.glob('*.py'))}
@@ -158,6 +172,8 @@ def main(argv=None, shared=None):
     vlm.__class__ = Qwen  # Reload stateless adapter methods without reloading frozen weights.
     vlm.max_new_tokens = args.max_new_tokens
     runtime = {'device_map':getattr(vlm.model,'hf_device_map',{}),
+               'tool_device':args.tool_device,
+               'tool_gpu_budget_mib':os.environ.get('CVPR_TOOL_GPU_BUDGET_MIB'),
                'torch_version':torch.__version__,
                'parameter_dtypes':dict(Counter(str(p.dtype) for p in vlm.model.parameters())),
                'max_pixels':vlm.processor.image_processor.max_pixels,
@@ -173,7 +189,13 @@ def main(argv=None, shared=None):
         prior = [json.loads(s) for s in result_path.read_text(encoding='utf-8').splitlines()] if result_path.exists() else []
         done = {str(r['id']) for r in prior}
         records = list(prior)
-        backend = Online(vlm, method == 'online_cf', args.support, args.specificity)
+        if method in ('online_repair', 'online_cf_repair'):
+            from .online_repair import OnlineRepair
+            backend = OnlineRepair(vlm, method == 'online_cf_repair', args.support, args.specificity,
+                                   initial_style=args.initial_style, repair_style=args.repair_style)
+        else:
+            backend = Online(vlm, method == 'online_cf', args.support, args.specificity,
+                             initial_style=args.initial_style)
         with result_path.open('a', encoding='utf-8') as stream:
             for case in cases:
                 if str(case['id']) in done:
@@ -194,6 +216,8 @@ def main(argv=None, shared=None):
                                                          'time':time.time(),**event},ensure_ascii=False)+'\n')
                                 events.flush()
                             record = solve(backend, image, question, args.max_steps, args.repairs, on_event=emit)
+                            if getattr(backend, 'last_finalization', None):
+                                record['finalization'] = backend.last_finalization
                     elif method == 'direct':
                         record = {'raw': vlm.generate(image, question+'\nReturn only the concise answer.'), 'status': 'direct'}
                     else:
@@ -218,7 +242,7 @@ def main(argv=None, shared=None):
                             record['initial_cot_reused'] = bool(cached.get('raw'))
                         else:
                             record = {'raw': vlm.generate(image, prompt), 'status': 'cot'}
-                    answer = extract_answer(record.get('answer', record.get('raw')), question)
+                    answer = extract_answer(raw_answer(record), question)
                 except Exception as exc:
                     # Persist failures; never report accuracy only on successful cases.
                     record, answer = {'status': 'error', 'error': f'{type(exc).__name__}: {exc}',

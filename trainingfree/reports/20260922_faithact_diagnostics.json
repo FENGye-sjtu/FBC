@@ -1,0 +1,537 @@
+{
+  "is_partial": false,
+  "completed_n": 765,
+  "expected_n": 765,
+  "parser_version": "committed_answer_v1",
+  "reference_blind_extraction": true,
+  "sources": {
+    "faithact": {
+      "path": "tmp/analysis/faithact_full.jsonl",
+      "sha256": "57ec855ca4c9a175a5a26caaaf336a6e5d058af758c421b7c9d1d4c27b4bce36"
+    },
+    "cot": {
+      "path": "tmp/analysis/cot_v2.jsonl",
+      "sha256": "fa1c602f94c99659dc2bbe54714b6e47e323600b8f68baaa4ccd0c0e1b3978a7"
+    },
+    "dataset": {
+      "path": "tmp/analysis/cases.jsonl",
+      "sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+    },
+    "extractor": {
+      "path": "trainingfree/answers.py",
+      "sha256": "efe25c3512513f0e06f4a6f97497fe7caea19983a4d62f08ab89893417a01f83"
+    }
+  },
+  "original_cot_mismatch_ids": [],
+  "status_counts": {
+    "faithact_port": 765
+  },
+  "coverage": {
+    "interior_cases": 141,
+    "interior_blocks_and_noun_calls": 212,
+    "tool_cases": 141,
+    "noun_inspections": 575,
+    "cases_with_boxes_in_prompt": 114,
+    "noun_records_with_any_detected_boxes": 554,
+    "noun_records_with_boxes_in_prompt": 236,
+    "noun_probability_bands": {
+      "exists_gt_0.6": 101,
+      "maybe_0.4_to_0.6": 138,
+      "below_0.4": 336
+    },
+    "top_nouns": [
+      [
+        "street",
+        52
+      ],
+      [
+        "road",
+        38
+      ],
+      [
+        "cars",
+        33
+      ],
+      [
+        "car",
+        25
+      ],
+      [
+        "vehicles",
+        19
+      ],
+      [
+        "vehicle",
+        17
+      ],
+      [
+        "sign",
+        14
+      ],
+      [
+        "lane",
+        12
+      ],
+      [
+        "traffic",
+        11
+      ],
+      [
+        "image",
+        11
+      ],
+      [
+        "traffic light",
+        9
+      ],
+      [
+        "lanes",
+        9
+      ]
+    ]
+  },
+  "noun_extraction": {
+    "cases_with_errors": 0,
+    "error_count": 0,
+    "errors": [],
+    "accepted_format": "ast.literal_eval(raw.strip()) -> list[str]",
+    "successful_raw_format_logged": false
+  },
+  "paired_groups": {
+    "all": {
+      "n": 765,
+      "left_correct": 526,
+      "right_correct": 528,
+      "wins": [
+        "23",
+        "35",
+        "49",
+        "95",
+        "96",
+        "116",
+        "120",
+        "141",
+        "147",
+        "154",
+        "194",
+        "218",
+        "247",
+        "254",
+        "289",
+        "311",
+        "359",
+        "372",
+        "389",
+        "405",
+        "464",
+        "466",
+        "470",
+        "493",
+        "499",
+        "514",
+        "550",
+        "567",
+        "581",
+        "595",
+        "623",
+        "747",
+        "749"
+      ],
+      "losses": [
+        "33",
+        "80",
+        "86",
+        "111",
+        "136",
+        "165",
+        "181",
+        "202",
+        "239",
+        "245",
+        "296",
+        "346",
+        "361",
+        "388",
+        "395",
+        "398",
+        "432",
+        "463",
+        "521",
+        "529",
+        "530",
+        "538",
+        "549",
+        "590",
+        "631",
+        "633",
+        "666",
+        "686",
+        "689",
+        "723",
+        "745"
+      ],
+      "net_correct": 2,
+      "mcnemar_exact_p": 0.9006532462520331,
+      "cot_accuracy": 0.6875816993464052,
+      "faithact_accuracy": 0.6901960784313725,
+      "mean_incremental_seconds": 11.865733136452455,
+      "faithact_unresolved_ids": [
+        "80",
+        "101",
+        "121",
+        "136",
+        "165",
+        "189",
+        "195",
+        "202",
+        "239",
+        "245",
+        "388",
+        "460",
+        "469",
+        "507",
+        "534",
+        "590",
+        "599",
+        "631",
+        "635",
+        "713"
+      ]
+    },
+    "tool_records": {
+      "n": 141,
+      "left_correct": 84,
+      "right_correct": 85,
+      "wins": [
+        "23",
+        "96",
+        "120",
+        "147",
+        "218",
+        "247",
+        "311",
+        "359",
+        "372",
+        "389",
+        "405",
+        "466",
+        "493",
+        "499",
+        "581",
+        "595",
+        "749"
+      ],
+      "losses": [
+        "111",
+        "136",
+        "165",
+        "181",
+        "202",
+        "239",
+        "245",
+        "296",
+        "361",
+        "395",
+        "398",
+        "521",
+        "538",
+        "590",
+        "666",
+        "745"
+      ],
+      "net_correct": 1,
+      "mcnemar_exact_p": 1,
+      "cot_accuracy": 0.5957446808510638,
+      "faithact_accuracy": 0.6028368794326241,
+      "mean_incremental_seconds": 54.74368890942816,
+      "faithact_unresolved_ids": [
+        "121",
+        "136",
+        "165",
+        "195",
+        "202",
+        "239",
+        "245",
+        "469",
+        "590",
+        "599",
+        "713"
+      ]
+    },
+    "no_tool_records": {
+      "n": 624,
+      "left_correct": 442,
+      "right_correct": 443,
+      "wins": [
+        "35",
+        "49",
+        "95",
+        "116",
+        "141",
+        "154",
+        "194",
+        "254",
+        "289",
+        "464",
+        "470",
+        "514",
+        "550",
+        "567",
+        "623",
+        "747"
+      ],
+      "losses": [
+        "33",
+        "80",
+        "86",
+        "346",
+        "388",
+        "432",
+        "463",
+        "529",
+        "530",
+        "549",
+        "631",
+        "633",
+        "686",
+        "689",
+        "723"
+      ],
+      "net_correct": 1,
+      "mcnemar_exact_p": 1,
+      "cot_accuracy": 0.7083333333333334,
+      "faithact_accuracy": 0.7099358974358975,
+      "mean_incremental_seconds": 2.17696428390506,
+      "faithact_unresolved_ids": [
+        "80",
+        "101",
+        "189",
+        "388",
+        "460",
+        "507",
+        "534",
+        "631",
+        "635"
+      ]
+    },
+    "boxes_in_evidence_prompt": {
+      "n": 114,
+      "left_correct": 66,
+      "right_correct": 66,
+      "wins": [
+        "96",
+        "147",
+        "218",
+        "247",
+        "311",
+        "359",
+        "372",
+        "389",
+        "405",
+        "493",
+        "499",
+        "581",
+        "595",
+        "749"
+      ],
+      "losses": [
+        "111",
+        "136",
+        "181",
+        "239",
+        "245",
+        "296",
+        "361",
+        "395",
+        "398",
+        "521",
+        "538",
+        "590",
+        "666",
+        "745"
+      ],
+      "net_correct": 0,
+      "mcnemar_exact_p": 1,
+      "cot_accuracy": 0.5789473684210527,
+      "faithact_accuracy": 0.5789473684210527,
+      "mean_incremental_seconds": 56.7222563033707,
+      "faithact_unresolved_ids": [
+        "121",
+        "136",
+        "239",
+        "245",
+        "469",
+        "590",
+        "713"
+      ]
+    },
+    "no_boxes_in_evidence_prompt": {
+      "n": 651,
+      "left_correct": 460,
+      "right_correct": 462,
+      "wins": [
+        "23",
+        "35",
+        "49",
+        "95",
+        "116",
+        "120",
+        "141",
+        "154",
+        "194",
+        "254",
+        "289",
+        "464",
+        "466",
+        "470",
+        "514",
+        "550",
+        "567",
+        "623",
+        "747"
+      ],
+      "losses": [
+        "33",
+        "80",
+        "86",
+        "165",
+        "202",
+        "346",
+        "388",
+        "432",
+        "463",
+        "529",
+        "530",
+        "549",
+        "631",
+        "633",
+        "686",
+        "689",
+        "723"
+      ],
+      "net_correct": 2,
+      "mcnemar_exact_p": 0.8679394004284404,
+      "cot_accuracy": 0.706605222734255,
+      "faithact_accuracy": 0.7096774193548387,
+      "mean_incremental_seconds": 4.010673780033591,
+      "faithact_unresolved_ids": [
+        "80",
+        "101",
+        "165",
+        "189",
+        "195",
+        "202",
+        "388",
+        "460",
+        "507",
+        "534",
+        "599",
+        "631",
+        "635"
+      ]
+    },
+    "tool_records_but_no_boxes_in_prompt": {
+      "n": 27,
+      "left_correct": 18,
+      "right_correct": 19,
+      "wins": [
+        "23",
+        "120",
+        "466"
+      ],
+      "losses": [
+        "165",
+        "202"
+      ],
+      "net_correct": 1,
+      "mcnemar_exact_p": 1,
+      "cot_accuracy": 0.6666666666666666,
+      "faithact_accuracy": 0.7037037037037037,
+      "mean_incremental_seconds": 46.38973769055964,
+      "faithact_unresolved_ids": [
+        "165",
+        "195",
+        "202",
+        "599"
+      ]
+    },
+    "noun_prefixes_only": {
+      "n": 25,
+      "left_correct": 16,
+      "right_correct": 17,
+      "wins": [
+        "23",
+        "120",
+        "466"
+      ],
+      "losses": [
+        "165",
+        "202"
+      ],
+      "net_correct": 1,
+      "mcnemar_exact_p": 1,
+      "cot_accuracy": 0.64,
+      "faithact_accuracy": 0.68,
+      "mean_incremental_seconds": 45.67897106612334,
+      "faithact_unresolved_ids": [
+        "165",
+        "195",
+        "202",
+        "599"
+      ]
+    },
+    "interior_but_no_tool_records": {
+      "n": 0,
+      "left_correct": 0,
+      "right_correct": 0,
+      "wins": [],
+      "losses": [],
+      "net_correct": 0,
+      "mcnemar_exact_p": 1,
+      "cot_accuracy": null,
+      "faithact_accuracy": null,
+      "mean_incremental_seconds": null,
+      "faithact_unresolved_ids": []
+    }
+  },
+  "regressions_to_unresolved_ids": [
+    "80",
+    "136",
+    "165",
+    "202",
+    "239",
+    "245",
+    "388",
+    "590",
+    "631"
+  ],
+  "official_suite_scorers": {
+    "committed_answer": {
+      "n": 765,
+      "correct": 528,
+      "accuracy": 0.6901960784313725
+    },
+    "vlmeval_raw": {
+      "n": 765,
+      "correct": 513,
+      "accuracy": 0.6705882352941176
+    },
+    "vlmeval_canonical_final": {
+      "n": 765,
+      "correct": 528,
+      "accuracy": 0.6901960784313725
+    },
+    "ags_raw": {
+      "n": 765,
+      "correct": 461,
+      "accuracy": 0.6026143790849673
+    }
+  },
+  "interpretation": [
+    "Full paired RealWorldQA reconstruction result, not exact original-paper protocol parity.",
+    "Evidence/no-evidence subsets describe coverage and outcomes; they do not establish a causal contribution of tools.",
+    "A tool evidence record is not necessarily included box text: fusion score below 0.4 yields only the noun prefix.",
+    "No noun-output formatting failures were recorded; missing interior steps account for no-tool cases.",
+    "Neither correct option labels nor high model confidence guarantee faithful visual reasoning."
+  ]
+}

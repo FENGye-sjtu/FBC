@@ -67,6 +67,9 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
         raise ValueError('Invalid controller budget')
     ledger, trace = [], []
     exhausted_questions = set()
+    verified_visual_points = set()
+    verified_questions = set()
+    closed_question_keys = set()
     def key(text):
         return re.sub(r'\W+', ' ', text.lower()).strip()
     def record(event):
@@ -94,7 +97,10 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
                 continue
             last_step = step
             question_key = key(step.evidence_question)
-            if step.kind == 'visual' and question_key and question_key in exhausted_questions:
+            # A renamed step kind cannot reopen an exhausted evidence query.
+            # Pure logical deductions use an empty query and may still continue
+            # conditionally from the explicitly uncertain ledger.
+            if question_key and question_key in exhausted_questions:
                 record({'step':index,'event':'repeat_of_exhausted_question','candidate':asdict(step)})
                 redirections += 1
                 if redirections > 2:
@@ -102,7 +108,50 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
                                   'after two explicit redirections; synthesize from the current ledger.',
                                   'redirection_exhausted')
                 feedback = ('Choose a different evidence point or make a conditional deduction. '
-                            'The repeated question is already explicitly uncertain and cannot be audited again.')
+                            'The repeated question is already explicitly uncertain and cannot be audited again. '
+                            'A purely logical deduction must leave evidence_question empty.')
+                continue
+            visual_point = (key(step.claim), question_key)
+            if step.kind == 'visual' and visual_point in verified_visual_points:
+                record({'step':index,'event':'repeat_of_verified_point','candidate':asdict(step)})
+                redirections += 1
+                if redirections > 2:
+                    return finish('The model repeatedly returned to an already verified visual point '
+                                  'after two explicit redirections; synthesize from the current ledger.',
+                                  'redirection_exhausted')
+                feedback = ('Choose a different evidence point or make a conditional deduction. '
+                            'This visual fact is already verified; do not audit it again. '
+                            'Derive the answer from the ledger with kind=deduction and an empty '
+                            'evidence_question, or inspect a new visual fact.')
+                continue
+            if question_key and question_key in verified_questions:
+                # Forward-only reasoning cannot reopen an accepted evidence
+                # question by changing its claim or relabeling its step kind.
+                record({'step':index,'event':'repeat_of_verified_question','candidate':asdict(step)})
+                redirections += 1
+                if redirections > 2:
+                    return finish('The model repeatedly returned to an already verified evidence question '
+                                  'after two explicit redirections; synthesize from the current ledger.',
+                                  'redirection_exhausted')
+                feedback = ('Choose a different evidence point or make a conditional deduction. '
+                            'This evidence question already has an accepted visual observation and '
+                            'cannot be audited again in forward-only reasoning. Use an empty '
+                            'evidence_question for a purely logical deduction, or inspect a new question.')
+                continue
+            if question_key and question_key in closed_question_keys:
+                # All attempted queries belong to this controller repair point,
+                # but only the accepted visual claim is verified. Remembering
+                # an earlier failed query must not promote it to a true premise.
+                record({'step':index,'event':'repeat_of_closed_question','candidate':asdict(step)})
+                redirections += 1
+                if redirections > 2:
+                    return finish('The model repeatedly returned to a query from an already closed repair point '
+                                  'after two explicit redirections; synthesize from the current ledger.',
+                                  'redirection_exhausted')
+                feedback = ('Choose a different evidence point or make a conditional deduction. '
+                            'This query was already attempted within a closed repair point; '
+                            'that earlier attempt was not accepted as verified. Do not reopen it. '
+                            'Use a new evidence question or an empty evidence_question for pure deduction.')
                 continue
             if question_key:
                 point_questions.add(question_key)
@@ -133,6 +182,11 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
                 step = replace(step, verification='uncertain' if inherited else 'verified',
                                uncertainty_reason='Depends on unresolved premises.' if inherited else '')
                 ledger.append(step)
+                closed_question_keys.update(point_questions)
+                if step.kind == 'visual':
+                    verified_visual_points.add(visual_point)
+                    if question_key:
+                        verified_questions.add(question_key)
                 if step.final_answer is not None:
                     uncertain = any(s.verification == 'uncertain' for s in ledger)
                     return {'answer': step.final_answer,

@@ -1,0 +1,1 @@
+{"state":"superseded","job":"job006.json","reason":"V10 smoke was 1/4 and separate case 9 was wrong. The expanding run was stopped to allocate its GPU to independent evidence rereading. Partial raw outputs and events remain unchanged; not a completed benchmark.","output":"/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_v10_cf_option_contrast"}

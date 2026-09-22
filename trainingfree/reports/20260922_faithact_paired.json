@@ -1,0 +1,398 @@
+{
+  "dataset": "/data_cinema/zqc/CVPR/data/vlmevalkit/cases.jsonl",
+  "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+  "parser_sha256": "efe25c3512513f0e06f4a6f97497fe7caea19983a4d62f08ab89893417a01f83",
+  "reference_blind_extraction": true,
+  "methods": {
+    "cot": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_cot_v2_reasoned/cot.jsonl",
+      "n": 765,
+      "correct": 526,
+      "manifest_path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_cot_v2_reasoned/manifest.json",
+      "input_budget": {
+        "model": "/data_cinema/zqc/CVPR/models/Qwen2.5-VL-7B-Instruct",
+        "quantization": "none",
+        "max_pixels": 1003520,
+        "max_new_tokens": 512,
+        "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+      },
+      "accuracy": 0.6875816993464052,
+      "accuracy_wilson95": [
+        0.6538692026867989,
+        0.719419651610367
+      ],
+      "uncertain": 0,
+      "with_evidence": 0,
+      "mean_seconds": 2.793907715732786,
+      "status_counts": {
+        "cot": 765
+      },
+      "parser_changes": [
+        {
+          "id": "93",
+          "stored_answer": "B\n\nThe right most bottle appears to be the smallest in comparison to the others",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "358",
+          "stored_answer": "A\n\nThe tree is positioned to the right of the bush when looking at the image",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "485",
+          "stored_answer": "B\n\nThe man in the striped track suit is on the right side of the street, standing near a parked car",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "510",
+          "stored_answer": "A\n\nThe face that has its eyes open is positioned in the middle of the six other figures",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true
+        }
+      ]
+    },
+    "faithact": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_faithact_v5_reasoned/faithact.jsonl",
+      "n": 765,
+      "correct": 528,
+      "manifest_path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_faithact_v5_reasoned/manifest.json",
+      "input_budget": {
+        "model": "/data_cinema/zqc/CVPR/models/Qwen2.5-VL-7B-Instruct",
+        "quantization": "none",
+        "max_pixels": 1003520,
+        "max_new_tokens": 512,
+        "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+      },
+      "accuracy": 0.6901960784313725,
+      "accuracy_wilson95": [
+        0.6565455127023139,
+        0.7219459737104921
+      ],
+      "uncertain": 0,
+      "with_evidence": 141,
+      "mean_seconds": 14.65964085218524,
+      "status_counts": {
+        "faithact_port": 765
+      },
+      "parser_changes": [
+        {
+          "id": "9",
+          "stored_answer": "the horizontal distance between the pickup truck and the nearest curb to it is approximately 5.5 meters",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "19",
+          "stored_answer": "the construction zone is further than the upcoming stop sign",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "56",
+          "stored_answer": "1. The image shows a street scene with multiple vehicles visible.\n2. The leftmost vehicle appears to be a dark-colored sedan, positioned on the left side of the road.\n3. The distance between the leftmost vehicle and the camera cannot be precisely determined without additional context or scale reference.\n4. However, based on the relative positions of the vehicles and the perspective of the image, the leftmost vehicle seems to be further away than the other vehicles closer to the camera.\n\nGiven the options provided:\nA. 20 meters\nB. 60 meters\nC. 100 meters\n\nThe most reasonable estimate for the distance of the leftmost vehicle from the camera would be:\n\nB. 60 meters",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "126",
+          "stored_answer": "1. road: The image shows a multi-lane road with clear lane markings.\n2. traffic lights: There are traffic lights visible at the intersection.\n3. lanes: The road has multiple lanes, as indicated by the lane markings.\n4. left-turn lane: There is a designated left-turn lane on the left side of the road.\n5. white arrow: A white arrow is present on the road, indicating the direction for left turns.\n6. dashed line: Dashed lines are visible on the road, likely indicating where vehicles can change lanes.\n\nGiven these observations, the correct answer is:\n\nB. 2 lanes\n\nThe presence of a dedicated left-turn lane and the white arrow indicate that two lanes are available for left turns",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "147",
+          "stored_answer": "related to the question is:\nB. 2",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "247",
+          "stored_answer": "the bike lane is on the right",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "304",
+          "stored_answer": "1. cars: The image shows several cars parked on the side of the road, which is not directly in the path but rather on the right side of the road.\n\n2. road: The road is visible in the foreground of the image, curving slightly to the right.\n\nGiven these observations, the cars are not directly in the path, so the answer is:\n\nB. No",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "319",
+          "stored_answer": "The image shows a gas station with several vehicles parked in the lot. The vehicle on the right appears to be at a distance that is not close enough to be measured accurately by eye alone, but it seems to be further than 10 or 20 meters. Given the context and typical distances between vehicles in such settings, the most plausible answer would be:\n\nC. 40 meters",
+          "parsed_answer": "C",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "397",
+          "stored_answer": "related to the question is:\n\nB. 1",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "405",
+          "stored_answer": "1. streetcar: The streetcar is present on the left side of the image, but it does not appear to be directly relevant to the question about driving up the ramp.\n\n2. ramp: There is a ramp visible in the center of the image, which appears to be designed for vehicles to ascend onto the streetcar tracks. However, there is no indication that the ramp is currently in use or that it is safe for a car to drive up it at this moment.\n\n3. road: The road is visible in the foreground, and there are no signs indicating that it is unsafe for cars to drive on it.\n\nGiven these observations, the correct answer is:\n\nB. No\n\nIt is not safe for the car to drive up the ramp in the scene",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "491",
+          "stored_answer": "related to the question is A. Yes",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "492",
+          "stored_answer": "1. road: The image shows a road with multiple lanes and traffic markings.\n2. traffic lights: There are traffic lights visible in the image, indicating the direction of traffic flow.\n3. markings: The word \"ONLY\" is painted on the road, which typically indicates a specific lane for turning left.\n4. arrow: There is an arrow pointing to the left, reinforcing the indication for left turns.\n5. lane: The lane in question appears to be designated for left turns, as indicated by the \"ONLY\" marking and the arrow.\n\nGiven these observations, it seems that the lane is specifically for left turns, but there is no direct indication that it is for going straight. However, since the question asks if you can keep going straight, and considering the lane markings and arrows suggest a left turn lane, the most appropriate answer would be:\n\nB. No",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "517",
+          "stored_answer": "the nearest vehicle from us is approximately 35 meters away",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "544",
+          "stored_answer": "related to the question is: C. 2",
+          "parsed_answer": "C",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "569",
+          "stored_answer": "The traffic sign in the image indicates a merge. The yellow diamond-shaped sign with an arrow pointing to the right typically signals that drivers should prepare to merge into the lane on the right.\n\nCorrect answer: C. Merge",
+          "parsed_answer": "C",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "623",
+          "stored_answer": "the most reasonable estimate would be:\n\nC. 50 meters",
+          "parsed_answer": "C",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "642",
+          "stored_answer": "related to the question is B. 6",
+          "parsed_answer": "B",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "730",
+          "stored_answer": "The image shows a highway with multiple lanes and vehicles. The vehicle on the left is approximately 25 meters away from the camera's perspective, based on the scale of the road and the size of the vehicle relative to the road markings.\n\nSo, the correct answer is:\nC. 25 meters",
+          "parsed_answer": "C",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "731",
+          "stored_answer": "the road on the left is going uphill",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true
+        },
+        {
+          "id": "755",
+          "stored_answer": "related to the question is: A. Straight ahead",
+          "parsed_answer": "A",
+          "stored_correct": false,
+          "correct": true
+        }
+      ]
+    }
+  },
+  "paired": {
+    "faithact_vs_cot": {
+      "n": 765,
+      "left_correct": 526,
+      "right_correct": 528,
+      "wins": [
+        "23",
+        "35",
+        "49",
+        "95",
+        "96",
+        "116",
+        "120",
+        "141",
+        "147",
+        "154",
+        "194",
+        "218",
+        "247",
+        "254",
+        "289",
+        "311",
+        "359",
+        "372",
+        "389",
+        "405",
+        "464",
+        "466",
+        "470",
+        "493",
+        "499",
+        "514",
+        "550",
+        "567",
+        "581",
+        "595",
+        "623",
+        "747",
+        "749"
+      ],
+      "losses": [
+        "33",
+        "80",
+        "86",
+        "111",
+        "136",
+        "165",
+        "181",
+        "202",
+        "239",
+        "245",
+        "296",
+        "346",
+        "361",
+        "388",
+        "395",
+        "398",
+        "432",
+        "463",
+        "521",
+        "529",
+        "530",
+        "538",
+        "549",
+        "590",
+        "631",
+        "633",
+        "666",
+        "686",
+        "689",
+        "723",
+        "745"
+      ],
+      "net_correct": 2,
+      "mcnemar_exact_p": 0.9006532462520331,
+      "input_budget_matched": true,
+      "input_budget_differences": {},
+      "comparison_scope": "matched_input_budget",
+      "evidence_subgroups": {
+        "faithact": {
+          "with_evidence": {
+            "n": 141,
+            "left_correct": 84,
+            "right_correct": 85,
+            "wins": [
+              "23",
+              "96",
+              "120",
+              "147",
+              "218",
+              "247",
+              "311",
+              "359",
+              "372",
+              "389",
+              "405",
+              "466",
+              "493",
+              "499",
+              "581",
+              "595",
+              "749"
+            ],
+            "losses": [
+              "111",
+              "136",
+              "165",
+              "181",
+              "202",
+              "239",
+              "245",
+              "296",
+              "361",
+              "395",
+              "398",
+              "521",
+              "538",
+              "590",
+              "666",
+              "745"
+            ],
+            "net_correct": 1,
+            "mcnemar_exact_p": 1.0
+          },
+          "without_evidence": {
+            "n": 624,
+            "left_correct": 442,
+            "right_correct": 443,
+            "wins": [
+              "35",
+              "49",
+              "95",
+              "116",
+              "141",
+              "154",
+              "194",
+              "254",
+              "289",
+              "464",
+              "470",
+              "514",
+              "550",
+              "567",
+              "623",
+              "747"
+            ],
+            "losses": [
+              "33",
+              "80",
+              "86",
+              "346",
+              "388",
+              "432",
+              "463",
+              "529",
+              "530",
+              "549",
+              "631",
+              "633",
+              "686",
+              "689",
+              "723"
+            ],
+            "net_correct": 1,
+            "mcnemar_exact_p": 1.0
+          }
+        }
+      }
+    }
+  }
+}

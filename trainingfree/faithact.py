@@ -6,6 +6,7 @@ weight substitution. This is a port, not a claim of exact paper reproduction.
 import ast
 import importlib.util
 import inspect
+import os
 from pathlib import Path
 
 
@@ -25,6 +26,12 @@ class FaithAct:
         if not checkpoint.is_file() or checkpoint.stat().st_size < 10000:
             raise FileNotFoundError('Real FaithAct CLIP weights required; Git LFS pointer is not a checkpoint')
         self.vlm, self.torch, self.device = vlm, torch, tool_device
+        if tool_device.startswith('cuda:') and os.environ.get('CVPR_TOOL_GPU_BUDGET_MIB'):
+            budget = int(os.environ['CVPR_TOOL_GPU_BUDGET_MIB']) * 1024**2
+            if budget <= 0:
+                raise ValueError('Dedicated tool GPU needs a positive memory budget')
+            total = torch.cuda.get_device_properties(tool_device).total_memory
+            torch.cuda.set_per_process_memory_fraction(min(1., budget/total), tool_device)
         self.template = module_from_file('faithact_template', Path(upstream)/'template.py')
         cls = module_from_file('faithact_clip', Path(upstream)/'train_pope/model.py').CLIP_cls
         self.clip_processor = CLIPProcessor.from_pretrained(clip_path)

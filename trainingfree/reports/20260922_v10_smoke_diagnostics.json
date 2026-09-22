@@ -1,0 +1,434 @@
+{
+  "summary": {
+    "path": "tmp\\analysis\\v10_smoke.jsonl",
+    "raw_sha256": "b3a23c1b725690d218936acb2b8c1e96fc6535a9a364e02d0aebc9ebe71e42e0",
+    "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+    "completed_n": 4,
+    "scored_n": 4,
+    "correct": 1,
+    "accuracy": 0.25,
+    "uncertain_n": 4,
+    "verified_n": 0,
+    "error_n": 0,
+    "status_counts": {
+      "answered_with_uncertainty": 4
+    },
+    "initial_answer_n": 4,
+    "initial_missing_n": 0,
+    "initial_correct": 1,
+    "initial_accuracy": 0.25,
+    "paired_n": 4,
+    "paired_initial_correct": 1,
+    "paired_final_correct": 1,
+    "gains_ids": [],
+    "losses_ids": [],
+    "initial_missing_ids": [],
+    "stored_rescore_disagreement_ids": [],
+    "with_repairs_n": 4,
+    "mean_support": 0.7667680940320415,
+    "min_support": 0.18242551386356354,
+    "max_support": 0.9940890073776245,
+    "finalization_source_counts": {
+      "unrecorded_fallback": 4
+    },
+    "mean_latency_seconds": 330.00266257024487,
+    "mean_calls": 50.25,
+    "trace_count_note": "Counts cover recorded trace events; failed or unlogged model calls cannot be reconstructed.",
+    "final_accuracy_protocol": "Use saved boolean correct when present; otherwise reference-blind extraction then exact match.",
+    "reference_blind_extraction": true,
+    "audits": 47,
+    "repair_attempts": 35,
+    "repair_audits": 34,
+    "parse_errors": 1,
+    "uncertainty_commits": 7,
+    "cf_checks": 8,
+    "cf_target_masks": 8,
+    "cf_control_masks": 16,
+    "cf_mask_calls": 24,
+    "option_consistency_checks": 3,
+    "repeated_question_events": 13,
+    "repeated_events_total": 13,
+    "answer_withheld": 6,
+    "logged_readback_n": 0
+  },
+  "details": [
+    {
+      "id": "0",
+      "status": "answered_with_uncertainty",
+      "reference": "C",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 12,
+      "audit_status_counts": {
+        "inconclusive": 11,
+        "contradicted": 1
+      },
+      "repair_attempts": 9,
+      "has_repair": true,
+      "repair_audits": 9,
+      "parse_errors": 0,
+      "uncertainty_commits": 3,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 5,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 5
+      },
+      "repeated_events_total": 5,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.24508501589298248,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.18242551386356354,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.22270014882087708,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.21673689285914102,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "unrecorded_fallback",
+      "finalization": {},
+      "elapsed_seconds": 305.2181160089676,
+      "calls": 37
+    },
+    {
+      "id": "1",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 20,
+      "audit_status_counts": {
+        "inconclusive": 14,
+        "supported": 6
+      },
+      "repair_attempts": 14,
+      "has_repair": true,
+      "repair_audits": 14,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 6,
+      "cf_target_masks": 6,
+      "cf_control_masks": 12,
+      "cf_mask_calls": 18,
+      "option_consistency_checks": 3,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.7772998809814453,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.8807970285415649,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.8807970285415649,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 0,
+          "value": 0.7772998809814453,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.8807970285415649,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 2,
+          "value": 0.8807970285415649,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 3,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        },
+        {
+          "step": 2,
+          "attempt": 0,
+          "value": 0.7772998809814453,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.8807970285415649,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 2,
+          "attempt": 2,
+          "value": 0.8807970285415649,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 2,
+          "attempt": 3,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        },
+        {
+          "step": 3,
+          "attempt": 0,
+          "value": 0.7772998809814453,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 3,
+          "attempt": 1,
+          "value": 0.8807970285415649,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 3,
+          "attempt": 2,
+          "value": 0.8354835510253906,
+          "audit_status": "supported"
+        },
+        {
+          "step": 4,
+          "attempt": 0,
+          "value": 0.7772998809814453,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 4,
+          "attempt": 1,
+          "value": 0.8807970285415649,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 4,
+          "attempt": 2,
+          "value": 0.8354835510253906,
+          "audit_status": "supported"
+        },
+        {
+          "step": 5,
+          "attempt": 0,
+          "value": 0.7772998809814453,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 5,
+          "attempt": 1,
+          "value": 0.8807970285415649,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.8357331484556199,
+      "answer_withheld": 6,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "unrecorded_fallback",
+      "finalization": {},
+      "elapsed_seconds": 540.7329152979655,
+      "calls": 102
+    },
+    {
+      "id": "2",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 12,
+      "audit_status_counts": {
+        "inconclusive": 12
+      },
+      "repair_attempts": 9,
+      "has_repair": true,
+      "repair_audits": 9,
+      "parse_errors": 0,
+      "uncertainty_commits": 3,
+      "cf_checks": 2,
+      "cf_target_masks": 2,
+      "cf_control_masks": 4,
+      "cf_mask_calls": 6,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 5,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 5
+      },
+      "repeated_events_total": 5,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9940890073776245,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.9465966820716858,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.9399133324623108,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.9465966820716858,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 0,
+          "value": 0.9902915358543396,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.9634974479675293,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "unrecorded_fallback",
+      "finalization": {},
+      "elapsed_seconds": 355.39651968103135,
+      "calls": 49
+    },
+    {
+      "id": "3",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "stored_correct",
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 3,
+      "audit_status_counts": {
+        "inconclusive": 3
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 2,
+      "parse_errors": 1,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.7310585379600525,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.29421496391296387,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.562176525592804,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.5291500091552734,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "unrecorded_fallback",
+      "finalization": {},
+      "elapsed_seconds": 118.66309929301497,
+      "calls": 13
+    }
+  ]
+}

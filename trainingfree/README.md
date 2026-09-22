@@ -17,7 +17,9 @@ project; it neither changes its files nor interrupts its jobs.
   uncertainty-aware continuation, final deduction audit and complete trace.
 - `online.py`: frozen VLM support scoring, separate deduction entailment, optional
   independently localized box deletion versus two equal-area low-overlap controls,
-  and candidate-independent option-counterfactual scoring.
+  and candidate-independent answer-consistency scoring (not image CF).
+- `online_repair.py`: failure-only independent evidence rereading, with a
+  neutral acquisition query and explicitly tentative best-supported fallback.
 - `run.py`: same input/decoding settings across CoT, FaithAct, online, online-CF;
   declared CoT prompt variants, reference-blind conclusion/option extraction,
   per-case trace, latency/token counts, and resumable runs.
@@ -31,6 +33,13 @@ project; it neither changes its files nor interrupts its jobs.
   separate run folders, with raw paths and parser/dataset hashes.
 - `eval_protocols.py`: deterministic AGS JSONL conversion, pinned VLMEvalKit
   `can_infer` scoring, and exact RealWorldQA prompt-packaging materialization.
+- `answers.py` / `evaluation_suite.py`: frozen reference-blind answer extraction,
+  complete-ID checks, immutable input snapshots, and separate unmodified AGS,
+  raw VLMEvalKit, and canonical-final VLMEvalKit scores.
+
+Latest fixed-output baseline: 541/765 (70.72%) with the unified parser;
+unmodified AGS remains 539/765 (70.46%). This is parsing recovery, not a model
+improvement. See `STATUS.md` and `reports/20260922_eval_repair_stage.md`.
 
 The CF MVP uses image-mean masking (not learned causal interventions). Scores and
 thresholds are engineering defaults, not calibrated confidence or correctness
@@ -61,8 +70,10 @@ See `REPLICATION.md` for the complete known/unknown protocol checklist and
    released. Our prompt and deterministic decoding are recorded explicitly.
 2. Keep Qwen script thresholds 0.25/0.20; paper/Tools.py use 0.35/0.25. Do not hide
    this discrepancy or alter the reproduced baseline based on test accuracy.
-3. Share one frozen Qwen instance and keep tools resident on CPU to fit a 24 GB
-   GPU. The official full classifier checkpoint strictly loads both CLIP encoders
+3. Share one frozen Qwen instance. The completed reasoned-v2 reconstruction kept
+   tools on CPU; the new layout-v5 reconstruction records a separate float32
+   tool GPU, with BF16 weights sharded over other free memory. The official full
+   classifier checkpoint strictly loads both CLIP encoders
    and the head; no duplicate encoder-weight download is necessary. Numerical
    device differences and token/pixel budgets are logged.
 4. Preserve sigmoid(logit_yes), blank-line first/last-step exclusion, and empty

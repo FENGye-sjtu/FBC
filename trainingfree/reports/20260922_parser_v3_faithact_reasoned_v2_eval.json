@@ -1,0 +1,104 @@
+{
+  "expected_n": 765,
+  "completed_n": 765,
+  "is_partial": false,
+  "allow_partial": false,
+  "missing_ids": [],
+  "correct": 528,
+  "accuracy": 0.6901960784313725,
+  "valid_label_n": 745,
+  "mcq_n": 765,
+  "with_evidence_n": 141,
+  "with_interior_cot_n": 141,
+  "interior_cot_block_n": 212,
+  "stored_correctness_changed_n": 20,
+  "stored_answer_changed_n": 34,
+  "answer_disagreement_n": 44,
+  "correctness_disagreement_n": 15,
+  "disagreement_n": 60,
+  "reference_blind_extraction": true,
+  "parser_version": "committed_answer_v3",
+  "canonical_final_protocol": "VLMEval can_infer receives only reference-blind extracted answer",
+  "predictions": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_faithact_v5_reasoned/faithact.jsonl",
+  "raw_sha256": "57ec855ca4c9a175a5a26caaaf336a6e5d058af758c421b7c9d1d4c27b4bce36",
+  "raw_snapshot": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/faithact_reasoned_v2/raw_predictions.jsonl",
+  "dataset": "/data_cinema/zqc/CVPR/data/vlmevalkit/cases.jsonl",
+  "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+  "dataset_snapshot": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/faithact_reasoned_v2/cases.jsonl",
+  "details": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/faithact_reasoned_v2/details.jsonl",
+  "details_sha256": "c516c7c42264319ecd15a189f057b692a5f6ca6df7dcee86beffbd09e3203b64",
+  "disagreements": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/faithact_reasoned_v2/disagreements.jsonl",
+  "disagreements_sha256": "d932b7f85e5949e2a47d32d68b4cc1b6960921d0ec8d36a3716739e4402bb89e",
+  "sources": {
+    "extractor": {
+      "path": "/data_cinema/zqc/CVPR/code/trainingfree/answers.py",
+      "sha256": "49c5a365e342cf423be14fb4ef9d59e49e1bcf4f98f1036f101f0a71c1140a83"
+    },
+    "normalizer": {
+      "path": "/data_cinema/zqc/CVPR/code/trainingfree/run.py",
+      "sha256": "a22ddcbcec3a902942f68c33edb7b0cc83ac72199784d898286c5f029a521518"
+    },
+    "vlmeval_loader": {
+      "path": "/data_cinema/zqc/CVPR/code/trainingfree/eval_protocols.py",
+      "sha256": "91dda4c27f98abe7fbca293bb1edc6893f1f7e5093411310e155ad0820114d18"
+    },
+    "evaluation_suite": {
+      "path": "/data_cinema/zqc/CVPR/code/trainingfree/evaluation_suite.py",
+      "sha256": "bb3b86fd4bb0952523805f1c0ea9f9e8d378d194df198ad15ab66f328c71b038"
+    },
+    "vlmeval_matching": {
+      "path": "/data_cinema/zqc/CVPR/upstream/VLMEvalKit/vlmeval/utils/matching_util.py",
+      "sha256": "06088ed4da68cd9d8c3018e7630d0503f1365e6dd31f651cbedd8aa44dc14466"
+    },
+    "ags_evaluator": {
+      "path": "/data_cinema/zqc/CVPR/upstream/AGS/extract_ans/getResult_nlp.py",
+      "sha256": "af658c6961d9c8c4a78bfc576e6de39bf7032632faa1a39b3520c088d8e71141"
+    }
+  },
+  "scorers": {
+    "committed_answer": {
+      "n": 765,
+      "correct": 528,
+      "accuracy": 0.6901960784313725,
+      "valid_label_n": 745
+    },
+    "vlmeval_raw": {
+      "n": 765,
+      "correct": 513,
+      "accuracy": 0.6705882352941176,
+      "valid_label_n": 721
+    },
+    "vlmeval_canonical_final": {
+      "n": 765,
+      "correct": 528,
+      "accuracy": 0.6901960784313725,
+      "valid_label_n": 745
+    },
+    "ags_raw": {
+      "protocol": "unmodified AGS extract_ans/getResult_nlp.py on raw model output",
+      "n": 765,
+      "correct": 461,
+      "accuracy": 0.6026143790849673,
+      "per_case_available": false,
+      "per_case_note": "Released stdout is preserved; per-case decisions are not reimplemented.",
+      "source": "/data_cinema/zqc/CVPR/upstream/AGS/extract_ans/getResult_nlp.py",
+      "source_sha256": "af658c6961d9c8c4a78bfc576e6de39bf7032632faa1a39b3520c088d8e71141",
+      "input": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/faithact_reasoned_v2/ags_input.jsonl",
+      "input_sha256": "102f60096f1060ed29d49b78d17736249f686cbdecfeb182421fa720b7c0da21",
+      "stdout": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/faithact_reasoned_v2/ags_stdout.txt",
+      "stdout_sha256": "1ac4937e86579fbaf6d64f8b28aea83368f112bf1b53ad216b237b4f55c4d77e",
+      "stderr": "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/faithact_reasoned_v2/ags_stderr.txt",
+      "stderr_sha256": "c8d742e5d3630b38b5b33259dca7922222822f04627c6e75c71af4f3f8bc8863",
+      "command": [
+        "/data_cinema/zqc/VBC/envs/efa/bin/python",
+        "/data_cinema/zqc/CVPR/upstream/AGS/extract_ans/getResult_nlp.py",
+        "--input-files",
+        "/data_cinema/zqc/CVPR/runs/eval_stage_20260922_parser_v3/faithact_reasoned_v2/ags_input.jsonl",
+        "--show-errors",
+        "765"
+      ]
+    }
+  },
+  "run_manifest": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_faithact_v5_reasoned/manifest.json",
+  "run_manifest_sha256": "f6e5c7bab545b6fb5099d81ee57ee5de4799f6af932bf9288787ff4390ff9ff6"
+}

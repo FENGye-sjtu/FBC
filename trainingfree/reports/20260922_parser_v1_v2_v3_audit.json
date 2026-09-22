@@ -1,0 +1,874 @@
+{
+  "parser_version": "committed_answer_v3",
+  "status": "final_frozen_additive",
+  "reference_blind_extraction": true,
+  "protocol": "Fixed raw outputs; extraction uses only model output and public question choices. References are compared after extraction. Overlapping snapshots are not pooled. V3 preserves every valid public option label produced by V2, including inherited V2 limitations; extension only handles unresolved outputs without a strong answer field.",
+  "supersedes_draft_audit": "tmp/analysis/parser_v1_v2_v3_audit.json",
+  "dataset": "tmp\\analysis\\cases.jsonl",
+  "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+  "parser_sources": {
+    "v1": {
+      "path": "tmp/milestones/20260922_eval_repair/current_source/answers.py",
+      "sha256": "efe25c3512513f0e06f4a6f97497fe7caea19983a4d62f08ab89893417a01f83",
+      "version": "committed_answer_v1"
+    },
+    "v2": {
+      "path": "tmp/analysis/parser_sources/answers_v2.py",
+      "sha256": "de804bf0bcde759d93e82c68946af6658a69ba37bf5cd7c3c2b20912b545051a",
+      "version": "committed_answer_v2"
+    },
+    "v3": {
+      "path": "trainingfree/answers.py",
+      "sha256": "49c5a365e342cf423be14fb4ef9d59e49e1bcf4f98f1036f101f0a71c1140a83",
+      "version": "committed_answer_v3"
+    }
+  },
+  "files": [
+    {
+      "path": "tmp\\analysis\\cf16.jsonl",
+      "sha256": "adc06b15121e1515231c37c329c63179b46212b766d870f0da4947948f197186",
+      "n": 16,
+      "correct": {
+        "v1": 7,
+        "v2": 7,
+        "v3": 7
+      },
+      "accuracy": {
+        "v1": 0.4375,
+        "v2": 0.4375,
+        "v3": 0.4375
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\cot_v1_directive.jsonl",
+      "sha256": "24bd011d0f2ea526194cb11913acdfd04bb1eb4a22743161273249605294ebe1",
+      "n": 765,
+      "correct": {
+        "v1": 541,
+        "v2": 541,
+        "v3": 541
+      },
+      "accuracy": {
+        "v1": 0.7071895424836602,
+        "v2": 0.7071895424836602,
+        "v3": 0.7071895424836602
+      },
+      "unresolved": {
+        "v1": 5,
+        "v2": 5,
+        "v3": 5
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\cot_v2.jsonl",
+      "sha256": "fa1c602f94c99659dc2bbe54714b6e47e323600b8f68baaa4ccd0c0e1b3978a7",
+      "n": 765,
+      "correct": {
+        "v1": 526,
+        "v2": 526,
+        "v3": 526
+      },
+      "accuracy": {
+        "v1": 0.6875816993464052,
+        "v2": 0.6875816993464052,
+        "v3": 0.6875816993464052
+      },
+      "unresolved": {
+        "v1": 7,
+        "v2": 7,
+        "v3": 7
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\faithact_full.jsonl",
+      "sha256": "57ec855ca4c9a175a5a26caaaf336a6e5d058af758c421b7c9d1d4c27b4bce36",
+      "n": 765,
+      "correct": {
+        "v1": 528,
+        "v2": 528,
+        "v3": 528
+      },
+      "accuracy": {
+        "v1": 0.6901960784313725,
+        "v2": 0.6901960784313725,
+        "v3": 0.6901960784313725
+      },
+      "unresolved": {
+        "v1": 20,
+        "v2": 20,
+        "v3": 20
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\faithact_layout_v5_live.jsonl",
+      "sha256": "e531d9199076900781e94ab6e33597b12f4766cbcf1aaca8b98edc92d3145319",
+      "n": 27,
+      "correct": {
+        "v1": 17,
+        "v2": 18,
+        "v3": 18
+      },
+      "accuracy": {
+        "v1": 0.6296296296296297,
+        "v2": 0.6666666666666666,
+        "v3": 0.6666666666666666
+      },
+      "unresolved": {
+        "v1": 2,
+        "v2": 1,
+        "v3": 1
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [
+            "4"
+          ],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [
+            "4"
+          ],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": [
+        {
+          "id": "4",
+          "outputs": {
+            "v1": "the speed limit on this road is B. 35",
+            "v2": "B",
+            "v3": "B"
+          },
+          "correct": {
+            "v1": false,
+            "v2": true,
+            "v3": true
+          },
+          "reference": "B",
+          "answer_source": "raw",
+          "raw": "1. speed: The speed limit sign indicates the maximum allowed speed for vehicles on the road.\n2. limit: The speed limit sign shows the specific number of miles per hour (mph) or kilometers per hour (km/h) that vehicles must not exceed.\n3. sign: The speed limit sign is visible on the right side of the road, providing clear instructions to drivers about the speed they can travel.\n\nThus, the speed limit on this road is B. 35."
+        }
+      ]
+    },
+    {
+      "path": "tmp\\analysis\\faithact_live.jsonl",
+      "sha256": "50f7da1fcc04574d2c829c41ae1a921bee6ec76da451b5edf14e2f450ea6bac1",
+      "n": 641,
+      "correct": {
+        "v1": 439,
+        "v2": 439,
+        "v3": 439
+      },
+      "accuracy": {
+        "v1": 0.6848673946957878,
+        "v2": 0.6848673946957878,
+        "v3": 0.6848673946957878
+      },
+      "unresolved": {
+        "v1": 19,
+        "v2": 19,
+        "v3": 19
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\faithact_partial.jsonl",
+      "sha256": "e86da18b7943aac471ae6f5890ad0ec6d9cb4f31765ab46ef7a1c2b7ae2f82f3",
+      "n": 137,
+      "correct": {
+        "v1": 96,
+        "v2": 96,
+        "v3": 96
+      },
+      "accuracy": {
+        "v1": 0.7007299270072993,
+        "v2": 0.7007299270072993,
+        "v3": 0.7007299270072993
+      },
+      "unresolved": {
+        "v1": 4,
+        "v2": 4,
+        "v3": 4
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\nf4_cot16.jsonl",
+      "sha256": "f9d74a203482a34b8d2786125409032795e1656b929c7f6588ebd07806bd4f74",
+      "n": 16,
+      "correct": {
+        "v1": 10,
+        "v2": 10,
+        "v3": 10
+      },
+      "accuracy": {
+        "v1": 0.625,
+        "v2": 0.625,
+        "v3": 0.625
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\nf4_direct16.jsonl",
+      "sha256": "1ee9f04a204054dd605202328c1509e1123c92d5000d38f7c0c5b3718b2e2ba6",
+      "n": 16,
+      "correct": {
+        "v1": 9,
+        "v2": 9,
+        "v3": 9
+      },
+      "accuracy": {
+        "v1": 0.5625,
+        "v2": 0.5625,
+        "v3": 0.5625
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\online16.jsonl",
+      "sha256": "c95549ba265401a12abbc3753e40f269139af48daef7abd77cc74a472f2dcec1",
+      "n": 16,
+      "correct": {
+        "v1": 7,
+        "v2": 7,
+        "v3": 7
+      },
+      "accuracy": {
+        "v1": 0.4375,
+        "v2": 0.4375,
+        "v3": 0.4375
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\prompt_brief128.jsonl",
+      "sha256": "f1c593e251e145585061cfb14e43bd6cbf979eae74f74ba2feacddd67eef5056",
+      "n": 128,
+      "correct": {
+        "v1": 89,
+        "v2": 89,
+        "v3": 89
+      },
+      "accuracy": {
+        "v1": 0.6953125,
+        "v2": 0.6953125,
+        "v3": 0.6953125
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\prompt_brief_live.jsonl",
+      "sha256": "bfa693629ff750a01fcd1a2d04f8423cc601936e375ebc151ba747783dee4762",
+      "n": 54,
+      "correct": {
+        "v1": 38,
+        "v2": 38,
+        "v3": 38
+      },
+      "accuracy": {
+        "v1": 0.7037037037037037,
+        "v2": 0.7037037037037037,
+        "v3": 0.7037037037037037
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\prompt_layout128.jsonl",
+      "sha256": "51058fe3f3cff03751935934b6bf8e4492b6dd4b2155b5673c209d3d4dff961b",
+      "n": 128,
+      "correct": {
+        "v1": 90,
+        "v2": 90,
+        "v3": 90
+      },
+      "accuracy": {
+        "v1": 0.703125,
+        "v2": 0.703125,
+        "v3": 0.703125
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\v10_smoke.jsonl",
+      "sha256": "b3a23c1b725690d218936acb2b8c1e96fc6535a9a364e02d0aebc9ebe71e42e0",
+      "n": 4,
+      "correct": {
+        "v1": 1,
+        "v2": 1,
+        "v3": 1
+      },
+      "accuracy": {
+        "v1": 0.25,
+        "v2": 0.25,
+        "v3": 0.25
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\v13_online_full.jsonl",
+      "sha256": "175218423c565b0b572aee8137e929922d900dbd3139ea551494878a57a434aa",
+      "n": 16,
+      "correct": {
+        "v1": 8,
+        "v2": 8,
+        "v3": 8
+      },
+      "accuracy": {
+        "v1": 0.5,
+        "v2": 0.5,
+        "v3": 0.5
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\v13_online_live.jsonl",
+      "sha256": "3557c19314446afed270ae4fe35698edf71e07529fbd6d65d682997c4605ddc8",
+      "n": 12,
+      "correct": {
+        "v1": 8,
+        "v2": 8,
+        "v3": 8
+      },
+      "accuracy": {
+        "v1": 0.6666666666666666,
+        "v2": 0.6666666666666666,
+        "v3": 0.6666666666666666
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\v9_cf16.jsonl",
+      "sha256": "819865661d5560c07410188440b252765d84385cc939d8578a8689fec66b6ffa",
+      "n": 16,
+      "correct": {
+        "v1": 8,
+        "v2": 8,
+        "v3": 8
+      },
+      "accuracy": {
+        "v1": 0.5,
+        "v2": 0.5,
+        "v3": 0.5
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\faithact_layout_v5_full128.jsonl",
+      "sha256": "0527929df39178118dca9a4a9983da23d00fff5df8eb7b8ac3b2ee014ef0f79b",
+      "n": 128,
+      "correct": {
+        "v1": 86,
+        "v2": 87,
+        "v3": 88
+      },
+      "accuracy": {
+        "v1": 0.671875,
+        "v2": 0.6796875,
+        "v3": 0.6875
+      },
+      "unresolved": {
+        "v1": 7,
+        "v2": 6,
+        "v3": 4
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [
+            "4"
+          ],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [
+            "107"
+          ],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": [
+            "55"
+          ]
+        },
+        "v1_to_v3": {
+          "recovered_ids": [
+            "4",
+            "107"
+          ],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": [
+            "55"
+          ]
+        }
+      },
+      "disagreements": [
+        {
+          "id": "4",
+          "outputs": {
+            "v1": "the speed limit on this road is B. 35",
+            "v2": "B",
+            "v3": "B"
+          },
+          "correct": {
+            "v1": false,
+            "v2": true,
+            "v3": true
+          },
+          "reference": "B",
+          "answer_source": "raw",
+          "raw": "1. speed: The speed limit sign indicates the maximum allowed speed for vehicles on the road.\n2. limit: The speed limit sign shows the specific number of miles per hour (mph) or kilometers per hour (km/h) that vehicles must not exceed.\n3. sign: The speed limit sign is visible on the right side of the road, providing clear instructions to drivers about the speed they can travel.\n\nThus, the speed limit on this road is B. 35."
+        },
+        {
+          "id": "55",
+          "outputs": {
+            "v1": "the closest vehicle to us is likely:\n\nB. between 5 and 10 meters",
+            "v2": "the closest vehicle to us is likely:\n\nB. between 5 and 10 meters",
+            "v3": "B"
+          },
+          "correct": {
+            "v1": false,
+            "v2": false,
+            "v3": false
+          },
+          "reference": "A",
+          "answer_source": "raw",
+          "raw": "1. The car in the foreground appears to be parked on the side of the road, which suggests it is stationary and not moving at the moment the photo was taken.\n2. The car's position relative to the curb and the grassy area indicates it is parked within a reasonable distance from the viewer, but not extremely close.\n3. Considering the typical parking distances and the visible space around the car, it seems the car is parked closer to the curb than further away, but still not extremely close.\n\nThus, the closest vehicle to us is likely:\n\nB. between 5 and 10 meters"
+        },
+        {
+          "id": "107",
+          "outputs": {
+            "v1": "if you stay in the current lane, you will end up on:\n\nB. Highway 95",
+            "v2": "if you stay in the current lane, you will end up on:\n\nB. Highway 95",
+            "v3": "B"
+          },
+          "correct": {
+            "v1": false,
+            "v2": false,
+            "v3": true
+          },
+          "reference": "B",
+          "answer_source": "raw",
+          "raw": "Let's analyze the image step by step:\n\n1. The image shows a city street at night with several cars stopped at a traffic light.\n2. There is a sign above the traffic light that provides directions for different highways.\n3. The sign indicates \"EXIT\" for different highways, including \"ALT 95\" and \"ALT 280.\"\n\nGiven this information:\n\n- The sign clearly shows an exit for \"ALT 95.\"\n- There is no indication of an exit for \"ALT 280\" in the visible part of the sign.\n\nTherefore, if you stay in the current lane, you will end up on:\n\nB. Highway 95"
+        }
+      ]
+    },
+    {
+      "path": "tmp\\analysis\\layout_v5_validation128.jsonl",
+      "sha256": "8352379cf3533241332545c7945da515bd7bf83420e4cc424a700c262aa9e259",
+      "n": 128,
+      "correct": {
+        "v1": 96,
+        "v2": 96,
+        "v3": 96
+      },
+      "accuracy": {
+        "v1": 0.75,
+        "v2": 0.75,
+        "v3": 0.75
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    },
+    {
+      "path": "tmp\\analysis\\v15_online_full.jsonl",
+      "sha256": "bce6c9679c69f2f5cee6005f5d327670d2b4c17fe911c669861bdd95c850624a",
+      "n": 16,
+      "correct": {
+        "v1": 9,
+        "v2": 9,
+        "v3": 9
+      },
+      "accuracy": {
+        "v1": 0.5625,
+        "v2": 0.5625,
+        "v3": 0.5625
+      },
+      "unresolved": {
+        "v1": 0,
+        "v2": 0,
+        "v3": 0
+      },
+      "transitions": {
+        "v1_to_v2": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v2_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        },
+        "v1_to_v3": {
+          "recovered_ids": [],
+          "lost_ids": [],
+          "incorrect_to_incorrect_ids": []
+        }
+      },
+      "disagreements": []
+    }
+  ],
+  "additive_checks": {
+    "rows_checked": 3794,
+    "preserved_v2_path_mismatches": [],
+    "changed_existing_valid_v2_labels": []
+  }
+}
