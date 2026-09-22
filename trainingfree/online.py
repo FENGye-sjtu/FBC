@@ -248,9 +248,9 @@ class Online:
         # Score all labels in the same grounded context instead of accepting a
         # high Yes probability for a plausible but non-discriminative claim.
         contrast_prompt = (
-            'Choose the single best option using the image and the verified evidence below. '
-            'Return only the option letter.\nQuestion: ' + task_question(question) +
-            '\nVerified evidence: ' + step.claim)
+            'Independently choose the single best option from the image. Do not assume that '
+            'the candidate claim or candidate answer is correct. Return only the option letter.\n'
+            'Question: ' + task_question(question))
         option_scores = {label: self.vlm.log_probability(image, contrast_prompt, label)
                          for label in labels}
         best = max(option_scores, key=option_scores.get)

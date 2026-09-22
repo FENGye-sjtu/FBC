@@ -41,7 +41,7 @@ because its attached conclusion is invalid, nor return that invalid conclusion.
 For multiple-choice questions, a high binary Yes score is not sufficiently
 discriminative: a wrong counting claim can still refer to the correct image
 region. We therefore treat every alternative option as a semantic counterfactual
-and score all option labels in the same image/evidence context. An attached
+and score all option labels in a fresh, candidate-independent image context. An attached
 answer is withheld when another option has higher frozen-model likelihood. This
 test uses no reference label and no learned auxiliary verifier.
 
