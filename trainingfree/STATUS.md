@@ -19,11 +19,16 @@ Official FaithAct port/checkpoint and all 765 original RealWorldQA cases are rea
 Implemented structured atomic steps, processed-image coordinate conversion,
 crop reacquisition, support/entailment gates, CF masking with matched controls,
 uncertain continuation, persistent workers, and explicit BF16 multi-GPU packing.
-32 focused local tests pass.
+34 focused local tests pass.
 Code snapshots and per-case records preserve experiment provenance.
 The report parser now also recognizes a single colon-labeled MCQ answer (e.g.
 `A: 2 green lights`) and handles empty predictions. Apply the same parser to all
 methods after completion; never rewrite raw outputs or use references to extract.
+
+Parser v3 additionally handles an explicit concluding option followed by
+explanation and uniquely maps a concluding option phrase back to its declared
+label. On fixed outputs it changes reasoned CoT from 522/765 to 524/765 (68.50%)
+and the first 178 FaithAct cases from 117 to 122, without changing generations.
 
 ## Measurements (development only)
 
@@ -68,6 +73,18 @@ Current VLMEvalKit exact
 matching reports 513/765 = 67.06%; its 26 disagreements all reject duplicated
 first-line/final explicit option letters as `Z`. Original xai packaging was
 479/765 = 62.61% (AGS 478/765). See `REPLICATION.md`; do not mix these protocols.
+
+Two 128-case BF16 prompt candidates are queued behind full FaithAct. The paired
+first-128 targets are 91/128 for directive-dominated selection and 87/128 for
+reasoned-v2. A candidate advances only if it preserves near-direct accuracy while
+producing substantially more inspectable evidence units.
+
+With the aligned VLMEvalKit first-16 packaging, NF4 direct is 9/16 and reasoned
+CoT is 10/16. V7 online and online-CF are both 7/16 with identical answers; CF
+executes 20 interventions but raises uncertainty without correcting an answer.
+V9 prevents an unverified final synthesis from overwriting the initial candidate
+when no later fact was verified. V10 adds reference-blind option-counterfactual
+scoring. Their runs are separate and no result is claimed before completion.
 
 ## Live work (relative to /data_cinema/zqc/CVPR)
 

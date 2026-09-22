@@ -67,7 +67,8 @@ to the pinned xai images, then inference was rerun with the VLMEvalKit MCQ promp
 | VLMEvalKit MCQ, fresh inference (directive-dominated) | project final-answer parser | 539 | 70.46% |
 | VLMEvalKit MCQ, fresh inference (directive-dominated) | AGS `getResult_nlp.py` | 539 | 70.46% |
 | VLMEvalKit MCQ, fresh inference (directive-dominated) | VLMEvalKit `can_infer` | 513 | 67.06% |
-| VLMEvalKit MCQ, reconstructed reasoned CoT | project final-answer parser | 522 | 68.24% |
+| VLMEvalKit MCQ, reconstructed reasoned CoT | stored project parser v2 | 522 | 68.24% |
+| VLMEvalKit MCQ, reconstructed reasoned CoT | reference-blind parser v3 replay | 524 | 68.50% |
 | VLMEvalKit MCQ, reconstructed reasoned CoT | AGS `getResult_nlp.py` | 523 | 68.37% |
 | VLMEvalKit MCQ, reconstructed reasoned CoT | VLMEvalKit `can_infer` | 456 | 59.61% |
 
@@ -95,9 +96,12 @@ Raw runs and evaluator records are under server paths
 An invalid FaithAct pass that reused these mostly direct outputs was stopped and
 preserved after 269 cases. The replacement reasoned CoT run completed with 141
 of 765 outputs containing at least one blank-line interior step that FaithAct can
-inspect (mean 1.49 blank-line parts, maximum 7). It is 68.24% by the project
-parser and 68.37% by AGS. The released-template FaithAct job is now running on
-this exact saved file; its score is not yet claimed.
+inspect (mean 1.49 blank-line parts, maximum 7). Stored v2 parsing is 68.24%,
+reference-blind parser-v3 replay is 68.50%, and AGS is 68.37%. Parser v3 recovers
+two outputs that begin with a single answer label and then explain it; it reads
+only the prediction and declared choices, never the reference. The raw run is
+unchanged. The released-template FaithAct job is now running on this exact saved
+file; its score is not yet claimed.
 
 ## Separately labeled controlled-format variant
 

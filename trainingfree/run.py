@@ -14,27 +14,62 @@ from .online import Online
 from .prompts import cot_prompt
 
 
+def choices_from_question(question):
+    """Return declared MCQ choices without consulting the reference answer."""
+    return {match.group(1).upper(): match.group(2).strip()
+            for match in re.finditer(r'(?m)^\s*([A-E])[.)]\s+(.+?)\s*$', question or '')}
+
+
+def _answer_text(text):
+    return re.sub(r'[^a-z0-9]+', ' ', str(text).lower()).strip()
+
+
 def extract_answer(text, question=''):
     if text is None:
         return ''
     text = text.strip()
     if not text:
         return ''
+    choices = choices_from_question(question)
+    has_choices = len(choices) >= 2 or (
+        re.search(r'\bA[.)]\s', question or '') and re.search(r'\bB[.)]\s', question or ''))
     tail = text.splitlines()[-1].strip(' *`.')
-    if re.fullmatch(r'[A-E]', tail) and re.search(r'\bA[.)]\s', question) and re.search(r'\bB[.)]\s', question):
+    if re.fullmatch(r'[A-E]', tail) and has_choices:
         return tail
-    markers = list(re.finditer(r'(?:FINAL ANSWER\s*(?:is)?\s*:|Thus,|Therefore,)', text, flags=re.I))
+    if len(choices) >= 2:
+        tail_choice = re.match(r'^\**\(?([A-E])\)?[.):]\**\s*(.+?)\s*$', tail)
+        if tail_choice and _answer_text(tail_choice.group(2)) == _answer_text(
+                choices.get(tail_choice.group(1), '')):
+            return tail_choice.group(1)
+    # Use the final explicit conclusion. These markers are model output only;
+    # extraction never receives or consults the reference label.
+    markers = list(re.finditer(
+        r'(?:\b(?:final|correct|best|most\s+(?:reasonable|plausible))\s+'
+        r'(?:answer|choice|estimate)\s*(?:is|would\s+be)?\s*:|\banswer\s+is\s*:|'
+        r'\bThus,|\bTherefore,|\bGiven these (?:observations|points),)', text, flags=re.I))
     if markers:
         text = text[markers[-1].end():].strip()
     text = text.strip(' *`\n.').strip()
     text = re.sub(r'^(?:the\s+)?(?:(?:correct|final)\s+)?answer\s*(?:is)?\s*:?\s*', '', text, flags=re.I)
     text = text.strip(' *`\n.')
     letter = re.fullmatch(r'\(?([A-E])\)?[.)]?', text)
-    if not letter and re.search(r'\bA[.)]\s', question) and re.search(r'\bB[.)]\s', question):
-        # Accept a single explicit option label plus its wording, not a list of options.
-        labels = re.findall(r'\b([A-E])[.):]\s', text)
-        if len(labels) == 1 and re.match(r'^[A-E][.):]\s', text):
-            return labels[0]
+    if not letter and has_choices:
+        # Accept an explicit option at the start of the conclusion even when a
+        # short post-answer explanation follows (common in FaithAct outputs).
+        leading = re.match(r'^\**\(?([A-E])\)?[.):]\**(?:\s|$)', text)
+        labels = re.findall(r'(?<![A-Za-z])([A-E])[.):](?=\s|\*)', text)
+        if leading and len(labels) == 1:
+            return leading.group(1)
+        # Some valid answers state the option wording rather than its label.
+        # Map only a unique declared option phrase in the conclusion, avoiding
+        # guesses when several choices are repeated or contrasted.
+        if len(choices) >= 2:
+            normalized = _answer_text(text)
+            matched = [label for label, value in choices.items()
+                       if _answer_text(value) and re.search(
+                           r'(?<![a-z0-9])' + re.escape(_answer_text(value)) + r'(?![a-z0-9])', normalized)]
+            if len(matched) == 1:
+                return matched[0]
     return letter.group(1) if letter else text
 
 
@@ -56,6 +91,8 @@ def main(argv=None, shared=None):
     p.add_argument('--max-new-tokens', type=int, default=512)
     p.add_argument('--max-pixels', type=int, default=1003520)
     p.add_argument('--max-steps', type=int, default=6)
+    p.add_argument('--cot-style', choices=['reasoned_v2','grounded_concise_v3','preserve_select_v3'],
+                   default='reasoned_v2')
     p.add_argument('--repairs', type=int, choices=range(4), default=3)
     p.add_argument('--support', type=float, default=.8)
     p.add_argument('--specificity', type=float, default=.05)
@@ -160,7 +197,7 @@ def main(argv=None, shared=None):
                     elif method == 'direct':
                         record = {'raw': vlm.generate(image, question+'\nReturn only the concise answer.'), 'status': 'direct'}
                     else:
-                        prompt = cot_prompt(question)
+                        prompt = cot_prompt(question, args.cot_style)
                         if method == 'faithact':
                             cot_path = args.cot_cache or (args.output/'cot.jsonl')
                             cots = cot_cache or ({str(r['id']): r for r in

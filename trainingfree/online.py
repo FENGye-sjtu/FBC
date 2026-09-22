@@ -82,6 +82,7 @@ class Online:
         self.vlm, self.counterfactual = vlm, counterfactual
         self.support, self.specificity = support, specificity
         self.last_candidate, self.repair_round = None, 0
+        self.fallback_answer = None
 
     @staticmethod
     def ledger_text(ledger):
@@ -109,6 +110,10 @@ class Online:
         redirect = feedback.startswith('Choose a different evidence point')
         if not feedback or redirect:
             self.last_candidate, self.repair_round = None, 0
+        if not ledger and not feedback:
+            # A new case starts. Keep the first answer only as an uncertainty
+            # fallback; it is never entered into the verified ledger.
+            self.fallback_answer = None
         elif self.last_candidate is not None:
             self.repair_round += 1
             try:
@@ -137,11 +142,23 @@ class Online:
             if step.claim.lower().strip() in ('one fact or deduction','one fact','your actual observation/inference'):
                 raise ValueError('Placeholder text is not an observation')
             self.last_candidate = step
+            if not ledger and not feedback and step.final_answer is not None:
+                self.fallback_answer = step.final_answer.strip()
             return step
         except (ValueError, KeyError, TypeError) as exc:
             raise ValueError(f'{exc}; raw candidate={raw[:1200]}') from exc
 
     def finalize(self, image, question, ledger):
+        has_verified = any(step.verification == 'verified' for step in ledger)
+        is_mcq = bool(re.search(r'(?m)^\s*A[.)]\s', question))
+        fallback_valid = (bool(re.fullmatch(r'[A-E]', self.fallback_answer or '', re.I))
+                          if is_mcq else bool(self.fallback_answer))
+        if fallback_valid and not has_verified:
+            # An inconclusive verifier is not counter-evidence. If no later
+            # fact was verified, do not let an unverified free-form synthesis
+            # overwrite the original candidate; preserve it explicitly under
+            # the controller's uncertain status.
+            return self.fallback_answer.upper() if is_mcq else self.fallback_answer
         prompt = ('Give the best available concise answer to the question using the image '
                   'and evidence ledger. Prefer verified facts. Uncertain statements are NOT '
                   'established facts; do not silently assume them true. If uncertainty remains, '
@@ -161,8 +178,11 @@ class Online:
                       f'Question: {task_question(question)}\nPremises: {self.ledger_text(ledger)}\n'
                       f'Claim: {step.claim}\nFinal answer: {step.final_answer}')
             score = self.vlm.yes_probability(None, prompt)
-            return Audit('supported' if score >= self.support else 'inconclusive',
-                         {'entailment': score}, 'Deduction entailment gate')
+            scores = {'entailment': score}
+            if score < self.support:
+                return Audit('inconclusive', scores, 'Deduction entailment gate')
+            alternative = self.option_counterfactual(image, question, step, scores)
+            return alternative or Audit('supported', scores, 'Deduction entailment gate')
         def view(img):
             return [img, self.crop(img, step.box)] if step.box else img
         prompt = ('Is the following visual claim fully supported by the image? '
@@ -176,7 +196,7 @@ class Online:
             return Audit('contradicted' if original < 1-self.support else 'inconclusive',
                          scores, 'Insufficient original-image support; reinspect or correct the claim.')
         if not self.counterfactual:
-            return self.check_final(question, step, ledger, scores, 'Original-image support gate')
+            return self.check_final(image, question, step, ledger, scores, 'Original-image support gate')
         # Reacquire the region in an independent context without the proposed answer.
         if not step.evidence_question.strip():
             return Audit('inconclusive', scores, 'Need a neutral evidence question for localization.')
@@ -198,10 +218,10 @@ class Online:
         if specific < self.specificity:
             return Audit('inconclusive', scores,
                          'Localized counterfactual dependence is weak; reacquire evidence or revise.')
-        return self.check_final(question, step, ledger, scores,
+        return self.check_final(view(image), question, step, ledger, scores,
                                 'Original support and localized counterfactual specificity passed')
 
-    def check_final(self, question, step, ledger, scores, reason):
+    def check_final(self, image, question, step, ledger, scores, reason):
         if step.final_answer is not None:
             prompt = ('Does the proposed final answer correctly follow from the visual fact and '
                       'labeled premises for this question? Check the exact option mapping if present. '
@@ -213,4 +233,32 @@ class Online:
                 scores['answer_withheld'] = True
                 return Audit('supported', scores,
                              'Visual fact supported; withhold proposed answer and derive a corrected conclusion next.')
+            alternative = self.option_counterfactual(image, question, step, scores)
+            if alternative:
+                return alternative
         return Audit('supported', scores, reason)
+
+    def option_counterfactual(self, image, question, step, scores):
+        labels = re.findall(r'(?m)^\s*([A-E])[.)]\s', question)
+        proposed = (step.final_answer or '').strip().upper()
+        if not (len(labels) >= 2 and proposed in labels and
+                hasattr(self.vlm, 'log_probability')):
+            return None
+        # Each alternative is a semantic counterfactual to the proposed option.
+        # Score all labels in the same grounded context instead of accepting a
+        # high Yes probability for a plausible but non-discriminative claim.
+        contrast_prompt = (
+            'Choose the single best option using the image and the verified evidence below. '
+            'Return only the option letter.\nQuestion: ' + task_question(question) +
+            '\nVerified evidence: ' + step.claim)
+        option_scores = {label: self.vlm.log_probability(image, contrast_prompt, label)
+                         for label in labels}
+        best = max(option_scores, key=option_scores.get)
+        scores['option_counterfactual_scores'] = option_scores
+        scores['option_counterfactual_best'] = best
+        if best != proposed:
+            scores['answer_withheld'] = True
+            return Audit('supported', scores,
+                         'Claim supported, but an alternative option has higher grounded likelihood; '
+                         'withhold the answer and derive a corrected conclusion next.')
+        return None

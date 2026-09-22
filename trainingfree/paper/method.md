@@ -38,6 +38,13 @@ only the verified assertion is committed. The answer is withheld and must be
 derived again at the next step. We do not discard a verified observation merely
 because its attached conclusion is invalid, nor return that invalid conclusion.
 
+For multiple-choice questions, a high binary Yes score is not sufficiently
+discriminative: a wrong counting claim can still refer to the correct image
+region. We therefore treat every alternative option as a semantic counterfactual
+and score all option labels in the same image/evidence context. An attached
+answer is withheld when another option has higher frozen-model likelihood. This
+test uses no reference label and no learned auxiliary verifier.
+
 ## Visual support and counterfactual specificity
 
 Let p(c; I) be the normalized Yes-vs-No likelihood of a fresh verification query.
@@ -76,7 +83,7 @@ expose its unresolved evidence question rather than repeatedly asserting the
 unverified value. If a later proposal returns to the exhausted question, it is
 not audited and receives no new repair budget. The controller requests a
 different evidence point or a conditional deduction. Two ignored redirections
-trigger uncertain answer synthesis; a successful redirect continues the ordinary
+trigger uncertain finalization; a successful redirect continues the ordinary
 step budget. Hiding the exhausted question during redirection was tested and
 rejected because it increased latency without improving the targeted accuracy.
 Deductions inherit uncertainty
@@ -84,9 +91,13 @@ from exposed uncertain premises; the current implementation conservatively recor
 all exposed ledger entries as parents. Independent visual facts can still receive
 their own support judgment, while final chain status remains uncertainty-aware.
 
-At a bounded step budget, the VLM returns the best-supported answer available
-from the image and labeled ledger. Such an answer is reported as uncertain, not
-as having passed a final audit. All questions remain in the accuracy denominator.
+At a bounded step budget, an initial candidate is retained only as an uncertainty
+fallback, never as a verified premise. If no later fact has been verified, an
+unverified free-form synthesis is not allowed to overwrite that candidate: an
+inconclusive check is not proof that a different answer is correct. If verified
+facts exist, the VLM synthesizes from the labeled ledger. Either path is reported
+as uncertain, not as having passed a final audit. All questions remain in the
+accuracy denominator.
 Dependency-specific backtracking is future work, not a claimed implemented feature.
 
 ## Implementation and evaluation commitments

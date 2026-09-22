@@ -129,6 +129,12 @@ class Tests(unittest.TestCase):
         self.assertIn('option letter', answer_format('Is it red?\nA. Yes\nB. No'))
         vlmeval = 'Question: What?\nOptions:\nA. one\nB. two\nPlease select the correct answer from the options above.'
         self.assertNotIn('Please select', cot_prompt(vlmeval))
+        concise = cot_prompt(vlmeval, 'grounded_concise_v3')
+        self.assertNotIn('Please select', concise)
+        self.assertIn('1 to 3 short numbered evidence statements', concise)
+        preserved = cot_prompt(vlmeval, 'preserve_select_v3')
+        self.assertIn('Please select', preserved)
+        self.assertIn('FINAL ANSWER:', preserved)
 
     def test_localization_uses_processed_not_original_pixels(self):
         class VLM:
@@ -256,6 +262,19 @@ class Tests(unittest.TestCase):
         self.assertEqual(audit.status, 'supported')
         self.assertTrue(audit.scores['answer_withheld'])
 
+    def test_option_counterfactual_withholds_nonmaximal_answer(self):
+        class VLM:
+            def yes_probability(self, *args):
+                return .95
+            def log_probability(self, image, prompt, completion):
+                return {'A':-3., 'B':-1., 'C':-2.}[completion]
+        question = 'Question: count?\nA. one\nB. two\nC. three'
+        audit = Online(VLM()).audit(
+            Image.new('RGB',(20,20)), question, Step('Two objects are visible', final_answer='A'), [])
+        self.assertEqual(audit.status, 'supported')
+        self.assertEqual(audit.scores['option_counterfactual_best'], 'B')
+        self.assertTrue(audit.scores['answer_withheld'])
+
     def test_withheld_answer_does_not_end_reasoning(self):
         class Withheld(Scripted):
             def audit(self, image, question, step, ledger):
@@ -268,6 +287,17 @@ class Tests(unittest.TestCase):
         self.assertEqual(result['ledger'][0]['verification'],'verified')
         self.assertEqual(len(result['ledger']),2)
 
+    def test_online_uncertain_finalization_preserves_initial_mcq_candidate(self):
+        class VLM:
+            def generate(self, *args, **kwargs):
+                return 'B'
+        backend = Online(VLM())
+        backend.fallback_answer = 'A'
+        uncertain = Step('Uncertain whether: visual estimate', verification='uncertain')
+        self.assertEqual(backend.finalize(None, 'Question?\nA. one\nB. two', [uncertain]), 'A')
+        verified = Step('A different fact is visible', verification='verified')
+        self.assertEqual(backend.finalize(None, 'Question?\nA. one\nB. two', [verified]), 'B')
+
     def test_answer_extraction(self):
         self.assertEqual(extract_answer('reason\nFINAL ANSWER: B.'), 'B')
         self.assertEqual(extract_answer('Thus, Yes.'), 'Yes')
@@ -277,6 +307,18 @@ class Tests(unittest.TestCase):
         self.assertEqual(extract_answer('Thus, the final answer is:\nB. No', 'A. Yes B. No'), 'B')
         self.assertEqual(extract_answer('Reasoning\nFinal answer:\n\nGreen'), 'Green')
         self.assertEqual(extract_answer('Reasoning mentions A and B.\nGiven this:\n\nB', 'A. Yes B. No'), 'B')
+        question = ('Question: How many lanes?\nOptions:\nA. 1 lane\nB. 2 lanes\nC. 3 lanes\n'
+                    'Please select the correct answer from the options above.')
+        self.assertEqual(extract_answer(
+            'Given these observations, the correct answer is:\n\nB. 2 lanes\n\nThis follows from the arrow.',
+            question), 'B')
+        distance = ('Question: distance?\nOptions:\nA. 5.5 meters\nB. 9.5 meters\nC. 13.5 meters')
+        self.assertEqual(extract_answer(
+            'Thus, the horizontal distance is approximately 5.5 meters.', distance), 'A')
+        self.assertEqual(extract_answer(
+            'I compare the visible distances.\n\nB. 9.5 meters', distance), 'B')
+        self.assertNotEqual(extract_answer(
+            'The options are 5.5 meters, 9.5 meters, and 13.5 meters.', distance), 'A')
 
     def test_empty_and_colon_labeled_answers(self):
         self.assertEqual(extract_answer('  \n'), '')
