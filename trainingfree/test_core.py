@@ -7,6 +7,7 @@ from .prompts import task_question, answer_format, cot_prompt
 from .queue_bf16 import select_devices
 from .placement import pack_modules
 from .format_adapter import FinalFormatAdapter
+from .qwen import align_rope_delta
 
 
 class Scripted:
@@ -29,6 +30,18 @@ class Scripted:
 
 
 class Tests(unittest.TestCase):
+    def test_multigpu_rope_delta_follows_dispatched_cache(self):
+        class Delta:
+            def __init__(self):
+                self.moved_to = None
+            def to(self, device):
+                self.moved_to = device
+                return self
+        model = type('Model', (), {'rope_deltas': Delta()})()
+        cache = type('Cache', (), {'device': 'cuda:1'})()
+        align_rope_delta(model, cache)
+        self.assertEqual(model.rope_deltas.moved_to, 'cuda:1')
+
     def test_faithact_format_variant_leaves_noun_extraction_unchanged(self):
         class VLM:
             def generate(self,image,prompt,**kwargs):
@@ -38,12 +51,12 @@ class Tests(unittest.TestCase):
         self.assertIn('Yes or No',adapter.generate(object(),'Evidence-conditioned answer'))
 
     def test_exhausted_point_is_not_given_eighteen_more_repairs(self):
-        backend = Scripted([Step('the light is red')]*5,['inconclusive']*4)
+        backend = Scripted([Step('the light is red')]*7,['inconclusive']*4)
         result = solve(backend,None,'q',max_steps=6)
-        self.assertEqual(len(backend.contexts),5)
+        self.assertEqual(len(backend.contexts),7)
         self.assertEqual(len(result['ledger']),1)
         self.assertEqual(result['status'],'answered_with_uncertainty')
-        self.assertEqual(result['trace'][-1]['event'],'uncertain_answer_synthesis')
+        self.assertEqual(result['trace'][-1]['event'],'redirection_exhausted')
 
     def test_unverified_hypothesis_is_not_repeated_as_premise(self):
         ledger = [Step('Uncertain whether: the light is red',evidence_question='What color is the light?',
@@ -55,12 +68,24 @@ class Tests(unittest.TestCase):
 
     def test_reworded_claim_cannot_reopen_exhausted_question(self):
         backend = Scripted([Step('the light is red',evidence_question='What color is the light?')]*4
-                           + [Step('the signal appears green',evidence_question='WHAT color is the light!')],
+                           + [Step('the signal appears green',evidence_question='WHAT color is the light!')]*3,
                            ['inconclusive']*4)
         result = solve(backend,None,'q')
         self.assertEqual(sum('audit' in e for e in result['trace']),4)
-        self.assertEqual(result['trace'][-2]['event'],'repeat_of_exhausted_question')
+        self.assertEqual(sum(e.get('event') == 'repeat_of_exhausted_question'
+                             for e in result['trace']),3)
+        self.assertEqual(result['trace'][-1]['event'],'redirection_exhausted')
         self.assertEqual(result['status'],'answered_with_uncertainty')
+
+    def test_repeated_exhausted_question_is_redirected_to_new_evidence(self):
+        repeated = Step('red light', evidence_question='Light color?')
+        backend = Scripted([repeated]*5 + [Step('the car is stopped', evidence_question='Is the car moving?'),
+                                          Step('conditional answer', 'deduction', final_answer='C')],
+                           ['inconclusive']*4 + ['supported']*2)
+        result = solve(backend, None, 'q')
+        self.assertEqual(result['answer'], 'C')
+        self.assertEqual(sum('audit' in e for e in result['trace']), 6)
+        self.assertIn('Choose a different evidence point', backend.contexts[5][1])
 
     def test_new_evidence_then_conditional_answer_can_continue(self):
         backend = Scripted([Step('unclear light',evidence_question='What color is the light?')]*4
@@ -74,13 +99,13 @@ class Tests(unittest.TestCase):
 
     def test_all_repair_question_aliases_remain_exhausted(self):
         backend = Scripted([Step('ambiguous light',evidence_question=q) for q in
-                            ['Light color?','Signal color?','Lamp color?','Traffic light color?']]
-                           + [Step('independent fact',evidence_question='Road clear?'),
-                              Step('a reworded light claim',evidence_question='Signal color?')],
+                           ['Light color?','Signal color?','Lamp color?','Traffic light color?']]
+                           + [Step('independent fact',evidence_question='Road clear?')]
+                           + [Step('a reworded light claim',evidence_question='Signal color?')]*3,
                            ['inconclusive']*4+['supported'])
         result = solve(backend,None,'q')
         self.assertEqual(sum('audit' in e for e in result['trace']),5)
-        self.assertEqual(result['trace'][-2]['event'],'repeat_of_exhausted_question')
+        self.assertEqual(result['trace'][-1]['event'],'redirection_exhausted')
 
     def test_bf16_placement_never_offloads(self):
         sizes = {'visual':5,'model.embed_tokens':3,'lm_head':3,'model.layers.0':2,'model.layers.1':2}

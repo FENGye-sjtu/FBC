@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import time
 import shutil
+import traceback
 from collections import Counter
 
 from .core import solve
@@ -65,6 +66,8 @@ def main(argv=None, shared=None):
     p.add_argument('--tool-device', default='cpu')
     p.add_argument('--standardize-faithact-output',action='store_true',
                    help='Append common answer format; this is a declared controlled-comparison variant')
+    p.add_argument('--cot-cache', type=Path,
+                   help='Completed CoT JSONL to reuse for FaithAct (recorded and hashed in manifest)')
     args = p.parse_args(argv)
     methods = args.methods.split(',')
     if not set(methods) <= {'direct', 'cot', 'faithact', 'online', 'online_cf'}:
@@ -76,6 +79,8 @@ def main(argv=None, shared=None):
     args.output.mkdir(parents=True, exist_ok=True)
     manifest = {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()}
     manifest['dataset_sha256'] = hashlib.sha256(args.dataset.read_bytes()).hexdigest()
+    if args.cot_cache:
+        manifest['cot_cache_sha256'] = hashlib.sha256(args.cot_cache.read_bytes()).hexdigest()
     manifest['metric'] = 'strict_normalized_exact_match; unanswered/errors count incorrect'
     manifest['protocol'] = 'engineering_port_v1_not_yet_paper_matched'
     manifest['code_sha256'] = {f.name: hashlib.sha256(f.read_bytes()).hexdigest()
@@ -95,6 +100,13 @@ def main(argv=None, shared=None):
     cases = cases[args.offset:args.offset+args.limit if args.limit else None]
     if len({str(c['id']) for c in cases}) != len(cases):
         raise ValueError('Duplicate case IDs')
+    cot_cache = {}
+    if args.cot_cache:
+        cot_cache = {str(row['id']): row for row in
+                     map(json.loads, args.cot_cache.read_text(encoding='utf-8').splitlines())}
+        missing = [str(case['id']) for case in cases if not cot_cache.get(str(case['id']), {}).get('raw')]
+        if missing:
+            raise ValueError(f'CoT cache is missing {len(missing)} selected cases, first={missing[0]}')
     from PIL import Image
     from .qwen import Qwen
     import torch
@@ -150,8 +162,10 @@ def main(argv=None, shared=None):
                     else:
                         prompt = cot_prompt(question)
                         if method == 'faithact':
-                            cot_path = args.output/'cot.jsonl'
-                            cots = {str(r['id']): r for r in map(json.loads, cot_path.read_text(encoding='utf-8').splitlines())} if cot_path.exists() else {}
+                            cot_path = args.cot_cache or (args.output/'cot.jsonl')
+                            cots = cot_cache or ({str(r['id']): r for r in
+                                                  map(json.loads, cot_path.read_text(encoding='utf-8').splitlines())}
+                                                 if cot_path.exists() else {})
                             cached = cots.get(str(case['id']), {})
                             cot = cached.get('raw') or vlm.generate(image, prompt)
                             if cached.get('raw'):
@@ -170,7 +184,8 @@ def main(argv=None, shared=None):
                     answer = extract_answer(record.get('answer', record.get('raw')), question)
                 except Exception as exc:
                     # Persist failures; never report accuracy only on successful cases.
-                    record, answer = {'status': 'error', 'error': f'{type(exc).__name__}: {exc}'}, ''
+                    record, answer = {'status': 'error', 'error': f'{type(exc).__name__}: {exc}',
+                                      'traceback': traceback.format_exc()}, ''
                     if isinstance(exc, torch.cuda.OutOfMemoryError):
                         torch.cuda.empty_cache()
                 reference = case.get('reference', case.get('answer', ''))

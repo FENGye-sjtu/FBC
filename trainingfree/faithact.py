@@ -77,8 +77,11 @@ class FaithAct:
     def run(self, image, question, original):
         objects, extraction_errors = [], []
         # Match the official script's blank-line split, including its first/last exclusion.
-        for step in original.split('\n\n')[1:-1]:
-            raw = self.vlm.generate(None, self.template.TEMPLATE_NOUNS.format(step))
+        for index, step in enumerate(original.split('\n\n')[1:-1]):
+            try:
+                raw = self.vlm.generate(None, self.template.TEMPLATE_NOUNS.format(step))
+            except RuntimeError as exc:
+                raise RuntimeError(f'FaithAct noun extraction call {index} failed: {exc}') from exc
             try:
                 parsed = ast.literal_eval(raw.strip())
                 if not isinstance(parsed, list) or not all(isinstance(s, str) for s in parsed):
@@ -88,11 +91,17 @@ class FaithAct:
                 extraction_errors.append({'raw': raw, 'error': str(exc)})
         descriptions, evidence = [], []
         for noun in dict.fromkeys(objects):
-            description, record = self.inspect(image, noun)
+            try:
+                description, record = self.inspect(image, noun)
+            except RuntimeError as exc:
+                raise RuntimeError(f'FaithAct tool inspection for {noun!r} failed: {exc}') from exc
             descriptions.append(description)
             evidence.append(record)
         question = question.replace('Please answer directly with only the letter of the correct option and nothing else.', '')
         prompt = self.template.TEMPLATE_EOT.format(question, '\n'.join(descriptions)) if descriptions else question
-        output = self.vlm.generate(image, prompt)
+        try:
+            output = self.vlm.generate(image, prompt)
+        except RuntimeError as exc:
+            raise RuntimeError(f'FaithAct final VLM call failed: {exc}') from exc
         return {'raw': output, 'original_cot': original, 'evidence': evidence,
                 'extraction_errors': extraction_errors, 'status': 'faithact_port'}

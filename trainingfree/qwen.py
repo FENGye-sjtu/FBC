@@ -4,6 +4,12 @@ import json
 import os
 
 
+def align_rope_delta(model, cache_position):
+    """Place Qwen's persistent RoPE delta beside the dispatched cache index."""
+    if cache_position is not None and model.rope_deltas is not None:
+        model.rope_deltas = model.rope_deltas.to(cache_position.device)
+
+
 class Qwen:
     def __init__(self, model_path, device='cuda:0', max_pixels=1003520, max_new_tokens=384,
                  quantization='none'):
@@ -70,6 +76,10 @@ class Qwen:
 
     def generate(self, image, prompt, max_tokens=None, schema=None):
         inputs = self.inputs(image, prompt)
+        # Qwen2.5-VL caches this tensor on the device used by the previous
+        # generation. Every adapter call is a fresh conversation; retaining it
+        # can mix cache_position on one shard with rope_deltas on another.
+        self.model.rope_deltas = None
         kwargs = {}
         length = inputs.input_ids.shape[1]
         if schema is not None:
@@ -91,12 +101,24 @@ class Qwen:
 
             kwargs['stopping_criteria'] = StoppingCriteriaList([CompleteJSON()])
         handle = self.model.lm_head.register_forward_pre_hook(lambda module, args: (args[0][:, -1:, :],))
+        # Accelerate moves cache_position in its dispatch hook, after ordinary
+        # module pre-hooks run. Wrap the already-bound _old_forward so alignment
+        # happens after dispatch and immediately before Qwen adds these tensors.
+        dispatched_forward = getattr(self.model, '_old_forward', None)
+        if dispatched_forward is not None:
+            def aligned_forward(*args, **forward_kwargs):
+                cache = forward_kwargs.get('cache_position')
+                align_rope_delta(self.model, cache)
+                return dispatched_forward(*args, **forward_kwargs)
+            self.model._old_forward = aligned_forward
         try:
             with self.torch.inference_mode():
                 output = self.model.generate(**inputs, max_new_tokens=max_tokens or self.max_new_tokens,
                                              do_sample=False, use_cache=True, **kwargs)
         finally:
             handle.remove()
+            if dispatched_forward is not None:
+                self.model._old_forward = dispatched_forward
         self.calls += 1
         self.input_tokens += length
         self.generated_tokens += output.shape[1] - length
@@ -136,6 +158,7 @@ class Qwen:
     def _last_logits(self, inputs, count):
         # Transformers 4.51 Qwen does not expose logits_to_keep. Project only
         # needed final hidden states instead of allocating the full prefix vocabulary.
+        self.model.rope_deltas = None
         handle = self.model.lm_head.register_forward_pre_hook(
             lambda module, args: (args[0][:, -count:, :],))
         try:

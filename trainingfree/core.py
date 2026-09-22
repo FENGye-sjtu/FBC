@@ -83,29 +83,41 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
         last_step = None
         last_reason = 'No well-formed candidate was produced.'
         point_questions = set()
-        for attempt in range(repairs + 1):
+        attempt, redirections, accepted = 0, 0, False
+        while attempt <= repairs:
             try:
                 step = backend.propose(image, question, list(ledger), feedback)
             except (ValueError, TypeError, KeyError) as exc:
                 feedback = f'Invalid step format: {exc}. Return one valid JSON step.'
                 record({'step': index, 'attempt': attempt, 'parse_error': str(exc)})
+                attempt += 1
                 continue
             last_step = step
             question_key = key(step.evidence_question)
             if step.kind == 'visual' and question_key and question_key in exhausted_questions:
                 record({'step':index,'event':'repeat_of_exhausted_question','candidate':asdict(step)})
-                return finish('This evidence question already exhausted its repair budget; '
-                              'continue to an explicitly uncertain best-effort answer without reopening it.',
-                              'uncertain_answer_synthesis')
+                redirections += 1
+                if redirections > 2:
+                    return finish('The model repeatedly returned to an exhausted evidence point '
+                                  'after two explicit redirections; synthesize from the current ledger.',
+                                  'redirection_exhausted')
+                feedback = ('Choose a different evidence point or make a conditional deduction. '
+                            'The repeated question is already explicitly uncertain and cannot be audited again.')
+                continue
             if question_key:
                 point_questions.add(question_key)
             if ledger and ledger[-1].verification == 'uncertain':
                 prior = ledger[-1].claim.removeprefix('Uncertain whether: ')
                 if key(prior) == key(step.claim):
                     record({'step':index,'event':'repeat_of_exhausted_point','candidate':asdict(step)})
-                    return finish('The same exhausted point was proposed again without new committed evidence; '
-                                  'continue to an explicitly uncertain best-effort answer, not another repair cycle.',
-                                  'uncertain_answer_synthesis')
+                    redirections += 1
+                    if redirections > 2:
+                        return finish('The model repeatedly returned to an exhausted claim after two '
+                                      'explicit redirections; synthesize from the current ledger.',
+                                      'redirection_exhausted')
+                    feedback = ('Choose a different evidence point or make a conditional deduction. '
+                                'The repeated claim is already explicitly uncertain and cannot be audited again.')
+                    continue
             if step.kind == 'deduction' and not ledger:
                 audit = Audit('inconclusive', reason='A deduction requires verified premises.')
             else:
@@ -126,13 +138,15 @@ def solve(backend: Backend, image, question: str, max_steps=6, repairs=3, on_eve
                     return {'answer': step.final_answer,
                             'status': 'answered_with_uncertainty' if uncertain else 'verified_by_model',
                             'ledger': [asdict(s) for s in ledger], 'trace': trace}
+                accepted = True
                 break
             # This is ephemeral repair context, never a premise of a later step.
             feedback = (f'Previous tentative claim {step.claim!r} was not accepted: '
                         f'{audit.reason}. Reinspect the image and replace this step. '
                         'Do not continue from the rejected claim.')
             last_reason = audit.reason or audit.status
-        else:
+            attempt += 1
+        if not accepted:
             # Initial attempt + at most 3 repairs. Do not assert a failed claim as fact.
             exhausted_questions.update(point_questions)
             unresolved = (f'Uncertain whether: {last_step.claim}' if last_step else

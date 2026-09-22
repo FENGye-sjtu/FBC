@@ -106,7 +106,8 @@ class Online:
 
     def propose(self, image, question, ledger, feedback):
         box, view = (), image
-        if not feedback:
+        redirect = feedback.startswith('Choose a different evidence point')
+        if not feedback or redirect:
             self.last_candidate, self.repair_round = None, 0
         elif self.last_candidate is not None:
             self.repair_round += 1

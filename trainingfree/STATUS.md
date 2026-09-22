@@ -19,7 +19,7 @@ Official FaithAct port/checkpoint and all 765 original RealWorldQA cases are rea
 Implemented structured atomic steps, processed-image coordinate conversion,
 crop reacquisition, support/entailment gates, CF masking with matched controls,
 uncertain continuation, persistent workers, and explicit BF16 multi-GPU packing.
-28 local and remote tests pass.
+32 focused local tests pass.
 Code snapshots and per-case records preserve experiment provenance.
 The report parser now also recognizes a single colon-labeled MCQ answer (e.g.
 `A: 2 green lights`) and handles empty predictions. Apply the same parser to all
@@ -46,27 +46,32 @@ Completed v4: online 4/4 and CF 4/4, each with one uncertain answer. V5 targeted
 case-2 regression: both correct B with explicit uncertainty, online 126.37 s,
 CF 308.32 s (v4: 414.17 / 425.01 s). These are shared-hardware debugging times,
 not a speed benchmark. V5's exact-claim repeat guard did NOT fire: reworded
-claims still reopened the same question. V6 additionally remembers every
-normalized evidence question from an exhausted repair cycle, across later steps;
-matching visual retries stop without another audit cycle, while independent
-evidence and conditional deductions remain allowed. This is deterministic
-question matching, not a semantic paraphrase guarantee. V6 real-model results
-are pending; never relabel the completed v5 traces as v6.
+claims still reopened the same question. V6 remembered every normalized evidence
+question but prematurely finalized its real case-2 regression; both variants
+regressed to wrong A. V7 keeps the no-reopen invariant and redirects twice toward
+independent evidence or a conditional deduction. Its case-2 trace exercised that
+path, but the model ignored both redirects and both variants still answered A.
+A 16-case v7 comparison is running. This is deterministic question matching,
+not a semantic paraphrase guarantee.
+
+## Completed BF16 CoT reproduction
+
+Fresh inference with the official VLMEvalKit RealWorldQA MCQ packaging completed
+all 765 cases: 539/765 = 70.46% under both the reference-blind final-answer parser
+and official AGS rule scorer, versus the paper's 70.1%. Current VLMEvalKit exact
+matching reports 513/765 = 67.06%; its 26 disagreements all reject duplicated
+first-line/final explicit option letters as `Z`. Original xai packaging was
+479/765 = 62.61% (AGS 478/765). See `REPLICATION.md`; do not mix these protocols.
 
 ## Live work (relative to /data_cinema/zqc/CVPR)
 
-- `runtime/workers/7b_dev`: jobs 002, 003 and 003a completed (v3, v4, v5).
-  Job 004 is running the
-  16-case v5 comparison with a declared standardized FaithAct answer-format
-  variant. Job 005 then checks v6 on the repeated-point case.
-  Log `logs/resident_7b_v2.log`. Do not mutate an active job's code snapshot.
-- `runtime/workers/7b_bf16_replication_v3`: job 001 targets all 765 CoT and
-  FaithAct examples, BF16, 1003520 max pixels, 512 output tokens.
-  Log `logs/bf16_replication_v3.log`. Real predictions are now being produced;
-  `runtime_model.json` confirms all 729 parameter tensors are torch.bfloat16
-  and all placements are GPUs. The full reproduction score is still pending.
-  Do not change `faithact.py` or pinned upstream templates during this run: its
-  older harness imports the FaithAct class only after the CoT phase completes.
+- `runtime/queues/vlmeval_bf16`: the same-protocol CoT job and one-case FaithAct
+  smoke completed. A full 765-case released-template FaithAct run is active and
+  reuses the hashed CoT file. Log `logs/vlmeval_faithact_bf16_v1.log`.
+- `runtime/queues/pilot16_v7`: active 16-case online/online-CF comparison after
+  the completed 0/1 case-2 regression. Log `logs/pilot16_v7.log`.
+- `runs/eval_protocols`: pinned AGS and VLMEvalKit conversion, per-case decisions,
+  source hashes, and score outputs for both inference packagings.
 - BF16 v1 FAILED before predictions because automatic placement offloaded to
   disk. V2 FAILED because a root device-map entry moved sharded modules onto one
   GPU during dispatch. V3 removes that root entry and is operational.
@@ -77,10 +82,9 @@ are pending; never relabel the completed v5 traces as v6.
 
 ## Continue from here
 
-Read the 16-case comparison and v6 regression; let the complete BF16 baseline
-finish. Compare with paper Table 2 CoT 70.1% / FaithAct 74.5% only with disclosed
-protocol differences in `REPLICATION.md`. Extend paired development to 16 cases,
-freeze the method, and run full evaluation plus MMStar.
+Read the v7 16-case comparison and full same-protocol FaithAct run. Compare with
+paper Table 2 FaithAct 74.5% only after all 765 cases complete. Then freeze the
+stepwise method and run full RealWorldQA plus MMStar.
 
 Completed v3 raw traces, code snapshots and corrected report were published to
 HF `trainingfree/milestones/20260922_pilot4_v3`, commit
