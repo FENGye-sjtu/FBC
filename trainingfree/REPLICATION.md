@@ -67,6 +67,9 @@ to the pinned xai images, then inference was rerun with the VLMEvalKit MCQ promp
 | VLMEvalKit MCQ, fresh inference (directive-dominated) | project final-answer parser | 539 | 70.46% |
 | VLMEvalKit MCQ, fresh inference (directive-dominated) | AGS `getResult_nlp.py` | 539 | 70.46% |
 | VLMEvalKit MCQ, fresh inference (directive-dominated) | VLMEvalKit `can_infer` | 513 | 67.06% |
+| VLMEvalKit MCQ, reconstructed reasoned CoT | project final-answer parser | 522 | 68.24% |
+| VLMEvalKit MCQ, reconstructed reasoned CoT | AGS `getResult_nlp.py` | 523 | 68.37% |
+| VLMEvalKit MCQ, reconstructed reasoned CoT | VLMEvalKit `can_infer` | 456 | 59.61% |
 
 The 70.46% result is numerically +0.36 percentage points from the paper's 70.1%
 CoT number, with all 765 cases answered and no runtime errors. It is not yet a
@@ -90,8 +93,11 @@ converted benchmark expects option letters.
 Raw runs and evaluator records are under server paths
 `runs/realworldqa_vlmevalkit_7b_bf16_cot_v1` and `runs/eval_protocols`.
 An invalid FaithAct pass that reused these mostly direct outputs was stopped and
-preserved after 261 cases. The replacement reasoned CoT run and its dependent
-released-template FaithAct job are queued serially; neither score is claimed yet.
+preserved after 261 cases. The replacement reasoned CoT run completed with 141
+of 765 outputs containing at least one blank-line interior step that FaithAct can
+inspect (mean 1.49 blank-line parts, maximum 7). It is 68.24% by the project
+parser and 68.37% by AGS. The released-template FaithAct job is now running on
+this exact saved file; its score is not yet claimed.
 
 ## Separately labeled controlled-format variant
 

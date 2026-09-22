@@ -72,7 +72,8 @@ first-line/final explicit option letters as `Z`. Original xai packaging was
 ## Live work (relative to /data_cinema/zqc/CVPR)
 
 - `runtime/queues/reasoned_bf16`: a clean 765-case CoT run removes the conflicting
-  direct-answer directive; its queued FaithAct job will reuse that hashed output.
+  direct-answer directive and completed at 522/765 (AGS 523/765). Its active
+  FaithAct job reuses that hashed output.
   The earlier 261-case directive-dominated FaithAct diagnostic is preserved and
   stopped. Log `logs/reasoned_bf16_v2.log`.
 - `runtime/queues/pilot16_v7`: completed 16-case online/online-CF comparison;
