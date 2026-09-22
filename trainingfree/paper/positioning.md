@@ -7,12 +7,14 @@ of the whole problem or silent acceptance of a low-confidence fact.
 
 ## What must be new
 
-FaithAct's **paper** already describes immediate step validation and action-guided
-refinement (Sections 4.2–4.3). Its **released Qwen script** consumes a precomputed
-whole CoT, extracts objects, then regenerates an answer. These are different
-levels of description. We must not write that all previous work only verifies
-after completion, or use the released script's limitation to erase its paper's
-claimed online design.
+FaithAct's prose describes immediate step validation and action-guided refinement
+(Sections 4.2–4.3), but its Appendix-E Algorithm 1 and released Qwen script both
+execute whole-chain `Reason -> ExtractObj -> verify every object -> Reason`.
+The algorithm initializes `R_raw` before any verification and returns one
+regenerated `R_new`; it does not expose an operational step-boundary loop. We
+should credit the paper's *verify-as-you-generate* motivation while distinguishing
+that claim from the batch algorithm and code that are actually specified. Our
+novelty claim is the concrete prefix-level controller, not the slogan alone.
 
 Our candidate contribution is therefore the combination of:
 

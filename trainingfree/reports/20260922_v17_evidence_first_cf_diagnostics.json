@@ -1,0 +1,1886 @@
+{
+  "summary": {
+    "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_v17_evidence_first/evidence_first_cf.jsonl",
+    "raw_sha256": "527be603761567c51b53fb9fd989061cf3c5da03d96386ade5503bdcc6642a0f",
+    "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+    "parser_version": "committed_answer_v4",
+    "completed_n": 16,
+    "scored_n": 16,
+    "correct": 8,
+    "accuracy": 0.5,
+    "stored_score_diagnostic": {
+      "n": 16,
+      "correct": 8,
+      "accuracy": 0.5
+    },
+    "final_score_source_counts": {
+      "reference_rescore": 16
+    },
+    "uncertain_n": 11,
+    "verified_n": 5,
+    "error_n": 0,
+    "status_counts": {
+      "answered_with_uncertainty": 11,
+      "verified_by_model": 5
+    },
+    "initial_answer_n": 0,
+    "initial_missing_n": 16,
+    "initial_correct": 0,
+    "initial_accuracy": null,
+    "paired_n": 0,
+    "paired_initial_correct": 0,
+    "paired_final_correct": 0,
+    "gains_ids": [],
+    "losses_ids": [],
+    "initial_missing_ids": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15"
+    ],
+    "stored_rescore_disagreement_ids": [],
+    "with_repairs_n": 13,
+    "mean_support": 0.7207643119429515,
+    "min_support": 0.002182716503739357,
+    "max_support": 0.9989677667617798,
+    "finalization_source_counts": {
+      "tentative_direct_anchor": 10,
+      "accepted_step": 6
+    },
+    "mean_latency_seconds": 182.67053178855713,
+    "mean_calls": 28.1875,
+    "trace_count_note": "Counts cover recorded trace events; failed or unlogged model calls cannot be reconstructed.",
+    "final_accuracy_protocol": "Re-score the shared source text with public cases and the current parser; saved booleans are diagnostic only.",
+    "reference_blind_extraction": true,
+    "audits": 106,
+    "repair_attempts": 58,
+    "repair_audits": 58,
+    "parse_errors": 0,
+    "uncertainty_commits": 10,
+    "cf_checks": 27,
+    "cf_target_masks": 27,
+    "cf_control_masks": 54,
+    "cf_mask_calls": 81,
+    "option_consistency_checks": 6,
+    "repeated_question_events": 22,
+    "repeated_events_total": 32,
+    "answer_withheld": 1,
+    "logged_readback_n": 31
+  },
+  "details": [
+    {
+      "id": "0",
+      "status": "answered_with_uncertainty",
+      "reference": "C",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 6,
+      "audit_status_counts": {
+        "inconclusive": 3,
+        "contradicted": 3
+      },
+      "repair_attempts": 4,
+      "has_repair": true,
+      "repair_audits": 4,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.6791787147521973,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.10669060051441193,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.10669060051441193,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.3486451506614685,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.10669060051441193,
+          "audit_status": "contradicted"
+        }
+      ],
+      "mean_support": 0.2695791333913803,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The front wheel of the car on the right side appears to be facing forward, as indicated by the alignment of the tire and the car's body position in the image frame. There is no obv",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "In which direction is the front wheel of the car on the right side facing?",
+          "inspection_box": [
+            0.8360714285714286,
+            0.38474489795918365,
+            1.0,
+            0.9277551020408162
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The front wheel of the car on the right side appears to be facing forward, as indicated by the alignment of the tire and the car's body position in the image frame. There is no obv",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "In which direction is the front wheel of the car on the right side facing?",
+          "inspection_box": [
+            0.8360714285714286,
+            0.38474489795918365,
+            1.0,
+            0.9277551020408162
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The front wheel of the car on the right side appears to be facing forward, as indicated by the alignment of the tire and the vehicle's body. There is no visible indication of the轮子",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "In which direction is the front wheel of the car on the right side facing?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 186.84980821504723,
+      "calls": 22
+    },
+    {
+      "id": "1",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 9,
+      "audit_status_counts": {
+        "supported": 2,
+        "inconclusive": 7
+      },
+      "repair_attempts": 5,
+      "has_repair": true,
+      "repair_audits": 5,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 2,
+      "cf_target_masks": 2,
+      "cf_control_masks": 4,
+      "cf_mask_calls": 6,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9940890073776245,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.957912266254425,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 2,
+          "value": 0.9149009585380554,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 3,
+          "value": 0.9149009585380554,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.851952850818634,
+          "audit_status": "supported"
+        },
+        {
+          "step": 3,
+          "attempt": 1,
+          "value": 0.851952850818634,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.9142848153909048,
+      "answer_withheld": 0,
+      "logged_readback_n": 2,
+      "readbacks": [
+        {
+          "step": 1,
+          "attempt": 2,
+          "observation": "There are two horizontal metal bars connected by vertical wooden posts.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "How many bars are here?",
+          "inspection_box": [
+            0.08671428571428572,
+            0.18693379790940767,
+            0.9525714285714286,
+            0.8993031358885017
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 1,
+          "attempt": 3,
+          "observation": "There are two horizontal metal bars connected by vertical wooden posts.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "How many bars are here?",
+          "inspection_box": [
+            0.08671428571428572,
+            0.18693379790940767,
+            0.9525714285714286,
+            0.8993031358885017
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 251.73428486590274,
+      "calls": 39
+    },
+    {
+      "id": "2",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 6,
+      "audit_status_counts": {
+        "inconclusive": 5,
+        "contradicted": 1
+      },
+      "repair_attempts": 4,
+      "has_repair": true,
+      "repair_audits": 4,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 3,
+      "cf_target_masks": 3,
+      "cf_control_masks": 6,
+      "cf_mask_calls": 9,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9947799444198608,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.9324532747268677,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.9324532747268677,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.9947799444198608,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.0031726830638945103,
+          "audit_status": "contradicted"
+        }
+      ],
+      "mean_support": 0.7715278242714703,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "There are no pedestrians visible in the image.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "how many pedestrians are there?",
+          "inspection_box": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "There are no pedestrians visible in the image.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "how many pedestrians are there?",
+          "inspection_box": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "There are no pedestrians visible in the image.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "how many pedestrians are there?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 218.36714380292688,
+      "calls": 35
+    },
+    {
+      "id": "3",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 6,
+      "audit_status_counts": {
+        "inconclusive": 6
+      },
+      "repair_attempts": 4,
+      "has_repair": true,
+      "repair_audits": 4,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.4687906503677368,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.7772998809814453,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.7772998809814453,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.6791787147521973,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.7981867790222168,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.7001511812210083,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The road appears to be slightly uphill as indicated by the perspective of the vehicles and the angle of the street lines converging towards the horizon. The trees and buildings on坡",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "Is the road that the vehicle is on uphill, downhill or flat?",
+          "inspection_box": [
+            0.0,
+            0.42831632653061225,
+            1.0,
+            1.0
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The road appears to be slightly uphill as indicated by the perspective of the vehicles and the angle of the street lines converging towards the horizon. The trees and buildings on坡",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "Is the road that the vehicle is on uphill, downhill or flat?",
+          "inspection_box": [
+            0.0,
+            0.42831632653061225,
+            1.0,
+            1.0
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The road appears to be uphill as vehicles are parked higher up than those further down the street, suggesting a slope upwards towards the viewer's perspective",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "Is the road that the vehicle is on uphill, downhill or flat?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 188.74812540097628,
+      "calls": 22
+    },
+    {
+      "id": "4",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 5,
+      "audit_status_counts": {
+        "supported": 3,
+        "inconclusive": 2
+      },
+      "repair_attempts": 2,
+      "has_repair": true,
+      "repair_audits": 2,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 3,
+      "cf_target_masks": 3,
+      "cf_control_masks": 6,
+      "cf_mask_calls": 9,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9953904151916504,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.9953904151916504,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 2,
+          "value": 0.9975274205207825,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9961027503013611,
+      "answer_withheld": 0,
+      "logged_readback_n": 1,
+      "readbacks": [
+        {
+          "step": 1,
+          "attempt": 2,
+          "observation": "The speed limit on this road is 35 mph as indicated by the sign in the image",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "What is the speed limit on this road?",
+          "inspection_box": [
+            0.7733116883116883,
+            0.3109183673469388,
+            0.8119155844155844,
+            0.4263265306122449
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 113.63099694403354,
+      "calls": 26
+    },
+    {
+      "id": "5",
+      "status": "verified_by_model",
+      "reference": "A",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 2,
+      "audit_status_counts": {
+        "supported": 2
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9890130758285522,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9890130758285522,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 32.97213760006707,
+      "calls": 10
+    },
+    {
+      "id": "6",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 6,
+      "audit_status_counts": {
+        "inconclusive": 5,
+        "contradicted": 1
+      },
+      "repair_attempts": 4,
+      "has_repair": true,
+      "repair_audits": 4,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9796676635742188,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.6791787147521973,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.6791787147521973,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.3208213150501251,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.002182716503739357,
+          "audit_status": "contradicted"
+        }
+      ],
+      "mean_support": 0.5322058249264956,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The image shows a street with cars parked along both sides and a car driving on the left side. There are no visible traffic lights or signs indicating whether to stop or proceed.",
+          "remaining_question": "",
+          "evidence_complete": false,
+          "repair_round": 1,
+          "inspection_query": "Are we required to stop?",
+          "inspection_box": [
+            0.4345454545454545,
+            0.48270408163265305,
+            0.44207792207792207,
+            0.49306122448979595
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The image shows a street with cars parked along both sides and a car driving on the left side. There are no visible traffic lights or signs indicating whether to stop or proceed.",
+          "remaining_question": "",
+          "evidence_complete": false,
+          "repair_round": 2,
+          "inspection_query": "Are we required to stop?",
+          "inspection_box": [
+            0.4345454545454545,
+            0.48270408163265305,
+            0.44207792207792207,
+            0.49306122448979595
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "There is a stop sign partially obscured by trees on the left side of the street, but it's not clearly visible due to the angle and obstruction. The presence of a stop sign suggests",
+          "remaining_question": "Is there a stop sign visible in the image? If so, where is it located and how obstructed is it by the trees and other elements in the scene? If not, why is there no stop sign visible despite the need?",
+          "evidence_complete": false,
+          "repair_round": 3,
+          "inspection_query": "Are we required to stop?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 195.783190911985,
+      "calls": 26
+    },
+    {
+      "id": "7",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 9,
+      "audit_status_counts": {
+        "inconclusive": 8,
+        "contradicted": 1
+      },
+      "repair_attempts": 6,
+      "has_repair": true,
+      "repair_audits": 6,
+      "parse_errors": 0,
+      "uncertainty_commits": 2,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 5,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 5
+      },
+      "repeated_events_total": 5,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.3775406777858734,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.4687906503677368,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.4687906503677368,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.16451644897460938,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.22270014882087708,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 2,
+          "value": 0.3486451506614685,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 3,
+          "value": 0.3486451506614685,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.3428041253771101,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The bicyclist appears to be facing forward, as indicated by the position of the handlebars and the direction of the wheels",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "Is the bicyclist in this image facing?",
+          "inspection_box": [
+            0.9018181818181817,
+            0.46734693877551026,
+            1.0,
+            0.9038265306122448
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The bicyclist appears to be facing forward, as indicated by the position of the handlebars and the direction of the wheels",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "Is the bicyclist in this image facing?",
+          "inspection_box": [
+            0.9018181818181817,
+            0.46734693877551026,
+            1.0,
+            0.9038265306122448
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The bicyclist appears to be facing away from the camera, as indicated by the rear view of the bicycle and the cyclist's position on the right side of the frame. However, the exact朝",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "Is the bicyclist in this image facing?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 255.40584772801958,
+      "calls": 32
+    },
+    {
+      "id": "8",
+      "status": "answered_with_uncertainty",
+      "reference": "C",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 11,
+      "audit_status_counts": {
+        "inconclusive": 7,
+        "supported": 4
+      },
+      "repair_attempts": 6,
+      "has_repair": true,
+      "repair_audits": 6,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 3,
+      "cf_target_masks": 3,
+      "cf_control_masks": 6,
+      "cf_mask_calls": 9,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 2,
+        "repeat_of_verified_question": 1
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.6791787147521973,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.6513549089431763,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.6513549089431763,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.9399133324623108,
+          "audit_status": "supported"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.9988304972648621,
+          "audit_status": "supported"
+        },
+        {
+          "step": 3,
+          "attempt": 1,
+          "value": 0.9988304972648621,
+          "audit_status": "supported"
+        },
+        {
+          "step": 4,
+          "attempt": 1,
+          "value": 0.9399133324623108,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.8370537417275565,
+      "answer_withheld": 1,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The dog is facing forward, looking directly at the camera.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "What direction is the dog facing?",
+          "inspection_box": [
+            0.26980952380952383,
+            0.13062717770034843,
+            0.7766190476190477,
+            0.7247735191637631
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The dog is facing forward, looking directly at the camera.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "What direction is the dog facing?",
+          "inspection_box": [
+            0.26980952380952383,
+            0.13062717770034843,
+            0.7766190476190477,
+            0.7247735191637631
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The dog is facing forward, looking towards the camera with its head turned slightly to the left side of the frame",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "What direction is the dog facing?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 278.30778207897674,
+      "calls": 46
+    },
+    {
+      "id": "9",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 11,
+      "audit_status_counts": {
+        "supported": 3,
+        "inconclusive": 8
+      },
+      "repair_attempts": 6,
+      "has_repair": true,
+      "repair_audits": 6,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 3,
+      "cf_target_masks": 3,
+      "cf_control_masks": 6,
+      "cf_mask_calls": 9,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 2,
+      "repeated_events": {
+        "repeat_of_verified_point": 1,
+        "repeat_of_exhausted_question": 2
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9968273043632507,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.9968273043632507,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 2,
+          "value": 0.3775406777858734,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 1,
+          "attempt": 3,
+          "value": 0.3775406777858734,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.8933094143867493,
+          "audit_status": "supported"
+        },
+        {
+          "step": 3,
+          "attempt": 1,
+          "value": 0.8933094143867493,
+          "audit_status": "supported"
+        },
+        {
+          "step": 4,
+          "attempt": 1,
+          "value": 0.7981867790222168,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.7619345102991376,
+      "answer_withheld": 0,
+      "logged_readback_n": 2,
+      "readbacks": [
+        {
+          "step": 1,
+          "attempt": 2,
+          "observation": "The pickup truck is positioned near the edge of the road, close to the concrete barrier. The exact horizontal distance cannot be determined due to the lack of scale reference.",
+          "remaining_question": "",
+          "evidence_complete": false,
+          "repair_round": 1,
+          "inspection_query": "What's the horizontal distance between the pickup truck and the nearest curb to it?",
+          "inspection_box": [
+            0.0,
+            0.49056122448979594,
+            0.2349350649350649,
+            0.6829081632653061
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 1,
+          "attempt": 3,
+          "observation": "The pickup truck is positioned near the edge of the road, close to the concrete barrier. The exact horizontal distance cannot be determined due to the lack of scale reference.",
+          "remaining_question": "",
+          "evidence_complete": false,
+          "repair_round": 2,
+          "inspection_query": "What's the horizontal distance between the pickup truck and the nearest curb to it?",
+          "inspection_box": [
+            0.0,
+            0.49056122448979594,
+            0.2349350649350649,
+            0.6829081632653061
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 299.55764589097816,
+      "calls": 45
+    },
+    {
+      "id": "10",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 14,
+      "audit_status_counts": {
+        "supported": 5,
+        "inconclusive": 9
+      },
+      "repair_attempts": 8,
+      "has_repair": true,
+      "repair_audits": 8,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 5,
+      "cf_target_masks": 5,
+      "cf_control_masks": 10,
+      "cf_mask_calls": 15,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 2
+      },
+      "repeated_events_total": 2,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9989677667617798,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.9989677667617798,
+          "audit_status": "supported"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.9989677667617798,
+          "audit_status": "supported"
+        },
+        {
+          "step": 3,
+          "attempt": 1,
+          "value": 0.9046505093574524,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 3,
+          "attempt": 2,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        },
+        {
+          "step": 4,
+          "attempt": 1,
+          "value": 0.9989677667617798,
+          "audit_status": "supported"
+        },
+        {
+          "step": 5,
+          "attempt": 1,
+          "value": 0.9149009585380554,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 5,
+          "attempt": 2,
+          "value": 0.8175744414329529,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 5,
+          "attempt": 3,
+          "value": 0.8175744414329529,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.918682873249054,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 3,
+          "attempt": 2,
+          "observation": "The water is behind the tater tots, partially obscured by the burger wrapper.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "Where is the water compared to the tater tots?",
+          "inspection_box": [
+            0.5286062717770035,
+            0.07671428571428571,
+            0.7327177700348433,
+            0.32804761904761903
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 5,
+          "attempt": 2,
+          "observation": "The water is behind the tater tots, partially obscured by the burger wrapper.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "Where is the water compared to the tater tots?",
+          "inspection_box": [
+            0.5286062717770035,
+            0.07671428571428571,
+            0.7327177700348433,
+            0.32804761904761903
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 5,
+          "attempt": 3,
+          "observation": "The water is behind the tater tots, partially obscured by the burger wrapper.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "Where is the water compared to the tater tots?",
+          "inspection_box": [
+            0.5286062717770035,
+            0.07671428571428571,
+            0.7327177700348433,
+            0.32804761904761903
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 344.07626322098076,
+      "calls": 57
+    },
+    {
+      "id": "11",
+      "status": "answered_with_uncertainty",
+      "reference": "C",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "C",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 9,
+      "audit_status_counts": {
+        "supported": 3,
+        "inconclusive": 6
+      },
+      "repair_attempts": 5,
+      "has_repair": true,
+      "repair_audits": 5,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 3,
+      "cf_target_masks": 3,
+      "cf_control_masks": 6,
+      "cf_mask_calls": 9,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 4
+      },
+      "repeated_events_total": 4,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9940890073776245,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.9940890073776245,
+          "audit_status": "supported"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.9940890073776245,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 2,
+          "attempt": 2,
+          "value": 0.8807970285415649,
+          "audit_status": "supported"
+        },
+        {
+          "step": 3,
+          "attempt": 1,
+          "value": 0.9933071732521057,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 3,
+          "attempt": 2,
+          "value": 0.9933071732521057,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.974946399529775,
+      "answer_withheld": 0,
+      "logged_readback_n": 1,
+      "readbacks": [
+        {
+          "step": 2,
+          "attempt": 2,
+          "observation": "The arrow is pointing to the left",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "Which direction is the arrow pointing?",
+          "inspection_box": [
+            0.1315270935960591,
+            0.7031229235880398,
+            0.5458128078817734,
+            0.8168106312292359
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "C",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 258.5634990159888,
+      "calls": 41
+    },
+    {
+      "id": "12",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "None",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 5,
+      "audit_status_counts": {
+        "inconclusive": 4,
+        "supported": 1
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 3,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.2018132209777832,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.7310585379600525,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.7310585379600525,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.562176525592804,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.556526705622673,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The vehicle appears to be facing towards the right side of the frame based on the orientation of the tires and the angle of the boom arm extending forward and upward from the rear",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "Which direction is this vehicle facing?",
+          "inspection_box": [
+            0.0,
+            0.1719047619047619,
+            1.0,
+            0.9935714285714285
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The vehicle appears to be facing towards the right side of the frame based on the orientation of the tires and the angle of the boom arm extending forward and upward from the rear",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "Which direction is this vehicle facing?",
+          "inspection_box": [
+            0.0,
+            0.1719047619047619,
+            1.0,
+            0.9935714285714285
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The vehicle appears to be facing towards the left side of the image frame, as indicated by the orientation of the front wheels and the positioning of the cab relative to the frame.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "Which direction is this vehicle facing?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 127.75017903093249,
+      "calls": 16
+    },
+    {
+      "id": "13",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 2,
+      "audit_status_counts": {
+        "supported": 2
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.8175744414329529,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 47.870309485006146,
+      "calls": 10
+    },
+    {
+      "id": "14",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 2,
+      "audit_status_counts": {
+        "supported": 2
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.8670357465744019,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.8670357465744019,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 41.90356502006762,
+      "calls": 10
+    },
+    {
+      "id": "15",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": null,
+      "initial_answer": null,
+      "initial_answer_source": "first_step_candidate",
+      "initial_answer_missing": true,
+      "initial_correct": null,
+      "initial_unavailable_reason": "missing_or_unresolved_initial_answer",
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": false,
+      "gain": false,
+      "loss": false,
+      "audits": 3,
+      "audit_status_counts": {
+        "contradicted": 1,
+        "supported": 2
+      },
+      "repair_attempts": 1,
+      "has_repair": true,
+      "repair_audits": 1,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 1,
+      "cf_target_masks": 1,
+      "cf_control_masks": 2,
+      "cf_mask_calls": 3,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.06754669547080994,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.4425605684518814,
+      "answer_withheld": 0,
+      "logged_readback_n": 1,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "One silver car is visible in the opposite lane, still driving.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "How many cars are in the opposite lane that are still driving?",
+          "inspection_box": [
+            0.2237987012987013,
+            0.49765306122448977,
+            0.33301948051948055,
+            0.6056632653061225
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 81.20772940502502,
+      "calls": 14
+    }
+  ]
+}

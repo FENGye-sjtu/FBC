@@ -1,0 +1,2295 @@
+{
+  "schema_version": "faithact_diagnostics_v1",
+  "parser_version": "committed_answer_v4",
+  "parser_sha256": "6d7c3d98c5ef949f73a9d982e2503f6cdcd79e89d81062c028247221856fcb8d",
+  "reference_blind_extraction": true,
+  "n": 128,
+  "completed_n": 128,
+  "expected_n": 765,
+  "baseline_n": 128,
+  "is_partial": true,
+  "is_partial_scope": "cases file; a complete development subset can still be partial here",
+  "is_partial_baseline_subset": false,
+  "missing_baseline_case_ids": [],
+  "missing_dataset_case_ids": [
+    "128",
+    "129",
+    "130",
+    "131",
+    "132",
+    "133",
+    "134",
+    "135",
+    "136",
+    "137",
+    "138",
+    "139",
+    "140",
+    "141",
+    "142",
+    "143",
+    "144",
+    "145",
+    "146",
+    "147",
+    "148",
+    "149",
+    "150",
+    "151",
+    "152",
+    "153",
+    "154",
+    "155",
+    "156",
+    "157",
+    "158",
+    "159",
+    "160",
+    "161",
+    "162",
+    "163",
+    "164",
+    "165",
+    "166",
+    "167",
+    "168",
+    "169",
+    "170",
+    "171",
+    "172",
+    "173",
+    "174",
+    "175",
+    "176",
+    "177",
+    "178",
+    "179",
+    "180",
+    "181",
+    "182",
+    "183",
+    "184",
+    "185",
+    "186",
+    "187",
+    "188",
+    "189",
+    "190",
+    "191",
+    "192",
+    "193",
+    "194",
+    "195",
+    "196",
+    "197",
+    "198",
+    "199",
+    "200",
+    "201",
+    "202",
+    "203",
+    "204",
+    "205",
+    "206",
+    "207",
+    "208",
+    "209",
+    "210",
+    "211",
+    "212",
+    "213",
+    "214",
+    "215",
+    "216",
+    "217",
+    "218",
+    "219",
+    "220",
+    "221",
+    "222",
+    "223",
+    "224",
+    "225",
+    "226",
+    "227",
+    "228",
+    "229",
+    "230",
+    "231",
+    "232",
+    "233",
+    "234",
+    "235",
+    "236",
+    "237",
+    "238",
+    "239",
+    "240",
+    "241",
+    "242",
+    "243",
+    "244",
+    "245",
+    "246",
+    "247",
+    "248",
+    "249",
+    "250",
+    "251",
+    "252",
+    "253",
+    "254",
+    "255",
+    "256",
+    "257",
+    "258",
+    "259",
+    "260",
+    "261",
+    "262",
+    "263",
+    "264",
+    "265",
+    "266",
+    "267",
+    "268",
+    "269",
+    "270",
+    "271",
+    "272",
+    "273",
+    "274",
+    "275",
+    "276",
+    "277",
+    "278",
+    "279",
+    "280",
+    "281",
+    "282",
+    "283",
+    "284",
+    "285",
+    "286",
+    "287",
+    "288",
+    "289",
+    "290",
+    "291",
+    "292",
+    "293",
+    "294",
+    "295",
+    "296",
+    "297",
+    "298",
+    "299",
+    "300",
+    "301",
+    "302",
+    "303",
+    "304",
+    "305",
+    "306",
+    "307",
+    "308",
+    "309",
+    "310",
+    "311",
+    "312",
+    "313",
+    "314",
+    "315",
+    "316",
+    "317",
+    "318",
+    "319",
+    "320",
+    "321",
+    "322",
+    "323",
+    "324",
+    "325",
+    "326",
+    "327",
+    "328",
+    "329",
+    "330",
+    "331",
+    "332",
+    "333",
+    "334",
+    "335",
+    "336",
+    "337",
+    "338",
+    "339",
+    "340",
+    "341",
+    "342",
+    "343",
+    "344",
+    "345",
+    "346",
+    "347",
+    "348",
+    "349",
+    "350",
+    "351",
+    "352",
+    "353",
+    "354",
+    "355",
+    "356",
+    "357",
+    "358",
+    "359",
+    "360",
+    "361",
+    "362",
+    "363",
+    "364",
+    "365",
+    "366",
+    "367",
+    "368",
+    "369",
+    "370",
+    "371",
+    "372",
+    "373",
+    "374",
+    "375",
+    "376",
+    "377",
+    "378",
+    "379",
+    "380",
+    "381",
+    "382",
+    "383",
+    "384",
+    "385",
+    "386",
+    "387",
+    "388",
+    "389",
+    "390",
+    "391",
+    "392",
+    "393",
+    "394",
+    "395",
+    "396",
+    "397",
+    "398",
+    "399",
+    "400",
+    "401",
+    "402",
+    "403",
+    "404",
+    "405",
+    "406",
+    "407",
+    "408",
+    "409",
+    "410",
+    "411",
+    "412",
+    "413",
+    "414",
+    "415",
+    "416",
+    "417",
+    "418",
+    "419",
+    "420",
+    "421",
+    "422",
+    "423",
+    "424",
+    "425",
+    "426",
+    "427",
+    "428",
+    "429",
+    "430",
+    "431",
+    "432",
+    "433",
+    "434",
+    "435",
+    "436",
+    "437",
+    "438",
+    "439",
+    "440",
+    "441",
+    "442",
+    "443",
+    "444",
+    "445",
+    "446",
+    "447",
+    "448",
+    "449",
+    "450",
+    "451",
+    "452",
+    "453",
+    "454",
+    "455",
+    "456",
+    "457",
+    "458",
+    "459",
+    "460",
+    "461",
+    "462",
+    "463",
+    "464",
+    "465",
+    "466",
+    "467",
+    "468",
+    "469",
+    "470",
+    "471",
+    "472",
+    "473",
+    "474",
+    "475",
+    "476",
+    "477",
+    "478",
+    "479",
+    "480",
+    "481",
+    "482",
+    "483",
+    "484",
+    "485",
+    "486",
+    "487",
+    "488",
+    "489",
+    "490",
+    "491",
+    "492",
+    "493",
+    "494",
+    "495",
+    "496",
+    "497",
+    "498",
+    "499",
+    "500",
+    "501",
+    "502",
+    "503",
+    "504",
+    "505",
+    "506",
+    "507",
+    "508",
+    "509",
+    "510",
+    "511",
+    "512",
+    "513",
+    "514",
+    "515",
+    "516",
+    "517",
+    "518",
+    "519",
+    "520",
+    "521",
+    "522",
+    "523",
+    "524",
+    "525",
+    "526",
+    "527",
+    "528",
+    "529",
+    "530",
+    "531",
+    "532",
+    "533",
+    "534",
+    "535",
+    "536",
+    "537",
+    "538",
+    "539",
+    "540",
+    "541",
+    "542",
+    "543",
+    "544",
+    "545",
+    "546",
+    "547",
+    "548",
+    "549",
+    "550",
+    "551",
+    "552",
+    "553",
+    "554",
+    "555",
+    "556",
+    "557",
+    "558",
+    "559",
+    "560",
+    "561",
+    "562",
+    "563",
+    "564",
+    "565",
+    "566",
+    "567",
+    "568",
+    "569",
+    "570",
+    "571",
+    "572",
+    "573",
+    "574",
+    "575",
+    "576",
+    "577",
+    "578",
+    "579",
+    "580",
+    "581",
+    "582",
+    "583",
+    "584",
+    "585",
+    "586",
+    "587",
+    "588",
+    "589",
+    "590",
+    "591",
+    "592",
+    "593",
+    "594",
+    "595",
+    "596",
+    "597",
+    "598",
+    "599",
+    "600",
+    "601",
+    "602",
+    "603",
+    "604",
+    "605",
+    "606",
+    "607",
+    "608",
+    "609",
+    "610",
+    "611",
+    "612",
+    "613",
+    "614",
+    "615",
+    "616",
+    "617",
+    "618",
+    "619",
+    "620",
+    "621",
+    "622",
+    "623",
+    "624",
+    "625",
+    "626",
+    "627",
+    "628",
+    "629",
+    "630",
+    "631",
+    "632",
+    "633",
+    "634",
+    "635",
+    "636",
+    "637",
+    "638",
+    "639",
+    "640",
+    "641",
+    "642",
+    "643",
+    "644",
+    "645",
+    "646",
+    "647",
+    "648",
+    "649",
+    "650",
+    "651",
+    "652",
+    "653",
+    "654",
+    "655",
+    "656",
+    "657",
+    "658",
+    "659",
+    "660",
+    "661",
+    "662",
+    "663",
+    "664",
+    "665",
+    "666",
+    "667",
+    "668",
+    "669",
+    "670",
+    "671",
+    "672",
+    "673",
+    "674",
+    "675",
+    "676",
+    "677",
+    "678",
+    "679",
+    "680",
+    "681",
+    "682",
+    "683",
+    "684",
+    "685",
+    "686",
+    "687",
+    "688",
+    "689",
+    "690",
+    "691",
+    "692",
+    "693",
+    "694",
+    "695",
+    "696",
+    "697",
+    "698",
+    "699",
+    "700",
+    "701",
+    "702",
+    "703",
+    "704",
+    "705",
+    "706",
+    "707",
+    "708",
+    "709",
+    "710",
+    "711",
+    "712",
+    "713",
+    "714",
+    "715",
+    "716",
+    "717",
+    "718",
+    "719",
+    "720",
+    "721",
+    "722",
+    "723",
+    "724",
+    "725",
+    "726",
+    "727",
+    "728",
+    "729",
+    "730",
+    "731",
+    "732",
+    "733",
+    "734",
+    "735",
+    "736",
+    "737",
+    "738",
+    "739",
+    "740",
+    "741",
+    "742",
+    "743",
+    "744",
+    "745",
+    "746",
+    "747",
+    "748",
+    "749",
+    "750",
+    "751",
+    "752",
+    "753",
+    "754",
+    "755",
+    "756",
+    "757",
+    "758",
+    "759",
+    "760",
+    "761",
+    "762",
+    "763",
+    "764"
+  ],
+  "interpretation": "Paired descriptive comparison on exactly matched initial CoT text; tool subsets do not isolate causal contributions or establish matched compute.",
+  "sources": {
+    "raw": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_faithact_official_gcot_dev128/faithact.jsonl",
+      "sha256": "1adaed0e7434d190dc8e416e2622803522acc6ecd7bf109382cc0f27642d98ae"
+    },
+    "baseline": {
+      "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_bf16_faithact_official_gcot_dev128/cot.jsonl",
+      "sha256": "9c606dd92ae065fda556066d69d76beed8cb55f695f257811d74b562c7718d0b"
+    },
+    "cases": {
+      "path": "/data_cinema/zqc/CVPR/data/vlmevalkit/cases.jsonl",
+      "sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87"
+    }
+  },
+  "original_cot_check": {
+    "checked_n": 128,
+    "exact_match": true,
+    "mismatch_ids": []
+  },
+  "status_counts": {
+    "faithact_port_released_code": 128
+  },
+  "coverage": {
+    "interior_cases": 128,
+    "noun_extraction_calls": 142,
+    "noun_calls_by_case": {
+      "0": 1,
+      "1": 1,
+      "2": 1,
+      "3": 1,
+      "4": 1,
+      "5": 1,
+      "6": 1,
+      "7": 1,
+      "8": 1,
+      "9": 2,
+      "10": 1,
+      "11": 1,
+      "12": 1,
+      "13": 1,
+      "14": 1,
+      "15": 1,
+      "16": 1,
+      "17": 1,
+      "18": 2,
+      "19": 1,
+      "20": 1,
+      "21": 1,
+      "22": 1,
+      "23": 1,
+      "24": 1,
+      "25": 1,
+      "26": 1,
+      "27": 1,
+      "28": 1,
+      "29": 1,
+      "30": 1,
+      "31": 1,
+      "32": 1,
+      "33": 1,
+      "34": 2,
+      "35": 1,
+      "36": 1,
+      "37": 1,
+      "38": 1,
+      "39": 1,
+      "40": 1,
+      "41": 1,
+      "42": 1,
+      "43": 2,
+      "44": 1,
+      "45": 2,
+      "46": 1,
+      "47": 1,
+      "48": 1,
+      "49": 1,
+      "50": 1,
+      "51": 1,
+      "52": 1,
+      "53": 1,
+      "54": 1,
+      "55": 2,
+      "56": 2,
+      "57": 1,
+      "58": 1,
+      "59": 1,
+      "60": 1,
+      "61": 1,
+      "62": 1,
+      "63": 1,
+      "64": 1,
+      "65": 1,
+      "66": 1,
+      "67": 1,
+      "68": 2,
+      "69": 1,
+      "70": 1,
+      "71": 1,
+      "72": 2,
+      "73": 1,
+      "74": 2,
+      "75": 1,
+      "76": 1,
+      "77": 1,
+      "78": 1,
+      "79": 1,
+      "80": 1,
+      "81": 1,
+      "82": 1,
+      "83": 1,
+      "84": 2,
+      "85": 1,
+      "86": 1,
+      "87": 1,
+      "88": 1,
+      "89": 1,
+      "90": 1,
+      "91": 1,
+      "92": 1,
+      "93": 1,
+      "94": 1,
+      "95": 1,
+      "96": 1,
+      "97": 1,
+      "98": 1,
+      "99": 1,
+      "100": 1,
+      "101": 2,
+      "102": 1,
+      "103": 1,
+      "104": 1,
+      "105": 1,
+      "106": 1,
+      "107": 2,
+      "108": 1,
+      "109": 1,
+      "110": 1,
+      "111": 1,
+      "112": 1,
+      "113": 1,
+      "114": 1,
+      "115": 1,
+      "116": 1,
+      "117": 1,
+      "118": 1,
+      "119": 2,
+      "120": 1,
+      "121": 1,
+      "122": 1,
+      "123": 1,
+      "124": 1,
+      "125": 1,
+      "126": 1,
+      "127": 1
+    },
+    "noun_call_count_source": "len(original_cot.split('\\n\\n')[1:-1]); released execution loop",
+    "tool_cases": 128,
+    "noun_inspections": 374,
+    "cases_with_boxes_in_prompt": 98,
+    "noun_records_with_any_detected_boxes": 358,
+    "noun_records_with_boxes_in_prompt": 177,
+    "detected_box_count": 1473,
+    "shown_box_count": 901,
+    "noun_probability_bands": {
+      "below_0.4": 193,
+      "maybe_0.4_to_0.6": 87,
+      "exists_gt_0.6": 94
+    },
+    "top_nouns": [
+      [
+        "road",
+        21
+      ],
+      [
+        "traffic light",
+        16
+      ],
+      [
+        "car",
+        15
+      ],
+      [
+        "vehicles",
+        14
+      ],
+      [
+        "sign",
+        12
+      ],
+      [
+        "intersection",
+        8
+      ],
+      [
+        "pedestrian",
+        7
+      ],
+      [
+        "arrow",
+        7
+      ],
+      [
+        "street",
+        7
+      ],
+      [
+        "red light",
+        7
+      ],
+      [
+        "stop sign",
+        6
+      ],
+      [
+        "vehicle",
+        6
+      ],
+      [
+        "dog",
+        5
+      ],
+      [
+        "traffic lights",
+        5
+      ],
+      [
+        "person",
+        5
+      ],
+      [
+        "pedestrians",
+        4
+      ],
+      [
+        "camera",
+        4
+      ],
+      [
+        "cars",
+        4
+      ],
+      [
+        "sidewalk",
+        4
+      ],
+      [
+        "truck",
+        3
+      ]
+    ]
+  },
+  "noun_extraction": {
+    "cases_with_errors": 0,
+    "error_count": 0,
+    "errors": [],
+    "accepted_format": "ast.literal_eval(raw.strip()) -> list[str]",
+    "successful_raw_format_logged": false,
+    "note": "No subtype is inferred for successful noun calls whose raw text was not logged."
+  },
+  "paired_groups": {
+    "all": {
+      "n": 128,
+      "left_correct": 78,
+      "right_correct": 78,
+      "wins": [
+        "19",
+        "23",
+        "25",
+        "28",
+        "35",
+        "40",
+        "45",
+        "47",
+        "65",
+        "70",
+        "72",
+        "86",
+        "90",
+        "99",
+        "100",
+        "108",
+        "113"
+      ],
+      "losses": [
+        "9",
+        "16",
+        "18",
+        "24",
+        "32",
+        "34",
+        "49",
+        "53",
+        "56",
+        "68",
+        "76",
+        "80",
+        "83",
+        "88",
+        "89",
+        "92",
+        "114"
+      ],
+      "net_correct": 0,
+      "mcnemar_exact_p": 1.0,
+      "baseline_accuracy": 0.609375,
+      "faithact_accuracy": 0.609375,
+      "faithact_unresolved_mcq": 12,
+      "seconds": {
+        "baseline_total": {
+          "recorded_n": 128,
+          "total": 931.6983458085451,
+          "mean": 7.278893326629259,
+          "median": 7.044438430049922
+        },
+        "faithact_total": {
+          "recorded_n": 128,
+          "total": 1938.9621783958282,
+          "mean": 15.148142018717408,
+          "median": 14.530287491506897
+        },
+        "faithact_incremental": {
+          "recorded_n": 128,
+          "total": 1007.2638325872831,
+          "mean": 7.869248692088149,
+          "median": 7.334534325986169
+        }
+      }
+    },
+    "tool_records": {
+      "n": 128,
+      "left_correct": 78,
+      "right_correct": 78,
+      "wins": [
+        "19",
+        "23",
+        "25",
+        "28",
+        "35",
+        "40",
+        "45",
+        "47",
+        "65",
+        "70",
+        "72",
+        "86",
+        "90",
+        "99",
+        "100",
+        "108",
+        "113"
+      ],
+      "losses": [
+        "9",
+        "16",
+        "18",
+        "24",
+        "32",
+        "34",
+        "49",
+        "53",
+        "56",
+        "68",
+        "76",
+        "80",
+        "83",
+        "88",
+        "89",
+        "92",
+        "114"
+      ],
+      "net_correct": 0,
+      "mcnemar_exact_p": 1.0,
+      "baseline_accuracy": 0.609375,
+      "faithact_accuracy": 0.609375,
+      "faithact_unresolved_mcq": 12,
+      "seconds": {
+        "baseline_total": {
+          "recorded_n": 128,
+          "total": 931.6983458085451,
+          "mean": 7.278893326629259,
+          "median": 7.044438430049922
+        },
+        "faithact_total": {
+          "recorded_n": 128,
+          "total": 1938.9621783958282,
+          "mean": 15.148142018717408,
+          "median": 14.530287491506897
+        },
+        "faithact_incremental": {
+          "recorded_n": 128,
+          "total": 1007.2638325872831,
+          "mean": 7.869248692088149,
+          "median": 7.334534325986169
+        }
+      }
+    },
+    "no_tool_records": {
+      "n": 0,
+      "left_correct": 0,
+      "right_correct": 0,
+      "wins": [],
+      "losses": [],
+      "net_correct": 0,
+      "mcnemar_exact_p": 1.0,
+      "baseline_accuracy": null,
+      "faithact_accuracy": null,
+      "faithact_unresolved_mcq": 0,
+      "seconds": {
+        "baseline_total": {
+          "recorded_n": 0,
+          "total": null,
+          "mean": null,
+          "median": null
+        },
+        "faithact_total": {
+          "recorded_n": 0,
+          "total": null,
+          "mean": null,
+          "median": null
+        },
+        "faithact_incremental": {
+          "recorded_n": 0,
+          "total": null,
+          "mean": null,
+          "median": null
+        }
+      }
+    },
+    "boxes_in_evidence_prompt": {
+      "n": 98,
+      "left_correct": 58,
+      "right_correct": 56,
+      "wins": [
+        "25",
+        "28",
+        "35",
+        "40",
+        "45",
+        "47",
+        "70",
+        "72",
+        "86",
+        "90",
+        "100",
+        "108",
+        "113"
+      ],
+      "losses": [
+        "9",
+        "16",
+        "18",
+        "32",
+        "34",
+        "49",
+        "53",
+        "56",
+        "68",
+        "80",
+        "83",
+        "88",
+        "89",
+        "92",
+        "114"
+      ],
+      "net_correct": -2,
+      "mcnemar_exact_p": 0.8505540192127228,
+      "baseline_accuracy": 0.5918367346938775,
+      "faithact_accuracy": 0.5714285714285714,
+      "faithact_unresolved_mcq": 8,
+      "seconds": {
+        "baseline_total": {
+          "recorded_n": 98,
+          "total": 724.3235256378539,
+          "mean": 7.391056384059733,
+          "median": 7.115625158476178
+        },
+        "faithact_total": {
+          "recorded_n": 98,
+          "total": 1542.908057010849,
+          "mean": 15.743959765416827,
+          "median": 15.087968888983596
+        },
+        "faithact_incremental": {
+          "recorded_n": 98,
+          "total": 818.5845313729951,
+          "mean": 8.352903381357093,
+          "median": 7.863914967572782
+        }
+      }
+    },
+    "tool_records_but_no_boxes_in_prompt": {
+      "n": 30,
+      "left_correct": 20,
+      "right_correct": 22,
+      "wins": [
+        "19",
+        "23",
+        "65",
+        "99"
+      ],
+      "losses": [
+        "24",
+        "76"
+      ],
+      "net_correct": 2,
+      "mcnemar_exact_p": 0.6875,
+      "baseline_accuracy": 0.6666666666666666,
+      "faithact_accuracy": 0.7333333333333333,
+      "faithact_unresolved_mcq": 4,
+      "seconds": {
+        "baseline_total": {
+          "recorded_n": 30,
+          "total": 207.37482017069124,
+          "mean": 6.912494005689708,
+          "median": 6.777276890468784
+        },
+        "faithact_total": {
+          "recorded_n": 30,
+          "total": 396.0541213849792,
+          "mean": 13.201804046165973,
+          "median": 13.114630959928036
+        },
+        "faithact_incremental": {
+          "recorded_n": 30,
+          "total": 188.679301214288,
+          "mean": 6.289310040476266,
+          "median": 6.3291383644682355
+        }
+      }
+    },
+    "noun_prefixes_only": {
+      "n": 29,
+      "left_correct": 19,
+      "right_correct": 21,
+      "wins": [
+        "19",
+        "23",
+        "65",
+        "99"
+      ],
+      "losses": [
+        "24",
+        "76"
+      ],
+      "net_correct": 2,
+      "mcnemar_exact_p": 0.6875,
+      "baseline_accuracy": 0.6551724137931034,
+      "faithact_accuracy": 0.7241379310344828,
+      "faithact_unresolved_mcq": 4,
+      "seconds": {
+        "baseline_total": {
+          "recorded_n": 29,
+          "total": 199.3904607737204,
+          "mean": 6.87553313012829,
+          "median": 6.652116289944388
+        },
+        "faithact_total": {
+          "recorded_n": 29,
+          "total": 379.9725706529571,
+          "mean": 13.102502436308864,
+          "median": 12.907709121936932
+        },
+        "faithact_incremental": {
+          "recorded_n": 29,
+          "total": 180.58210987923667,
+          "mean": 6.226969306180575,
+          "median": 6.3101702380226925
+        }
+      }
+    },
+    "interior_but_no_tool_records": {
+      "n": 0,
+      "left_correct": 0,
+      "right_correct": 0,
+      "wins": [],
+      "losses": [],
+      "net_correct": 0,
+      "mcnemar_exact_p": 1.0,
+      "baseline_accuracy": null,
+      "faithact_accuracy": null,
+      "faithact_unresolved_mcq": 0,
+      "seconds": {
+        "baseline_total": {
+          "recorded_n": 0,
+          "total": null,
+          "mean": null,
+          "median": null
+        },
+        "faithact_total": {
+          "recorded_n": 0,
+          "total": null,
+          "mean": null,
+          "median": null
+        },
+        "faithact_incremental": {
+          "recorded_n": 0,
+          "total": null,
+          "mean": null,
+          "median": null
+        }
+      }
+    }
+  },
+  "regressions_to_unresolved_ids": [
+    "24",
+    "49",
+    "53",
+    "80",
+    "88"
+  ],
+  "changed_correctness": [
+    {
+      "id": "9",
+      "direction": "regression",
+      "reference": "A",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: What's the horizontal distance between the pickup truck and the nearest curb to it?\nOptions:\nA. 5.5 meters\nB. 9.5 meters\nC. 13.5 meters\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe relevant region in the image is the area around the pickup truck, specifically the space between the truck and the nearest curb. The curb is the edge of the road where the pavement meets the sidewalk or street.\n\nStep 2: Reasoning\nTo estimate the horizontal distance, we need to consider the scale of the image. The pickup truck appears to be positioned close to the edge of the road, but not directly at the curb. The curb is visible on the left side of the image, and the truck is slightly further away from it than the width of the truck itself.\n\nGiven the options provided, the most reasonable estimate would be closer to 5.5 meters, as the truck is not very far from the curb but still has some space between them.\n\nStep 3: Answer\nA. 5.5 meters",
+      "faithact_raw": "1. The pickup truck is located at coordinates (548.8635864257812, 358.3857421875) with a width of approximately 3.3 meters.\n2. The road is located at coordinates (1.261988639831543, 478.34039306640625) with a length of approximately 1446.9114990234375 meters.\n3. The curb is located at coordinates (0.7304745316505432, 456.68450927734375) with a width of approximately 341.30352783203125 meters.\n\nTo find the horizontal distance between the pickup truck and the nearest curb, we need to calculate the difference in their x-coordinates.\n\nThe x-coordinate of the pickup truck is approximately 548.86 meters.\nThe x-coordinate of the curb is approximately 0.73 meters.\n\nThe horizontal distance between the pickup truck and the nearest curb is calculated as follows:\n\\[ \\text{Distance} = |548.86 - 0.73| = 548.13 \\text{ meters} \\]\n\nHowever, this value does not match any of the given options. It seems there might be an error in the provided options or the bounding box coordinates. Given the options, the closest reasonable answer would be:\n\nB. 9.5 meters\n\nThus, the final answer is B. 9.5 meters.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "pickup truck",
+          "probability": 0.681688630580902,
+          "detected_box_count": 2,
+          "shown_box_count": 2
+        },
+        {
+          "noun": "road",
+          "probability": 0.5965057551860808,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "curb",
+          "probability": 0.40664033889770507,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "truck",
+          "probability": 0.7182554066181182,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        }
+      ]
+    },
+    {
+      "id": "16",
+      "direction": "regression",
+      "reference": "A",
+      "cot_answer": "A",
+      "faithact_answer": "C",
+      "question": "Question: How many sedans can be found within 5 meters of the camera?\nOptions:\nA. 0\nB. 1\nC. 2\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe region of interest is the area immediately in front of the camera, which appears to be a wet street with parked cars on both sides. The camera's perspective suggests it is inside a vehicle, looking out through the windshield.\n\nStep 2: Reasoning\n- The camera is positioned at the center of the street, facing forward.\n- The first car visible in front of the camera is a sedan, parked on the left side of the street.\n- No other sedans are visible within the next 5 meters from the camera's position.\n\nStep 3: Answer\nA. 0",
+      "faithact_raw": "1. sedan: The bounding box for the sedan is located at coordinates (358.60955810546875, 473.2856750488281, 487.1554870605469, 572.0934448242188). This object is clearly visible on the left side of the street.\n\n2. sedan: The bounding box for another sedan is located at coordinates (675.3035278320312, 464.1034240722656, 769.9534301757812, 553.0758056640625). This object is also clearly visible on the right side of the street.\n\nThus, there are two sedans within 5 meters of the camera.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "camera",
+          "probability": 0.30173564851284024,
+          "detected_box_count": 0,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "car",
+          "probability": 0.8441861242055893,
+          "detected_box_count": 8,
+          "shown_box_count": 8
+        },
+        {
+          "noun": "sedan",
+          "probability": 0.8927693724632263,
+          "detected_box_count": 19,
+          "shown_box_count": 19
+        }
+      ]
+    },
+    {
+      "id": "18",
+      "direction": "regression",
+      "reference": "C",
+      "cot_answer": "C",
+      "faithact_answer": "A",
+      "question": "Question: How many plastic bags are here?\nOptions:\nA. There are three plastic bags here.\nB. There are four plastic bags here.\nC. There are two plastic bags here.\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe image shows a stack of transparent plastic bags containing what appears to be dried fruits or similar items. There is a red object, possibly a clip or a tool, on top of the stack.\n\nStep 2: Reasoning\n- The stack consists of two distinct layers of plastic bags.\n- Each layer contains items that are not fully visible but appear to be separate from each other.\n- The presence of a barcode on one of the bags suggests it might be a commercial product, but this does not affect the count of the bags themselves.\n\nStep 3: Answer\nBased on the observation, there are two plastic bags in the image.\n\nFinal answer: C. There are two plastic bags here.",
+      "faithact_raw": "1. plastic: The image contains a single plastic bag, which is partially visible at the top of the image. This bag appears to be sealed with a red clip.\n\n2. bags: There are two distinct plastic bags visible in the image. One is located at the bottom left, and the other is on top of it, partially overlapping. Both bags appear to be sealed with clips.\n\nThus, the correct answer is:\nA. There are three plastic bags here.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "plastic",
+          "probability": 0.5458259612321853,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "bags",
+          "probability": 0.7400710999965667,
+          "detected_box_count": 3,
+          "shown_box_count": 3
+        }
+      ]
+    },
+    {
+      "id": "19",
+      "direction": "correction",
+      "reference": "B",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: Is the construction zone closer or further than the upcoming stop sign?\nOptions:\nA. Closer\nB. Further\nC. The same\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe construction zone is indicated by the presence of construction materials, barriers, and workers in the middle of the street. The stop sign is located on the right side of the image, near the edge of the road.\n\nStep 2: Reasoning\nThe construction zone is clearly visible and appears to be in the middle of the street, while the stop sign is positioned further back, closer to the edge of the image. The construction zone is physically closer to the viewer's perspective compared to the stop sign.\n\nStep 3: Answer\nA. Closer",
+      "faithact_raw": "1. construction zone: The construction zone is indicated by the presence of construction materials, cones, and a sign that reads \"Construction Zone\" on the street.\n2. stop sign: The stop sign is located at the intersection, as indicated by the red octagonal sign with the word \"STOP\" written on it.\n\nThe construction zone is further down the street compared to the upcoming stop sign. Therefore, the correct answer is:\n\nB. Further",
+      "tool_called": true,
+      "boxes_in_prompt": false,
+      "nouns": [
+        {
+          "noun": "construction zone",
+          "probability": 0.18746251240372658,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "stop sign",
+          "probability": 0.38146280497312546,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "23",
+      "direction": "correction",
+      "reference": "A",
+      "cot_answer": "none of the options A, B, or C accurately describe where the road is flooded",
+      "faithact_answer": "A",
+      "question": "Question: Where is the road flooded?\nOptions:\nA. The right lane\nB. The middle lane\nC. The left lane\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe image shows a wet road with visible reflections on the surface, indicating recent or ongoing rain. There are no visible signs of flooding in the lanes themselves; however, there is water on the grassy areas adjacent to the road.\n\nStep 2: Reasoning\n- The road appears wet but not flooded in the lanes.\n- There is water on the grassy areas next to the road, which could be from runoff.\n- The water does not extend into the lanes, so it cannot be considered flooding in those areas.\n\nStep 3: Answer\nThe road is not flooded in any of the lanes. Therefore, none of the options A, B, or C accurately describe where the road is flooded.",
+      "faithact_raw": "1. road: The road appears wet, indicating recent rain.\n2. water: There are visible puddles on the right side of the road, suggesting flooding in that area.\n3. grass: The grass on the right side of the road is also wet, which could be due to the same reason as the road.\n\nThus, A. The right lane is flooded.",
+      "tool_called": true,
+      "boxes_in_prompt": false,
+      "nouns": [
+        {
+          "noun": "road",
+          "probability": 0.2660386323928833,
+          "detected_box_count": 3,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "water",
+          "probability": 0.13736361581832168,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "grass",
+          "probability": 0.25227436125278474,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "24",
+      "direction": "regression",
+      "reference": "A",
+      "cot_answer": "A",
+      "faithact_answer": "None of the given options can be confirmed as the color of the traffic lights in the image",
+      "question": "Question: What color is the nearest set of traffic lights in this scene?\nOptions:\nA. Red\nB. Green\nC. Yellow\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The nearest set of traffic lights in the image can be identified as the ones located further down the road, closer to the center of the image. These lights appear to be emitting a red glow.\n\nStep 2: Reasoning: The traffic lights in the foreground are not visible due to the angle and distance from the camera. However, the traffic lights further down the road are clearly visible and emit a red glow. This suggests that the nearest set of traffic lights (which are not directly visible but inferred from the context) would also be red.\n\nStep 3: Answer: A. Red",
+      "faithact_raw": "1. traffic lights: The image shows traffic lights in the distance, but their colors are not clearly visible due to the lighting conditions and the distance.\n\n2. Based on the options provided (Red, Green, Yellow), we cannot definitively determine the color of the traffic lights in the image.\n\nThus, the correct answer is: None of the given options can be confirmed as the color of the traffic lights in the image.",
+      "tool_called": true,
+      "boxes_in_prompt": false,
+      "nouns": [
+        {
+          "noun": "traffic lights",
+          "probability": 0.2556774660944938,
+          "detected_box_count": 3,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "25",
+      "direction": "correction",
+      "reference": "B",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: How many garages does the first building on our right have?\nOptions:\nA. 7\nB. 8\nC. 9\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The first building on the right side of the image is a multi-story structure with a row of garage doors along its front facade. These garage doors are evenly spaced and appear to be part of a single unit.\n\nStep 2: Reasoning: By closely examining the image, we can count the number of garage doors visible on the first building on the right. There are four garage doors clearly visible in the foreground, and there appears to be an additional set of three garage doors partially obscured behind them. Therefore, the total number of garage doors is seven.\n\nStep 3: Answer: A. 7",
+      "faithact_raw": "1. garage: The image shows a building on the right side with multiple garage doors. By counting the visible garage doors, there appear to be 8 doors in total.\n\n2. doors: The bounding box provided indicates the presence of doors, which aligns with the count of garage doors.\n\nThus, the correct answer is B. 8.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "garage",
+          "probability": 0.43327087163925165,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "doors",
+          "probability": 0.1275016122497618,
+          "detected_box_count": 9,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "28",
+      "direction": "correction",
+      "reference": "B",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: How many pedestrians are there in the image?\nOptions:\nA. 0\nB. 1\nC. 2\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe region of interest for identifying pedestrians is the sidewalk on both sides of the street, as well as any areas where people might be visible.\n\nStep 2: Reasoning\n- On the left side of the image, there are no visible pedestrians on the sidewalk.\n- On the right side of the image, there is one person standing near the building, but they appear to be stationary and not actively walking or moving.\n- There are no other visible pedestrians in the image.\n\nStep 3: Answer\nA. 0",
+      "faithact_raw": "1. The image shows a street scene with parked cars on both sides of the road.\n2. There is a person visible on the right side of the image, standing near a car.\n3. The person appears to be a pedestrian based on their position and posture.\n\nThus, the correct answer is B. 1.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "image",
+          "probability": 0.15586101971566674,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "sidewalk",
+          "probability": 0.22978555113077162,
+          "detected_box_count": 3,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "person",
+          "probability": 0.7731504917144775,
+          "detected_box_count": 2,
+          "shown_box_count": 2
+        },
+        {
+          "noun": "building",
+          "probability": 0.23996180966496466,
+          "detected_box_count": 4,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "32",
+      "direction": "regression",
+      "reference": "B",
+      "cot_answer": "B",
+      "faithact_answer": "A",
+      "question": "Question: What color are the numbers on the ground?\nOptions:\nA. blue\nB. white\nC. red\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The region of interest is the area where the numbers are located on the ground, which appears to be a painted marking on the highway.\n\nStep 2: Reasoning: Observing the image, the numbers on the ground are clearly visible and appear to be white in color. They are part of a painted marking that includes the number \"4\" and other characters, which are typically used for lane identification or traffic guidance.\n\nStep 3: Answer: B. white",
+      "faithact_raw": "1. The numbers on the ground are blue.\n2. The marking is a number \"4\".\n\nThus, the final answer is A. blue.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "numbers",
+          "probability": 0.19465027898550033,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "ground",
+          "probability": 0.2669817261397839,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "marking",
+          "probability": 0.17184814400970935,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "number",
+          "probability": 0.16587654054164885,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "4",
+          "probability": 0.4191963553428649,
+          "detected_box_count": 2,
+          "shown_box_count": 2
+        },
+        {
+          "noun": "characters",
+          "probability": 0.17331313174217938,
+          "detected_box_count": 5,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "34",
+      "direction": "regression",
+      "reference": "B",
+      "cot_answer": "B",
+      "faithact_answer": "A",
+      "question": "Question: How many vehicles are stopping in the lane to our left?\nOptions:\nA. 2\nB. 3\nC. 4\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe relevant region in the image is the left lane, where we can see several vehicles stopped at a traffic light. The traffic light is red, indicating that vehicles should stop.\n\nStep 2: Reasoning\n- There is one vehicle directly ahead in the left lane.\n- Behind this vehicle, there are two more vehicles visible, also stopped at the traffic light.\n\nStep 3: Answer\nThe total number of vehicles stopping in the lane to the left is 3.\n\nFinal answer: B. 3",
+      "faithact_raw": "1. The image shows a road scene with multiple vehicles and traffic lights.\n2. There are cars visible on the road, including a white car and a blue car in the foreground.\n3. The traffic lights are positioned at various points along the road, indicating different lanes and directions.\n4. The vehicles appear to be stopped at a red light, as indicated by their positions and the traffic lights' colors.\n\nThus, there are 2 vehicles stopping in the lane to the left of the viewer's perspective.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "vehicle",
+          "probability": 0.6969272375106811,
+          "detected_box_count": 16,
+          "shown_box_count": 16
+        },
+        {
+          "noun": "traffic light",
+          "probability": 0.3006387799978256,
+          "detected_box_count": 7,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "vehicles",
+          "probability": 0.598420512676239,
+          "detected_box_count": 17,
+          "shown_box_count": 17
+        },
+        {
+          "noun": "lane",
+          "probability": 0.17532457336783408,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "35",
+      "direction": "correction",
+      "reference": "A",
+      "cot_answer": "B",
+      "faithact_answer": "A",
+      "question": "Question: Should I stop right now?\nOptions:\nA. No.\nB. Yes, there is pedestrian crossing ahead\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe relevant region in the image is the intersection where the road lines indicate a pedestrian crossing. There is a visible crosswalk with white stripes, which typically indicates a pedestrian crossing area.\n\nStep 2: Reasoning\nGiven that there is a pedestrian crossing ahead, it is generally advisable to stop at an intersection to ensure the safety of pedestrians. The presence of the crosswalk suggests that pedestrians may be crossing or waiting to cross, and stopping would allow for their safe passage.\n\nStep 3: Answer\nB. Yes, there is pedestrian crossing ahead",
+      "faithact_raw": "1. pedestrian: The presence of a pedestrian does not necessarily mean you should stop immediately. Pedestrians can be unpredictable, but they are not directly in the path of the vehicle in this image.\n\n2. intersection: There is an intersection visible in the image, which typically requires caution. However, the pedestrian is not in the crosswalk, and there are no other vehicles in the immediate vicinity that would require stopping.\n\n3. crosswalk: The crosswalk is present, but it appears to be empty at the moment. There is no indication that a pedestrian is crossing or about to cross the street.\n\nGiven these observations, the most appropriate action is:\n\nA. No.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "pedestrian",
+          "probability": 0.5615794569253921,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "crossing",
+          "probability": 0.2792645066976547,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "intersection",
+          "probability": 0.23830979615449904,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "crosswalk",
+          "probability": 0.24438055008649825,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "40",
+      "direction": "correction",
+      "reference": "A",
+      "cot_answer": "C",
+      "faithact_answer": "A",
+      "question": "Question: Which box is the third largest?\nOptions:\nA. The white lense wipe box is the third largest.\nB. The box in the back is the third largest.\nC. The grey box is the third largest.\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\n- The image shows three boxes of different sizes on a wooden floor.\n- The largest box is in the back, with dimensions labeled as \"12x9x4\".\n- The second largest box is in front of the largest one, smaller than it but larger than the smallest box.\n- The smallest box is in the foreground, with a white label and a blue lid.\n\nStep 2: Reasoning\n- The largest box is clearly the one in the back.\n- The second largest box is the one in front of the largest box.\n- The smallest box is the one in the foreground.\n\nStep 3: Answer\nC. The grey box is the third largest.",
+      "faithact_raw": "1. The large brown box in the background appears to be the largest object in the image.\n2. The smaller brown box in front of the large brown box is the second largest.\n3. The white box with the ZEISS logo on it is the third largest.\n\nThus, the correct answer is A. The white lense wipe box is the third largest.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "box",
+          "probability": 0.8107069194316863,
+          "detected_box_count": 5,
+          "shown_box_count": 5
+        }
+      ]
+    },
+    {
+      "id": "45",
+      "direction": "correction",
+      "reference": "C",
+      "cot_answer": "B",
+      "faithact_answer": "C",
+      "question": "Question: How many pedestrians are there within 50 meters from us?\nOptions:\nA. 3\nB. 5\nC. 7 or more\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe region of interest for this question is the area around the vehicle in the foreground, specifically within a 50-meter radius. This includes the sidewalk and crosswalk areas where pedestrians might be present.\n\nStep 2: Reasoning\n- In the immediate vicinity of the vehicle, there are several pedestrians visible on the sidewalk and crossing the street.\n- Counting the pedestrians within this 50-meter radius:\n  - One pedestrian is standing near the \"Paris Baguette\" sign.\n  - Two pedestrians are near the center of the image, closer to the middle of the street.\n  - Another pedestrian is further down the sidewalk on the right side of the image.\n  - There are additional pedestrians further away, but they are not within the 50-meter radius.\n\nStep 3: Answer\nBased on the visible pedestrians within the 50-meter radius, the count is 5.\n\nFinal answer: B. 5",
+      "faithact_raw": "1. pedestrian: The bounding box for pedestrians is present in the image, indicating their presence.\n2. sign: There are signs visible in the image, but they do not provide specific information about the number of pedestrians.\n\nThus, based on the bounding box evidence for pedestrians, the final answer is C.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "pedestrian",
+          "probability": 0.7028478443622589,
+          "detected_box_count": 16,
+          "shown_box_count": 16
+        },
+        {
+          "noun": "sign",
+          "probability": 0.20121595710515977,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "street",
+          "probability": 0.38848752677440646,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "pedestrians",
+          "probability": 0.4834265351295471,
+          "detected_box_count": 18,
+          "shown_box_count": 18
+        }
+      ]
+    },
+    {
+      "id": "47",
+      "direction": "correction",
+      "reference": "B",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: How many pedestrians are there?\nOptions:\nA. 1\nB. 2\nC. 3\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe relevant region in the image is the area near the center, where pedestrians can be seen. There is one person visible walking on the sidewalk.\n\nStep 2: Reasoning\n- The image shows a street scene with buildings on both sides.\n- There is a pedestrian crossing the street, which is clearly visible.\n- No other pedestrians are visible in the image.\n\nStep 3: Answer\nA. 1",
+      "faithact_raw": "1. Pedestrian: There is one pedestrian visible on the sidewalk near the center of the image, walking away from the camera.\n\n2. Pedestrian: There is another pedestrian further down the street, closer to the bus stop area.\n\nThus, the final answer is B. 2.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "street",
+          "probability": 0.29865661859512327,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "buildings",
+          "probability": 0.4328947752714157,
+          "detected_box_count": 4,
+          "shown_box_count": 4
+        },
+        {
+          "noun": "pedestrian",
+          "probability": 0.7587507903575896,
+          "detected_box_count": 2,
+          "shown_box_count": 2
+        }
+      ]
+    },
+    {
+      "id": "49",
+      "direction": "regression",
+      "reference": "A",
+      "cot_answer": "A",
+      "faithact_answer": "related to the question \"What color is the nearest set of traffic lights?\" is that it cannot be determined from the image provided",
+      "question": "Question: What color is the nearest set of traffic lights?\nOptions:\nA. Red\nB. Green\nC. Yellow\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The nearest set of traffic lights is located on the left side of the image, near the center. It is partially obscured by darkness but appears to be emitting a red light.\n\nStep 2: Reasoning: The traffic light is illuminated with a red light, which is typically used to signal vehicles to stop. The other options (green and yellow) are not visible or indicated by the light in the image.\n\nStep 3: Answer: A. Red",
+      "faithact_raw": "1. The image shows a nighttime scene at an intersection with cars and traffic lights visible.\n2. There are multiple traffic lights present, but their colors cannot be determined due to the low lighting conditions.\n3. The vehicles in the image are partially visible, with one car in the foreground and others further away.\n4. The traffic lights do not provide enough information to determine their specific colors.\n\nThus, the final answer related to the question \"What color is the nearest set of traffic lights?\" is that it cannot be determined from the image provided.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "traffic light",
+          "probability": 0.5190363526344299,
+          "detected_box_count": 5,
+          "shown_box_count": 5
+        },
+        {
+          "noun": "red light",
+          "probability": 0.43417031764984126,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "vehicles",
+          "probability": 0.5615238606929779,
+          "detected_box_count": 8,
+          "shown_box_count": 8
+        }
+      ]
+    },
+    {
+      "id": "53",
+      "direction": "regression",
+      "reference": "B",
+      "cot_answer": "B",
+      "faithact_answer": "There is no stove in the image",
+      "question": "Question: Where is the stove located?\nOptions:\nA. The stove is to the left of the boxes.\nB. The stove is inbetween the stack of boxes and refrigerator.\nC. The stove is in front of the boxes.\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The region of interest for the stove's location is the area between the stack of boxes and the refrigerator, as these objects are clearly visible in the image.\n\nStep 2: Reasoning: \n- The stack of boxes is on the left side of the image.\n- The refrigerator is on the right side of the image.\n- There is an object that appears to be a stove or oven between the stack of boxes and the refrigerator. It is partially covered with a cardboard box, but its shape and position suggest it is a stove.\n\nStep 3: Answer: B. The stove is inbetween the stack of boxes and refrigerator.",
+      "faithact_raw": "1. Stove: There is no stove visible in the image. The objects present are boxes, a refrigerator, and what appears to be a large appliance (possibly a washer or dryer) wrapped in protective material. None of these match the description of a stove.\n\n2. Boxes: The boxes are stacked on the left side of the room. They are clearly visible and do not obstruct any potential location for a stove.\n\n3. Refrigerator: The refrigerator is located on the right side of the room. It is a large appliance with a freezer compartment on top, which is typical for refrigerators.\n\nGiven the analysis, there is no stove in the image. Therefore, the correct answer cannot be determined from the provided options as none of them match the actual content of the image.\n\nThus, the final answer is: There is no stove in the image.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "stack",
+          "probability": 0.7047704100608825,
+          "detected_box_count": 4,
+          "shown_box_count": 4
+        },
+        {
+          "noun": "boxes",
+          "probability": 0.7894259989261626,
+          "detected_box_count": 3,
+          "shown_box_count": 3
+        },
+        {
+          "noun": "refrigerator",
+          "probability": 0.6809623777866363,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "stove",
+          "probability": 0.33120866119861603,
+          "detected_box_count": 0,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "56",
+      "direction": "regression",
+      "reference": "B",
+      "cot_answer": "B",
+      "faithact_answer": "C",
+      "question": "Question: How far from the camera is the leftmost vehicle?\nOptions:\nA. 20 meters\nB. 60 meters\nC. 100 meters\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The leftmost vehicle in the image is a dark-colored sedan located on the left side of the road, closer to the left edge of the frame compared to other vehicles.\n\nStep 2: Reasoning: To estimate the distance of the leftmost vehicle from the camera, we need to consider the perspective and scale of the image. The image appears to be taken from a moving vehicle or a stationary position at a moderate distance from the road. The leftmost vehicle is clearly visible but not extremely close, suggesting it's within a reasonable range that would be typical for a street scene captured with a standard lens.\n\nGiven the options provided:\n- A. 20 meters: This is too close, as the vehicle is clearly visible and identifiable.\n- B. 60 meters: This seems plausible as it is a common distance for a vehicle to be visible in a street scene.\n- C. 100 meters: This is too far, as the vehicle would likely appear much smaller and less detailed.\n\nStep 3: Answer: B. 60 meters",
+      "faithact_raw": "1. The image shows a street scene with multiple vehicles and buildings. The vehicles are at varying distances from the camera, but the leftmost vehicle is clearly visible and identifiable as a car.\n\n2. The leftmost vehicle is positioned on the left side of the road, closer to the camera compared to other vehicles further down the road.\n\n3. Based on the relative positions and the perspective of the image, the leftmost vehicle appears to be approximately 100 meters away from the camera.\n\nThus, the correct answer is:\nC. 100 meters",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "vehicle",
+          "probability": 0.661940586566925,
+          "detected_box_count": 9,
+          "shown_box_count": 9
+        },
+        {
+          "noun": "camera",
+          "probability": 0.08531044200062751,
+          "detected_box_count": 0,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "image",
+          "probability": 0.14420379055663943,
+          "detected_box_count": 3,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "road",
+          "probability": 0.3275884911417961,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "65",
+      "direction": "correction",
+      "reference": "C",
+      "cot_answer": "B",
+      "faithact_answer": "C",
+      "question": "Question: Are these bars the same height?\nOptions:\nA. The bar in the front is higher than the bar in the back of the photo.\nB. The bar in the back of the photo is higher than the bar in the front.\nC. The bars are parallel and are the same height.\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The region of interest in the image is the horizontal bars supported by wooden posts. These bars appear to be at different heights relative to each other.\n\nStep 2: Reasoning:\n- The bar in the foreground (closer to the camera) appears to be lower than the bar in the background (further from the camera).\n- The shadows cast by the bars also suggest that the bar in the background is higher, as its shadow is longer and more pronounced compared to the shorter shadow of the bar in the foreground.\n\nStep 3: Answer: B. The bar in the back of the photo is higher than the bar in the front.",
+      "faithact_raw": "1. bar: The bars appear to be parallel and at the same height, as there is no visible difference in their alignment or spacing.\n\n2. shadow: The shadow cast by the bars is consistent with the bars being parallel and at the same height, as it extends straight across the ground without any noticeable distortion.\n\nThus, C. The bars are parallel and are the same height.",
+      "tool_called": true,
+      "boxes_in_prompt": false,
+      "nouns": [
+        {
+          "noun": "bar",
+          "probability": 0.3536744803190231,
+          "detected_box_count": 3,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "shadow",
+          "probability": 0.2358254075050354,
+          "detected_box_count": 7,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "68",
+      "direction": "regression",
+      "reference": "B",
+      "cot_answer": "B",
+      "faithact_answer": "A",
+      "question": "Question: How many pedestrians can be found within 45 meters of the camera?\nOptions:\nA. 0\nB. 1\nC. 2\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe region of interest for this question is the area around the camera, specifically within a 45-meter radius. This includes the road, sidewalks, and any visible pedestrians.\n\nStep 2: Reasoning\n- The camera is positioned on the road, facing forward.\n- There is one pedestrian visible on the left side of the image, standing near the sidewalk.\n- No other pedestrians are visible within the 45-meter radius from the camera's perspective.\n\nStep 3: Answer\nBased on the grounded evidence, there is only one pedestrian within 45 meters of the camera.\n\nFinal answer: B. 1",
+      "faithact_raw": "1. The image shows a street scene with a pedestrian crossing the road.\n2. There is a person wearing a high-visibility jacket standing near the crosswalk, holding a stop sign.\n3. The camera's bounding box indicates the presence of pedestrians on the sidewalk, but they are not directly in front of the camera.\n\nGiven these observations, there are no pedestrians within 45 meters of the camera.\n\nThus, the correct answer is:\nA. 0",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "camera",
+          "probability": 0.14660732746124266,
+          "detected_box_count": 0,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "road",
+          "probability": 0.4147071272134781,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "pedestrian",
+          "probability": 0.7327569246292114,
+          "detected_box_count": 5,
+          "shown_box_count": 5
+        },
+        {
+          "noun": "sidewalk",
+          "probability": 0.32384865283966063,
+          "detected_box_count": 3,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "70",
+      "direction": "correction",
+      "reference": "A",
+      "cot_answer": "B",
+      "faithact_answer": "A",
+      "question": "Question: Which traffic light is relevant to us?\nOptions:\nA. The red left arrow\nB. The red circle\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The relevant region for determining which traffic light is relevant to us is the area where the traffic lights are located, specifically focusing on the one that controls the direction we are interested in.\n\nStep 2: Reasoning: \n- The image shows multiple traffic lights at an intersection.\n- We need to identify which traffic light controls the direction we are interested in. Since the question asks about a specific traffic light (either the red left arrow or the red circle), we should focus on those two options.\n- The red left arrow typically indicates that vehicles can turn left if the light is green, but it does not control the straight path.\n- The red circle is universally recognized as a stop sign, indicating that vehicles must come to a complete stop regardless of their intended direction.\n\nStep 3: Answer: B. The red circle",
+      "faithact_raw": "1. red left arrow: The red left arrow traffic light is located at the top of the image, near the center. It is part of the traffic signal system at the intersection.\n\n2. red circle: The red circle traffic light is also located at the top of the image, near the center. It is another part of the traffic signal system at the intersection.\n\nThus, both the red left arrow and the red circle traffic lights are relevant to the question. However, since the question asks for one specific traffic light, we need to choose between them. In this case, the red left arrow is more directly related to the direction of the vehicles in the image, as it controls the left turn lane.\n\nTherefore, the correct answer is:\nA. The red left arrow",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "traffic light",
+          "probability": 0.6669560134410858,
+          "detected_box_count": 9,
+          "shown_box_count": 9
+        },
+        {
+          "noun": "red left arrow",
+          "probability": 0.13790670260787008,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "red circle",
+          "probability": 0.3211628720164299,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "72",
+      "direction": "correction",
+      "reference": "A",
+      "cot_answer": "C",
+      "faithact_answer": "A",
+      "question": "Question: Which side of the black truck is open?\nOptions:\nA. The right side\nB. The left side\nC. Both sides\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The black truck is located on the right side of the image, facing towards the left. It appears to be a moving truck with a visible logo on its side.\n\nStep 2: Reasoning: The truck's side that is open cannot be determined from the image because the angle at which the photo was taken does not provide a clear view of the truck's side profile. The truck could be a box truck or a flatbed truck, both of which can have their sides open depending on the type of load they are carrying. Without a clearer view of the truck's side, it is impossible to determine which side is open.\n\nStep 3: Answer: Based on the given options and the information available in the image, it is not possible to determine which side of the black truck is open. Therefore, the correct answer is:\n\nC. Both sides",
+      "faithact_raw": "1. The image shows a street scene with vehicles parked on both sides of the road.\n2. There is a black truck visible on the right side of the image.\n3. The truck appears to have its rear door open, as there is no visible cargo or items inside the open area.\n\nThus, the final answer is: A. The right side.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "truck",
+          "probability": 0.8330991804599761,
+          "detected_box_count": 3,
+          "shown_box_count": 3
+        },
+        {
+          "noun": "side",
+          "probability": 0.2164229765534401,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "box truck",
+          "probability": 0.7309491634368895,
+          "detected_box_count": 3,
+          "shown_box_count": 3
+        },
+        {
+          "noun": "flatbed truck",
+          "probability": 0.7423462599515914,
+          "detected_box_count": 2,
+          "shown_box_count": 2
+        }
+      ]
+    },
+    {
+      "id": "76",
+      "direction": "regression",
+      "reference": "A",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: Which is closer?\nOptions:\nA. The stop sign\nB. The speed limit sign\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\n- The stop sign is located on the right side of the image, near the edge of the road.\n- The speed limit sign is also on the right side but further back from the stop sign, closer to the center of the image.\n\nStep 2: Reasoning\n- The stop sign is positioned closer to the foreground of the image compared to the speed limit sign.\n- The stop sign is more prominently visible and appears larger due to its proximity to the camera's perspective.\n\nStep 3: Answer\nA. The stop sign",
+      "faithact_raw": "1. Stop sign: The stop sign is located on the right side of the image, near the parked cars. It is further away from the camera's perspective compared to the speed limit sign.\n\n2. Speed limit sign: The speed limit sign is also on the right side of the image, but it is positioned closer to the camera than the stop sign.\n\nThus, the speed limit sign is closer.",
+      "tool_called": true,
+      "boxes_in_prompt": false,
+      "nouns": [
+        {
+          "noun": "stop sign",
+          "probability": 0.281085841357708,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "speed limit sign",
+          "probability": 0.24966298341751098,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "80",
+      "direction": "regression",
+      "reference": "A",
+      "cot_answer": "A",
+      "faithact_answer": "None of the given options (A, B, C) can be selected based on the image content",
+      "question": "Question: What color is the nearest set of traffic lights?\nOptions:\nA. Red\nB. Green\nC. Yellow\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The nearest set of traffic lights is located on the left side of the image, near the center. It appears to be illuminated with a red light.\n\nStep 2: Reasoning: The traffic light is positioned at an intersection where vehicles would typically stop. Given its position and the context of the image, it is reasonable to infer that the light is functioning as a stop signal for approaching traffic. The illumination suggests it is red, which is the standard color for a stop signal in traffic lights.\n\nStep 3: Answer: A. Red",
+      "faithact_raw": "1. The image shows a nighttime street scene with parked cars on both sides of the road.\n2. There are no visible traffic lights in the image; the area appears to be illuminated by streetlights.\n3. The vehicles are stationary, as indicated by their parked positions along the curb.\n\nGiven these observations, it's not possible to determine the color of the nearest set of traffic lights since they are not present in the image. Therefore, the correct answer cannot be determined from the provided information.\n\nThus, the final answer is: None of the given options (A, B, C) can be selected based on the image content.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "traffic light",
+          "probability": 0.22308057248592375,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "intersection",
+          "probability": 0.2013500042259693,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "vehicles",
+          "probability": 0.5591032326221466,
+          "detected_box_count": 20,
+          "shown_box_count": 20
+        },
+        {
+          "noun": "stop signal",
+          "probability": 0.2191404566168785,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        },
+        {
+          "noun": "red",
+          "probability": 0.7486514806747436,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        }
+      ]
+    },
+    {
+      "id": "83",
+      "direction": "regression",
+      "reference": "B",
+      "cot_answer": "B",
+      "faithact_answer": "C",
+      "question": "Question: How many red traffic lights are visible?\nOptions:\nA. 3\nB. 2\nC. 1\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe region of interest in the image is the area where traffic lights are located, which can be seen on the left side of the intersection and near the center of the image.\n\nStep 2: Reasoning\n- On the left side of the image, there is one traffic light that appears to be red.\n- Near the center of the image, there is another traffic light that also appears to be red.\n- No other red traffic lights are visible in the rest of the image.\n\nStep 3: Answer\nThe correct answer is B. 2.",
+      "faithact_raw": "1. traffic light: There is one red traffic light visible at the intersection of Sunset Street.\n\n2. traffic light: There are no other red traffic lights visible in the image.\n\nThus, the final answer is C. 1.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "traffic light",
+          "probability": 0.6108220875263214,
+          "detected_box_count": 5,
+          "shown_box_count": 5
+        }
+      ]
+    },
+    {
+      "id": "86",
+      "direction": "correction",
+      "reference": "B",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: How many pedestrians are there within 30 meters?\nOptions:\nA. 1\nB. 2\nC. 3\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe region of interest for this question is the sidewalk on the right side of the image, as it is where pedestrians would typically be found. The area within 30 meters from the center of the image (where the truck is located) includes the sidewalk and part of the crosswalk.\n\nStep 2: Reasoning\n- There is one person clearly visible walking on the sidewalk to the right of the image.\n- No other pedestrians are visible within the 30-meter radius from the center of the image.\n\nStep 3: Answer\nA. 1",
+      "faithact_raw": "1. The image shows a street scene with vehicles and pedestrians.\n2. There is one person visible on the sidewalk on the right side of the image.\n3. No other pedestrians are visible within 30 meters of the person on the sidewalk.\n\nThus, the correct answer is:\nB. 1",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "person",
+          "probability": 0.8018238484859466,
+          "detected_box_count": 2,
+          "shown_box_count": 2
+        },
+        {
+          "noun": "sidewalk",
+          "probability": 0.3119411677122116,
+          "detected_box_count": 1,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "88",
+      "direction": "regression",
+      "reference": "A",
+      "cot_answer": "A",
+      "faithact_answer": "related to the question \"What color is the nearest set of traffic lights in this scene?\" is not determinable based on the provided information",
+      "question": "Question: What color is the nearest set of traffic lights in this scene?\nOptions:\nA. Red\nB. Green\nC. Yellow\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The nearest set of traffic lights in the image can be identified as the ones located further down the road, closer to the center of the image. These traffic lights are partially obscured by trees but are still visible enough to determine their color.\n\nStep 2: Reasoning: Observing the traffic lights, they appear to be emitting a red light. This can be inferred from the typical appearance of red traffic lights, which often have a distinct red glow or illumination that stands out against the surroundings.\n\nStep 3: Answer: A. Red",
+      "faithact_raw": "1. The image shows a street scene with multiple traffic lights visible.\n2. The traffic lights are located at various points along the road, but their colors cannot be determined from the image alone due to the grayscale filter applied to the photo.\n3. The red light option is listed as one of the possible answers, but without being able to see the actual colors of the traffic lights, it's impossible to confirm if they are red.\n\nThus, the final answer related to the question \"What color is the nearest set of traffic lights in this scene?\" is not determinable based on the provided information.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "traffic lights",
+          "probability": 0.4302076190710067,
+          "detected_box_count": 7,
+          "shown_box_count": 7
+        },
+        {
+          "noun": "red light",
+          "probability": 0.19977809339761732,
+          "detected_box_count": 2,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "89",
+      "direction": "regression",
+      "reference": "A",
+      "cot_answer": "A",
+      "faithact_answer": "C",
+      "question": "Question: How many usb-c ports are there?\nOptions:\nA. There is one usb-c port.\nB. There are three usb-c ports.\nC. There are two usb-c ports.\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The image shows a close-up of a device with various ports. The relevant region for the question is the left side of the device, where the USB-C ports are located.\n\nStep 2: Reasoning: Upon examining the image, there is one USB-C port visible on the left side of the device. This can be identified by its distinct shape and the symbol next to it, which is the standard USB-C symbol.\n\nStep 3: Answer: A. There is one USB-C port.",
+      "faithact_raw": "1. USB-C: The image shows one USB-C port on the device.\n\n2. Port: The image also shows another port that appears to be a USB-C port based on its shape and position next to the USB-A port.\n\nThus, the correct answer is:\nC. There are two USB-C ports.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "USB-C",
+          "probability": 0.8014417886734009,
+          "detected_box_count": 2,
+          "shown_box_count": 2
+        },
+        {
+          "noun": "port",
+          "probability": 0.5345305562019348,
+          "detected_box_count": 2,
+          "shown_box_count": 2
+        }
+      ]
+    },
+    {
+      "id": "90",
+      "direction": "correction",
+      "reference": "A",
+      "cot_answer": "C",
+      "faithact_answer": "A",
+      "question": "Question: Where the the mitten relative to the rack?\nOptions:\nA. The mitten is directly next to the rack.\nB. The mitten is on top of the rack.\nC. The mitten is at the bottom of the rack.\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The mitten is located above the rack, and they are both placed on a marble surface. The mitten appears to be positioned slightly to the left of the center of the image, while the rack is centered but below the mitten.\n\nStep 2: Reasoning: Based on the spatial arrangement, the mitten is not directly next to the rack (Option A). It is also not on top of the rack (Option B), as it is clearly above the rack. Therefore, the only remaining option is that the mitten is at the bottom of the rack (Option C).\n\nStep 3: Answer: The mitten is at the bottom of the rack.",
+      "faithact_raw": "1. mitten: The mitten is located at the top of the image, positioned horizontally and appears to be folded over itself. Its bounding box indicates it is placed on a surface.\n\n2. rack: The rack is located below the mitten, also horizontally aligned. It is a circular metal grid and its bounding box shows it is on the same surface as the mitten.\n\nGiven these observations, the mitten is directly next to the rack.\n\nThus, the correct answer is A. The mitten is directly next to the rack.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "mitten",
+          "probability": 0.856600821018219,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "rack",
+          "probability": 0.7316495358943939,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        }
+      ]
+    },
+    {
+      "id": "92",
+      "direction": "regression",
+      "reference": "A",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: are the vehicles facing left?\nOptions:\nA. Yes\nB. No\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The region of interest in the image is the area where the vehicles are located, which appears to be on the right side of the image, facing towards the left side of the frame.\n\nStep 2: Reasoning: The vehicles are positioned such that their fronts are oriented towards the left side of the image. This can be inferred from the direction in which the headlights and the general orientation of the vehicles' bodies point.\n\nStep 3: Answer: A. Yes",
+      "faithact_raw": "1. The image shows a street scene at night with buildings and parked cars.\n2. There are no visible vehicles facing left in the image; instead, there are parked cars on the right side of the street.\n3. The headlights of the parked cars are not clearly visible due to the nighttime setting and the image quality.\n\nThus, the final answer is B. No.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "vehicles",
+          "probability": 0.5348994493484497,
+          "detected_box_count": 3,
+          "shown_box_count": 3
+        },
+        {
+          "noun": "headlights",
+          "probability": 0.5226923942565918,
+          "detected_box_count": 3,
+          "shown_box_count": 3
+        }
+      ]
+    },
+    {
+      "id": "99",
+      "direction": "correction",
+      "reference": "B",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: How many cars are on the right hand side?\nOptions:\nA. 2\nB. 3\nC. 4\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The region of interest for the question is the right-hand side of the image, which includes the area from the center-right edge towards the far right edge of the image.\n\nStep 2: Reasoning:\n- On the right-hand side, there are two distinct vehicles visible. One is closer to the foreground, and the other is further back.\n- There are no additional vehicles that can be clearly identified beyond these two.\n\nStep 3: Answer: A. 2",
+      "faithact_raw": "1. There are two cars visible on the right-hand side of the image.\n2. The third car is partially obscured by the fourth car.\n\nThus, the correct answer is:\nB. 3",
+      "tool_called": true,
+      "boxes_in_prompt": false,
+      "nouns": [
+        {
+          "noun": "vehicles",
+          "probability": 0.3135474354028701,
+          "detected_box_count": 9,
+          "shown_box_count": 0
+        }
+      ]
+    },
+    {
+      "id": "100",
+      "direction": "correction",
+      "reference": "B",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: In what direction are the pedestrians ahead crossing?\nOptions:\nA. Left to right.\nB. Right to left.\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\nThe pedestrians in the image are located near the center of the street, slightly to the left side from the perspective of the camera. They appear to be moving towards the right side of the frame.\n\nStep 2: Reasoning\nGiven that the pedestrians are positioned on the left side of the street and are moving towards the right side of the frame, they are crossing from left to right.\n\nStep 3: Answer\nA. Left to right.",
+      "faithact_raw": "1. Pedestrians: The pedestrians appear to be crossing the street from the right side towards the left side of the image. This indicates they are moving from right to left.\n\n2. Street: The street is a two-lane road with a clear division line, and there are no vehicles obstructing the pedestrian crossing.\n\nThus, the final answer is B. Right to left.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "pedestrians",
+          "probability": 0.47674113512039185,
+          "detected_box_count": 3,
+          "shown_box_count": 3
+        },
+        {
+          "noun": "street",
+          "probability": 0.40491841137409207,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        }
+      ]
+    },
+    {
+      "id": "108",
+      "direction": "correction",
+      "reference": "A",
+      "cot_answer": "B",
+      "faithact_answer": "A",
+      "question": "Question: Which book is facing the wrong way?\nOptions:\nA. The first book on the left is facing the wrong way.\nB. The red book is facing the wrong way.\nC. All of the books pictured are facing the same direction.\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding: The region of interest in the image is the top shelf of the bookcase, where several books are stacked vertically. The books are aligned such that their spines are visible, and one book appears to be slightly tilted or out of alignment with the others.\n\nStep 2: Reasoning: \n- The first book on the left (Option A) is not facing the wrong way; its spine is aligned with the others.\n- The red book (Option B) is not facing the wrong way either; it is also aligned with the other books.\n- The last book on the right (Option C) is the only one that appears to be slightly tilted or out of alignment with the others. This suggests that it might be facing the wrong way relative to the others.\n\nStep 3: Answer: B. The red book is facing the wrong way.",
+      "faithact_raw": "1. The first book on the left is facing the wrong way because its spine is not aligned with the other books on the shelf.\n\n2. The red book is not facing the wrong way; it is aligned with the other books.\n\n3. Not all of the books pictured are facing the same direction. The first book on the left is facing the wrong way, while the others are aligned.\n\nThus, A. The first book on the left is facing the wrong way.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "book",
+          "probability": 0.5569433957338332,
+          "detected_box_count": 9,
+          "shown_box_count": 9
+        }
+      ]
+    },
+    {
+      "id": "113",
+      "direction": "correction",
+      "reference": "B",
+      "cot_answer": "A",
+      "faithact_answer": "B",
+      "question": "Question: Which vehicle is closer to us, the school bus or the black SUV?\nOptions:\nA. School bus\nB. Black SUV\nC. They are at the same distance\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\n- The school bus is on the left side of the image.\n- The black SUV is on the right side of the image.\n- Both vehicles are on the road, and their relative positions can be observed based on their proximity to the camera's perspective.\n\nStep 2: Reasoning\n- The school bus appears larger in the image compared to the black SUV, which suggests it is closer to the camera.\n- The school bus is also positioned more prominently in the foreground, further indicating its proximity.\n- The black SUV is slightly further back in the scene, as evidenced by the perspective and the fact that it is smaller in the frame.\n\nStep 3: Answer\nA. School bus",
+      "faithact_raw": "1. The school bus is located on the left side of the image and is further away from the camera compared to the black SUV.\n2. The black SUV is positioned more towards the center of the image and appears to be closer to the camera than the school bus.\n\nThus, the black SUV is closer to us.",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "school bus",
+          "probability": 0.40280908048152925,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        },
+        {
+          "noun": "black SUV",
+          "probability": 0.5289534270763397,
+          "detected_box_count": 1,
+          "shown_box_count": 1
+        }
+      ]
+    },
+    {
+      "id": "114",
+      "direction": "regression",
+      "reference": "B",
+      "cot_answer": "B",
+      "faithact_answer": "A",
+      "question": "Question: Is the camera further from the pickup truck nearest to us than the truck that's closest to us?\nOptions:\nA. Yes\nB. No\nPlease select the correct answer from the options above.  \n",
+      "cot_raw": "Step 1: Grounding\n- The image shows two trucks, one on the left side of the road and one on the right side of the road. The truck on the right is closer to the camera as it appears larger and more detailed compared to the truck on the left.\n\nStep 2: Reasoning\n- The truck on the right is positioned closer to the camera because it is smaller in the frame and less detailed, indicating it is farther away. Conversely, the truck on the left is larger and more detailed, suggesting it is closer to the camera.\n\nStep 3: Answer\nB. No",
+      "faithact_raw": "1. The pickup truck nearest to us is the one on the right side of the image, which is a Jeep Tundra.\n2. The truck that's closest to us is the one on the left side of the image, which is a white delivery truck.\n\nThe camera appears to be further from the pickup truck (Jeep Tundra) than the truck that's closest to us (white delivery truck). This can be inferred from the perspective and size of the vehicles in the image, where the pickup truck looks smaller and more distant compared to the white delivery truck.\n\nThus, the correct answer is:\nA. Yes",
+      "tool_called": true,
+      "boxes_in_prompt": true,
+      "nouns": [
+        {
+          "noun": "truck",
+          "probability": 0.46765251159667964,
+          "detected_box_count": 6,
+          "shown_box_count": 6
+        }
+      ]
+    }
+  ],
+  "timing_note": "FaithAct total includes cached initial-CoT cost when recorded by run.py; incremental time measures this FaithAct execution. Missing timings are not zeros."
+}

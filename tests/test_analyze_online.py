@@ -128,6 +128,16 @@ class AnalyzeOnlineTests(unittest.TestCase):
         self.assertEqual(detail['initial_unavailable_reason'],'public_question_unavailable')
         self.assertFalse(detail['gain'])
 
+    def test_evidence_first_uses_recorded_direct_anchor_for_paired_changes(self):
+        row = {'id':'0','question':QUESTION,'reference':'B','answer':'B','correct':True,
+               'controller_protocol':'evidence_first_v5_ground_then_commit',
+               'anchor_answer':'A','trace':[audit(None)]}
+        detail = diagnose_row(row)
+        self.assertEqual(detail['initial_answer_source'],'tentative_direct_anchor')
+        self.assertEqual(detail['initial_answer'],'A')
+        self.assertFalse(detail['initial_correct'])
+        self.assertTrue(detail['gain'])
+
 
 if __name__ == '__main__':
     unittest.main()

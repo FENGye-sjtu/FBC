@@ -29,7 +29,8 @@ def main():
         print('START_JOB', job.name, flush=True)
         try:
             # Never reload during an active job. Existing manifests pin code hashes.
-            for module in ('core','answers','prompts','qwen','online','online_repair','run'):
+            for module in ('core','answers','prompts','qwen','online','online_repair',
+                           'evidence_first','faithact','format_adapter','run'):
                 loaded = importlib.import_module('trainingfree.'+module)
                 importlib.reload(loaded)
             from .run import main as run

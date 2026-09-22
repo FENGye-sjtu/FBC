@@ -6,6 +6,15 @@ failures. Inspect STATUS.md and the server worker result before submitting.
 
 Current sequence on 2026-09-22:
 
+Update after the historical list below was written: full layout-v5 and the
+released-GCoT/released-FaithAct 128-pair are complete; see `STATUS.md` for the
+measured scores. Parser v4 adds only the audited Markdown-bold final-marker
+recovery on top of v3. The active BF16 queue is job 003b (paper-appendix
+FaithAct), followed by 003c, V16 validation and V18 evidence-first validation.
+The NF4 queue finishes the old V17 CF trace before the new V18 16-case gate.
+Later bullets mentioning jobs still running/no result are retained as historical
+launch-time state, not current status.
+
 - The old BF16 sequence is complete: reasoned-v2 FaithAct plus the three 128-case
   prompt comparisons. Brief-v4 is 89/128 correct with 34 inspectable outputs;
   adaptive-v4 is 80/128 with 121 valid labels and 69 inspectable outputs;

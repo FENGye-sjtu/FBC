@@ -45,6 +45,10 @@ class EmptyQuestionTests(unittest.TestCase):
         fixed = sanitize_evidence_question(original, QUESTION)
         self.assertEqual(fixed.evidence_question, 'Which direction does the wheel face?')
         self.assertNotIn('Left', fixed.evidence_question)
+        suffixed = sanitize_evidence_question(
+            Step('The light is red.', evidence_question='What color is the light? It is red.'),
+            QUESTION)
+        self.assertEqual(suffixed.evidence_question, 'What color is the light?')
         self.assertEqual(fixed.verification, 'candidate')
         deduction = sanitize_evidence_question(
             Step('A conditional inference.', kind='deduction', evidence_question=' \n'), QUESTION)

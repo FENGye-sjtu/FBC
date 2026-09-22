@@ -94,7 +94,8 @@ def main(argv=None, shared=None):
     p.add_argument('--max-pixels', type=int, default=1003520)
     p.add_argument('--max-steps', type=int, default=6)
     p.add_argument('--cot-style', choices=['reasoned_v2','grounded_concise_v3','preserve_select_v3',
-                                         'evidence_brief_v4','evidence_adaptive_v4','evidence_layout_v5'],
+                                         'evidence_brief_v4','evidence_adaptive_v4','evidence_layout_v5',
+                                         'faithact_gcot_official','faithact_paper_cot_literal'],
                    default='reasoned_v2')
     p.add_argument('--repairs', type=int, choices=range(4), default=3)
     p.add_argument('--initial-style', choices=['full','compact_v1'], default='full',
@@ -108,8 +109,15 @@ def main(argv=None, shared=None):
     p.add_argument('--dino')
     p.add_argument('--poll-checkpoint')
     p.add_argument('--tool-device', default='cpu')
+    p.add_argument('--faithact-box-threshold', type=float, default=.25,
+                   help='Released Qwen script uses .25; paper Sec. 5.1 reports .35')
+    p.add_argument('--faithact-text-threshold', type=float, default=.20,
+                   help='Released Qwen script uses .20; paper Sec. 5.1 reports .25')
     p.add_argument('--standardize-faithact-output',action='store_true',
                    help='Append common answer format; this is a declared controlled-comparison variant')
+    p.add_argument('--faithact-prompt', choices=['released_code','paper_appendix'],
+                   default='released_code',
+                   help='Keep the released-code and paper-appendix refinement protocols separate')
     p.add_argument('--cot-cache', type=Path,
                    help='Completed CoT JSONL to reuse for FaithAct (recorded and hashed in manifest)')
     args = p.parse_args(argv)
@@ -120,12 +128,18 @@ def main(argv=None, shared=None):
             p.error('--tool-device auto requires a dedicated tool GPU from queue_bf16')
     methods = args.methods.split(',')
     if not set(methods) <= {'direct', 'cot', 'faithact', 'online', 'online_cf',
-                            'online_repair', 'online_cf_repair'}:
+                            'online_repair', 'online_cf_repair',
+                            'evidence_first', 'evidence_first_cf'}:
         p.error('Unknown method')
     if 'faithact' in methods and not all([args.upstream, args.clip, args.dino, args.poll_checkpoint]):
         p.error('FaithAct requires upstream, clip, dino and poll-checkpoint')
     if 'faithact' in methods:
-        from .faithact import FaithAct  # Freeze class source now; instantiate tools lazily.
+        # The resident queue predates some protocol variants. Reload explicitly
+        # at the job boundary, never during an active case, then transplant the
+        # lightweight class logic onto any already-loaded frozen tools below.
+        import importlib
+        faithact_module = importlib.reload(importlib.import_module('trainingfree.faithact'))
+        FaithAct = faithact_module.FaithAct
     args.output.mkdir(parents=True, exist_ok=True)
     manifest = {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()}
     manifest['dataset_sha256'] = hashlib.sha256(args.dataset.read_bytes()).hexdigest()
@@ -183,13 +197,28 @@ def main(argv=None, shared=None):
     for method in methods:
         if method == 'faithact':
             if 'faithact' not in shared:
-                shared['faithact'] = FaithAct(vlm, args.upstream, args.clip, args.dino, args.poll_checkpoint, args.tool_device)
+                shared['faithact'] = FaithAct(vlm, args.upstream, args.clip, args.dino,
+                                              args.poll_checkpoint, args.tool_device,
+                                              args.faithact_box_threshold,
+                                              args.faithact_text_threshold,
+                                              prompt_protocol=args.faithact_prompt)
             faithact = shared['faithact']
+            # The resident worker reuses heavy frozen tools across sequential
+            # jobs; the protocol remains job-scoped and is captured in manifest.
+            faithact.__class__ = FaithAct
+            faithact.prompt_protocol = args.faithact_prompt
+            faithact.box_threshold = args.faithact_box_threshold
+            faithact.text_threshold = args.faithact_text_threshold
         result_path = args.output/(method+'.jsonl')
         prior = [json.loads(s) for s in result_path.read_text(encoding='utf-8').splitlines()] if result_path.exists() else []
         done = {str(r['id']) for r in prior}
         records = list(prior)
-        if method in ('online_repair', 'online_cf_repair'):
+        if method in ('evidence_first', 'evidence_first_cf'):
+            from .evidence_first import EvidenceFirstOnlineRepair
+            backend = EvidenceFirstOnlineRepair(
+                vlm, method == 'evidence_first_cf', args.support, args.specificity,
+                initial_style=args.initial_style, repair_style=args.repair_style)
+        elif method in ('online_repair', 'online_cf_repair'):
             from .online_repair import OnlineRepair
             backend = OnlineRepair(vlm, method == 'online_cf_repair', args.support, args.specificity,
                                    initial_style=args.initial_style, repair_style=args.repair_style)
@@ -209,7 +238,7 @@ def main(argv=None, shared=None):
                         image_path = (args.image_root or args.dataset.parent)/image_path
                     image = Image.open(image_path).convert('RGB')
                     question = case['question']
-                    if method.startswith('online'):
+                    if method.startswith('online') or method.startswith('evidence_first'):
                         with (args.output/'events.jsonl').open('a',encoding='utf-8') as events:
                             def emit(event):
                                 events.write(json.dumps({'id':case['id'],'method':method,
@@ -218,6 +247,10 @@ def main(argv=None, shared=None):
                             record = solve(backend, image, question, args.max_steps, args.repairs, on_event=emit)
                             if getattr(backend, 'last_finalization', None):
                                 record['finalization'] = backend.last_finalization
+                            if method.startswith('evidence_first'):
+                                record['controller_protocol'] = backend.protocol_version
+                                record['anchor_raw'] = backend.anchor_raw
+                                record['anchor_answer'] = backend.anchor_answer
                     elif method == 'direct':
                         record = {'raw': vlm.generate(image, question+'\nReturn only the concise answer.'), 'status': 'direct'}
                     else:

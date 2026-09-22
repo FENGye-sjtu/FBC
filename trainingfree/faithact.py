@@ -8,6 +8,35 @@ import importlib.util
 import inspect
 import os
 from pathlib import Path
+import re
+
+
+PAPER_APPENDIX_REFINEMENT = '''Question: {question}
+
+Model Response: {original}
+
+Additional location information:
+
+{evidence}
+
+Use only objects marked as present with high confidence, and avoid objects
+marked as absent. Do not introduce new objects or descriptions. Do not repeat
+confidence scores or bounding boxes in the reasoning. Revise the response to
+be consistent with the verified visual evidence. Think step by step, formatting
+each step as "<number>.<object>:<analysis>" with a blank line between steps.
+Finish with "Thus, <final answer related to the question>".'''
+
+
+def refinement_prompt(template, protocol, question, original, descriptions):
+    """Build declared FaithAct protocols without silently mixing paper and code."""
+    evidence = '\n'.join(descriptions)
+    if protocol == 'released_code':
+        return template.TEMPLATE_EOT.format(question, evidence) if descriptions else question
+    if protocol == 'paper_appendix':
+        question = re.sub(r'^\s*Question\s*:\s*', '', question, flags=re.I)
+        return PAPER_APPENDIX_REFINEMENT.format(
+            question=question, original=original, evidence=evidence or '(No verified object evidence.)')
+    raise ValueError(f'Unknown FaithAct refinement protocol: {protocol}')
 
 
 def module_from_file(name, path):
@@ -19,7 +48,7 @@ def module_from_file(name, path):
 
 class FaithAct:
     def __init__(self, vlm, upstream, clip_path, dino_path, checkpoint, tool_device='cpu',
-                 box_threshold=.25, text_threshold=.20):
+                 box_threshold=.25, text_threshold=.20, prompt_protocol='released_code'):
         import torch
         from transformers import AutoProcessor, AutoModelForZeroShotObjectDetection, CLIPProcessor, CLIPConfig, CLIPModel
         checkpoint = Path(checkpoint)
@@ -53,6 +82,7 @@ class FaithAct:
         self.dino = AutoModelForZeroShotObjectDetection.from_pretrained(dino_path).to(tool_device).eval()
         self.dino.requires_grad_(False)
         self.box_threshold, self.text_threshold = box_threshold, text_threshold
+        self.prompt_protocol = prompt_protocol
 
     def inspect(self, image, noun):
         inputs = self.dino_processor(images=image, text=noun+'.', return_tensors='pt').to(self.device)
@@ -76,6 +106,11 @@ class FaithAct:
             description += f'Object exists with probability {probability}. '
         elif probability >= .4:
             description += f'Object may exist with probability {probability}. '
+        elif self.prompt_protocol == 'paper_appendix':
+            # Algorithm 1 records Abstain() results, whereas the released Qwen
+            # script emits only a bare noun.  Make that paper-only state
+            # explicit so the appendix instruction can actually avoid it.
+            description += f'Object is marked absent with combined confidence {probability}. '
         if probability >= .4:
             description += ' '.join(f'{i+1}.bbox: {box}' for i, box in enumerate(boxes))
         return description, {'noun': noun, 'poll': clip_prob, 'ground': scores,
@@ -105,10 +140,12 @@ class FaithAct:
             descriptions.append(description)
             evidence.append(record)
         question = question.replace('Please answer directly with only the letter of the correct option and nothing else.', '')
-        prompt = self.template.TEMPLATE_EOT.format(question, '\n'.join(descriptions)) if descriptions else question
+        prompt = refinement_prompt(self.template, self.prompt_protocol, question, original, descriptions)
         try:
             output = self.vlm.generate(image, prompt)
         except RuntimeError as exc:
             raise RuntimeError(f'FaithAct final VLM call failed: {exc}') from exc
         return {'raw': output, 'original_cot': original, 'evidence': evidence,
-                'extraction_errors': extraction_errors, 'status': 'faithact_port'}
+                'extraction_errors': extraction_errors,
+                'status': 'faithact_port_' + self.prompt_protocol,
+                'refinement_protocol': self.prompt_protocol}

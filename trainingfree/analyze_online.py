@@ -68,7 +68,8 @@ def diagnose_row(row, case=None):
     trace = row.get('trace') or []
     initial_event = first_attempt(trace)
     initial_candidate = initial_event.get('candidate') or {}
-    initial_raw = initial_candidate.get('final_answer')
+    initial_raw = (row.get('anchor_answer') if row.get('controller_protocol','').startswith('evidence_first_')
+                   else initial_candidate.get('final_answer'))
     initial_answer, initial_correct = score_text(initial_raw, question, reference)
     initial_unavailable_reason = None
     if not question:
@@ -127,6 +128,9 @@ def diagnose_row(row, case=None):
     return {
         'id':case_id, 'status':row.get('status',''), 'reference':reference,
         'initial_raw_answer':initial_raw, 'initial_answer':initial_answer,
+        'initial_answer_source':('tentative_direct_anchor' if
+                                 row.get('controller_protocol','').startswith('evidence_first_')
+                                 else 'first_step_candidate'),
         'initial_answer_missing': initial_correct is None, 'initial_correct':initial_correct,
         'initial_unavailable_reason':initial_unavailable_reason,
         'initial_attempt':initial_event.get('attempt'), 'initial_step':initial_event.get('step'),

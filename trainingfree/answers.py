@@ -9,7 +9,7 @@ import re
 import unicodedata
 
 
-PARSER_VERSION = 'committed_answer_v3'
+PARSER_VERSION = 'committed_answer_v4'
 _LABEL = r'[A-E]'
 _NUMBER_WORDS = dict(zip(
     'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen '
@@ -347,7 +347,7 @@ def _extract_v2(text, question=''):
 
 
 def extract_answer(text, question=''):
-    """Add one terminal-format recovery to v2 without revising valid labels.
+    """Add reference-blind formatting recoveries without semantic guessing.
 
     Already parsed public choice labels are immutable under this extension.
     Only unresolved v2 outputs with no strong final-answer field are eligible.
@@ -356,9 +356,23 @@ def extract_answer(text, question=''):
     """
     previous = _extract_v2(text, question)
     choices = choices_from_question(question)
-    if previous in choices or not choices or text is None:
+    if not choices or text is None:
         return previous
     original = str(text).strip()
+    # Some generations bold only the marker (``**Final Answer**: B``).  The
+    # closing Markdown delimiter used to sit between ``answer`` and ``:``, so
+    # a marker at the end of a long rationale was invisible to v2/v3.  Remove
+    # only that delimiter and replay the same parser; no option or reference
+    # content is consulted by this formatting-only recovery.
+    normalized_marker = re.sub(
+        r'(?i)(\bfinal\s+(?:answer|choice|option))\s*(?:\*\*|__)+\s*([:=])',
+        r'\1\2', original)
+    if normalized_marker != original:
+        recovered = _extract_v2(normalized_marker, question)
+        if recovered in choices:
+            return recovered
+    if previous in choices:
+        return previous
     events = _events(original)
     if events:
         _, strength, selected = max(events, key=lambda event: (event[1], event[0]))

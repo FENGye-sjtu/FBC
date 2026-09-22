@@ -54,7 +54,7 @@ class AnswerTests(unittest.TestCase):
             self.assertEqual(raw_answer(row), value)
 
     def test_v3_weak_conclusion_with_complete_terminal_option(self):
-        self.assertEqual(PARSER_VERSION, 'committed_answer_v3')
+        self.assertEqual(PARSER_VERSION, 'committed_answer_v4')
         question = ('If I stay in this lane, where do I end up?\n'
                     'A. Highway 1\nB. Highway 95\nC. Highway 280')
         for text in ('Thus, if you stay in this lane, you will end up on:\n\nB. Highway 95',
@@ -134,6 +134,15 @@ class AnswerTests(unittest.TestCase):
         self.assertEqual(extract_answer('Final answer: A. blue', QUESTION), 'A')
         self.assertEqual(extract_answer('Final answer: (A) — blue', QUESTION), 'A')
         self.assertEqual(extract_answer('Final answer: A - blue', QUESTION), 'A')
+
+    def test_v4_bold_final_marker_after_long_reasoning(self):
+        raw = ('The scene contains many objects. Option A was considered, but the visible '
+               'evidence instead supports the negative response. ' * 8 +
+               '\n\n**Final Answer**: B. No')
+        self.assertEqual(extract_answer(raw, 'A. Yes\nB. No'), 'B')
+        # The explicit final commitment must also override an earlier label.
+        self.assertEqual(extract_answer('Answer: A\nCorrection.\n**Final Answer**: B. No',
+                                        'A. Yes\nB. No'), 'B')
 
     def test_no_ground_truth_or_reference_input(self):
         # A declared label is respected even if the option wording disagrees;

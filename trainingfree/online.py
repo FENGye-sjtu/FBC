@@ -57,6 +57,13 @@ def question_stem(question):
 def sanitize_evidence_question(step, question):
     """Give empty visual queries a stable budget key without rejecting the step."""
     query = step.evidence_question.strip()
+    # A structured decoder can still append an answer after a syntactically
+    # complete question ("What color is it? It is red").  Localization and
+    # evidence-budget identity must see only the neutral query, never that
+    # answer-bearing suffix.  Apply this at the shared boundary so specialized
+    # controllers cannot accidentally bypass the older caller-side cleanup.
+    if step.kind == 'visual' and '?' in query:
+        query = query.split('?', 1)[0].strip() + '?'
     if step.kind == 'visual' and not query:
         query = question_stem(question) or 'What relevant visual evidence is present?'
     return replace(step, evidence_question=query)

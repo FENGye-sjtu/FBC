@@ -1,0 +1,1410 @@
+{
+  "summary": {
+    "path": "/data_cinema/zqc/CVPR/runs/realworldqa_vlmevalkit_7b_nf4_pilot16_v18_evidence_first/evidence_first.jsonl",
+    "raw_sha256": "3edd171b90c12ff9bdd284873e9b306336102b0f33d1ca75e54576065f6c9bf3",
+    "dataset_sha256": "c873cd0f9e61f937834ad6e81964484d165ea6fb72243e788a2fdc26e0b8ad87",
+    "parser_version": "committed_answer_v4",
+    "completed_n": 16,
+    "scored_n": 16,
+    "correct": 8,
+    "accuracy": 0.5,
+    "stored_score_diagnostic": {
+      "n": 16,
+      "correct": 8,
+      "accuracy": 0.5
+    },
+    "final_score_source_counts": {
+      "reference_rescore": 16
+    },
+    "uncertain_n": 12,
+    "verified_n": 4,
+    "error_n": 0,
+    "status_counts": {
+      "answered_with_uncertainty": 12,
+      "verified_by_model": 4
+    },
+    "initial_answer_n": 16,
+    "initial_missing_n": 0,
+    "initial_correct": 9,
+    "initial_accuracy": 0.5625,
+    "paired_n": 16,
+    "paired_initial_correct": 9,
+    "paired_final_correct": 8,
+    "gains_ids": [],
+    "losses_ids": [
+      "3"
+    ],
+    "initial_missing_ids": [],
+    "stored_rescore_disagreement_ids": [],
+    "with_repairs_n": 13,
+    "mean_support": 0.7188243199553754,
+    "min_support": 0.02595735713839531,
+    "max_support": 0.9959298968315125,
+    "finalization_source_counts": {
+      "tentative_direct_anchor": 12,
+      "accepted_step": 4
+    },
+    "mean_latency_seconds": 108.79573257474112,
+    "mean_calls": 15.0625,
+    "trace_count_note": "Counts cover recorded trace events; failed or unlogged model calls cannot be reconstructed.",
+    "final_accuracy_protocol": "Re-score the shared source text with public cases and the current parser; saved booleans are diagnostic only.",
+    "reference_blind_extraction": true,
+    "audits": 73,
+    "repair_attempts": 28,
+    "repair_audits": 28,
+    "parse_errors": 0,
+    "uncertainty_commits": 2,
+    "cf_checks": 0,
+    "cf_target_masks": 0,
+    "cf_control_masks": 0,
+    "cf_mask_calls": 0,
+    "option_consistency_checks": 4,
+    "repeated_question_events": 6,
+    "repeated_events_total": 44,
+    "answer_withheld": 0,
+    "logged_readback_n": 11
+  },
+  "details": [
+    {
+      "id": "0",
+      "status": "answered_with_uncertainty",
+      "reference": "C",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 5,
+      "audit_status_counts": {
+        "inconclusive": 2,
+        "contradicted": 2,
+        "supported": 1
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 3,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.2018132209777832,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.10669060051441193,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.10669060051441193,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.3486451506614685,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.1909598931670189,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The front wheel of the car on the right side appears to be facing forward, as indicated by the alignment of the tire and the car's body position in the image frame. There is no obv",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "In which direction is the front wheel of the car on the right side facing?",
+          "inspection_box": [
+            0.8360714285714286,
+            0.38474489795918365,
+            1.0,
+            0.9277551020408162
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The front wheel of the car on the right side appears to be facing forward, as indicated by the alignment of the tire and the car's body position in the image frame. There is no obv",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "In which direction is the front wheel of the car on the right side facing?",
+          "inspection_box": [
+            0.8360714285714286,
+            0.38474489795918365,
+            1.0,
+            0.9277551020408162
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The front wheel of the car on the right side appears to be facing forward, as indicated by the alignment of the tire and the vehicle's body. There is no visible indication of the轮子",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "In which direction is the front wheel of the car on the right side facing?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 160.39661341300234,
+      "calls": 19
+    },
+    {
+      "id": "1",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 6,
+      "audit_status_counts": {
+        "supported": 3,
+        "inconclusive": 3
+      },
+      "repair_attempts": 2,
+      "has_repair": true,
+      "repair_audits": 2,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 4
+      },
+      "repeated_events_total": 4,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9940890073776245,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.9840936064720154,
+          "audit_status": "supported"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.9940890073776245,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9907572070757548,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 112.26845158799551,
+      "calls": 17
+    },
+    {
+      "id": "2",
+      "status": "verified_by_model",
+      "reference": "A",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 2,
+      "audit_status_counts": {
+        "supported": 2
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9959298968315125,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9959298968315125,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 24.044147948967293,
+      "calls": 6
+    },
+    {
+      "id": "3",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": true,
+      "audits": 2,
+      "audit_status_counts": {
+        "supported": 2
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9149009585380554,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9149009585380554,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 29.904375139973126,
+      "calls": 6
+    },
+    {
+      "id": "4",
+      "status": "verified_by_model",
+      "reference": "B",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 4,
+      "audit_status_counts": {
+        "supported": 3,
+        "inconclusive": 1
+      },
+      "repair_attempts": 1,
+      "has_repair": true,
+      "repair_audits": 1,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 1
+      },
+      "repeated_events_total": 1,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9953904151916504,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.9947799444198608,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9950851798057556,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 62.80359785200562,
+      "calls": 11
+    },
+    {
+      "id": "5",
+      "status": "verified_by_model",
+      "reference": "A",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 2,
+      "audit_status_counts": {
+        "supported": 2
+      },
+      "repair_attempts": 0,
+      "has_repair": false,
+      "repair_audits": 0,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 1,
+      "repeated_question_events": 0,
+      "repeated_events": {},
+      "repeated_events_total": 0,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9324532747268677,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9324532747268677,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "accepted_step",
+      "finalization": {},
+      "elapsed_seconds": 24.97182592190802,
+      "calls": 6
+    },
+    {
+      "id": "6",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 4,
+      "audit_status_counts": {
+        "supported": 2,
+        "inconclusive": 2
+      },
+      "repair_attempts": 1,
+      "has_repair": true,
+      "repair_audits": 1,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 4
+      },
+      "repeated_events_total": 4,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9796676635742188,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.851952850818634,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9158102571964264,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 94.96826256497297,
+      "calls": 13
+    },
+    {
+      "id": "7",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 4,
+      "audit_status_counts": {
+        "supported": 2,
+        "inconclusive": 2
+      },
+      "repair_attempts": 1,
+      "has_repair": true,
+      "repair_audits": 1,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 1,
+        "repeat_of_verified_question": 2
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9149009585380554,
+          "audit_status": "supported"
+        },
+        {
+          "step": 2,
+          "attempt": 0,
+          "value": 0.43782350420951843,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.43782350420951843,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.5968493223190308,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 130.52183967002202,
+      "calls": 16
+    },
+    {
+      "id": "8",
+      "status": "answered_with_uncertainty",
+      "reference": "C",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 7,
+      "audit_status_counts": {
+        "inconclusive": 5,
+        "supported": 2
+      },
+      "repair_attempts": 4,
+      "has_repair": true,
+      "repair_audits": 4,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 4
+      },
+      "repeated_events_total": 4,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.7057850360870361,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.6513549089431763,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.6513549089431763,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.9399133324623108,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.9399133324623108,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.777664303779602,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The dog is facing forward, looking directly at the camera.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "What direction is the dog facing?",
+          "inspection_box": [
+            0.26980952380952383,
+            0.13062717770034843,
+            0.7766190476190477,
+            0.7247735191637631
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The dog is facing forward, looking directly at the camera.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "What direction is the dog facing?",
+          "inspection_box": [
+            0.26980952380952383,
+            0.13062717770034843,
+            0.7766190476190477,
+            0.7247735191637631
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The dog is facing forward, looking towards the camera with its head turned slightly to the left side of the frame",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "What direction is the dog facing?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 175.2840450060321,
+      "calls": 24
+    },
+    {
+      "id": "9",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 9,
+      "audit_status_counts": {
+        "supported": 4,
+        "inconclusive": 4,
+        "contradicted": 1
+      },
+      "repair_attempts": 4,
+      "has_repair": true,
+      "repair_audits": 4,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 3,
+        "repeat_of_verified_question": 1
+      },
+      "repeated_events_total": 4,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.8933094143867493,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.8933094143867493,
+          "audit_status": "supported"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.8933094143867493,
+          "audit_status": "supported"
+        },
+        {
+          "step": 3,
+          "attempt": 1,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        },
+        {
+          "step": 4,
+          "attempt": 1,
+          "value": 0.02595735713839531,
+          "audit_status": "contradicted"
+        }
+      ],
+      "mean_support": 0.7046920083463192,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 190.9045314550167,
+      "calls": 25
+    },
+    {
+      "id": "10",
+      "status": "answered_with_uncertainty",
+      "reference": "A",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 6,
+      "audit_status_counts": {
+        "supported": 3,
+        "inconclusive": 3
+      },
+      "repair_attempts": 2,
+      "has_repair": true,
+      "repair_audits": 2,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 4
+      },
+      "repeated_events_total": 4,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9046505093574524,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.9046505093574524,
+          "audit_status": "supported"
+        },
+        {
+          "step": 2,
+          "attempt": 1,
+          "value": 0.9046505093574524,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9046505093574524,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 118.31561553198844,
+      "calls": 17
+    },
+    {
+      "id": "11",
+      "status": "answered_with_uncertainty",
+      "reference": "C",
+      "initial_raw_answer": "C",
+      "initial_answer": "C",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "C",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 4,
+      "audit_status_counts": {
+        "supported": 2,
+        "inconclusive": 2
+      },
+      "repair_attempts": 1,
+      "has_repair": true,
+      "repair_audits": 1,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 4
+      },
+      "repeated_events_total": 4,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.9875683188438416,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.9875683188438416,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.9875683188438416,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "C",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 81.71774100803304,
+      "calls": 13
+    },
+    {
+      "id": "12",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "B",
+      "initial_answer": "B",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": true,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "B",
+      "final_correct": true,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": true,
+      "final_rescored_correct": true,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 5,
+      "audit_status_counts": {
+        "inconclusive": 4,
+        "supported": 1
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 3,
+      "parse_errors": 0,
+      "uncertainty_commits": 1,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 3,
+      "repeated_events": {
+        "repeat_of_exhausted_question": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.6791787147521973,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.7310585379600525,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "value": 0.7310585379600525,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "value": 0.562176525592804,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.6758680790662766,
+      "answer_withheld": 0,
+      "logged_readback_n": 3,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The vehicle appears to be facing towards the right side of the frame based on the orientation of the tires and the angle of the boom arm extending forward and upward from the rear",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "Which direction is this vehicle facing?",
+          "inspection_box": [
+            0.0,
+            0.1719047619047619,
+            1.0,
+            0.9935714285714285
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 2,
+          "observation": "The vehicle appears to be facing towards the right side of the frame based on the orientation of the tires and the angle of the boom arm extending forward and upward from the rear",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 2,
+          "inspection_query": "Which direction is this vehicle facing?",
+          "inspection_box": [
+            0.0,
+            0.1719047619047619,
+            1.0,
+            0.9935714285714285
+          ],
+          "view": "full_plus_crop"
+        },
+        {
+          "step": 0,
+          "attempt": 3,
+          "observation": "The vehicle appears to be facing towards the left side of the image frame, as indicated by the orientation of the front wheels and the positioning of the cab relative to the frame.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 3,
+          "inspection_query": "Which direction is this vehicle facing?",
+          "inspection_box": [],
+          "view": "full"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "B",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 156.37545399495866,
+      "calls": 19
+    },
+    {
+      "id": "13",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 5,
+      "audit_status_counts": {
+        "inconclusive": 3,
+        "supported": 2
+      },
+      "repair_attempts": 2,
+      "has_repair": true,
+      "repair_audits": 2,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 4
+      },
+      "repeated_events_total": 4,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.7057850360870361,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.8354835510253906,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.851952850818634,
+          "audit_status": "supported"
+        }
+      ],
+      "mean_support": 0.7977404793103536,
+      "answer_withheld": 0,
+      "logged_readback_n": 1,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "The vehicle directly in front of us appears to be moving forward, as it is positioned on the road ahead of the crosswalk.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "Which direction is the vehicle directly in front of us traveling?",
+          "inspection_box": [
+            0.43775974025974024,
+            0.4334693877551021,
+            0.787077922077922,
+            0.6213775510204081
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 134.00541964394506,
+      "calls": 17
+    },
+    {
+      "id": "14",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 3,
+      "audit_status_counts": {
+        "supported": 1,
+        "inconclusive": 2
+      },
+      "repair_attempts": 1,
+      "has_repair": true,
+      "repair_audits": 1,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 1,
+        "repeat_of_verified_question": 2
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.6791787147521973,
+          "audit_status": "inconclusive"
+        }
+      ],
+      "mean_support": 0.7483765780925751,
+      "answer_withheld": 0,
+      "logged_readback_n": 0,
+      "readbacks": [],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 92.70704752102029,
+      "calls": 12
+    },
+    {
+      "id": "15",
+      "status": "answered_with_uncertainty",
+      "reference": "B",
+      "initial_raw_answer": "A",
+      "initial_answer": "A",
+      "initial_answer_source": "tentative_direct_anchor",
+      "initial_answer_missing": false,
+      "initial_correct": false,
+      "initial_unavailable_reason": null,
+      "initial_attempt": 0,
+      "initial_step": 0,
+      "final_answer": "A",
+      "final_correct": false,
+      "final_score_source": "reference_rescore",
+      "answer_source": "answer",
+      "stored_correct": false,
+      "final_rescored_correct": false,
+      "stored_rescore_disagreement": false,
+      "paired_initial_final": true,
+      "gain": false,
+      "loss": false,
+      "audits": 5,
+      "audit_status_counts": {
+        "inconclusive": 2,
+        "supported": 1,
+        "contradicted": 2
+      },
+      "repair_attempts": 3,
+      "has_repair": true,
+      "repair_audits": 3,
+      "parse_errors": 0,
+      "uncertainty_commits": 0,
+      "cf_checks": 0,
+      "cf_target_masks": 0,
+      "cf_control_masks": 0,
+      "cf_mask_calls": 0,
+      "option_consistency_checks": 0,
+      "repeated_question_events": 0,
+      "repeated_events": {
+        "repeat_of_verified_point": 3
+      },
+      "repeated_events_total": 3,
+      "support_scores": [
+        {
+          "step": 0,
+          "attempt": 0,
+          "value": 0.3775406777858734,
+          "audit_status": "inconclusive"
+        },
+        {
+          "step": 0,
+          "attempt": 1,
+          "value": 0.8175744414329529,
+          "audit_status": "supported"
+        },
+        {
+          "step": 1,
+          "attempt": 1,
+          "value": 0.13296423852443695,
+          "audit_status": "contradicted"
+        },
+        {
+          "step": 1,
+          "attempt": 2,
+          "value": 0.13296423852443695,
+          "audit_status": "contradicted"
+        }
+      ],
+      "mean_support": 0.36526089906692505,
+      "answer_withheld": 0,
+      "logged_readback_n": 1,
+      "readbacks": [
+        {
+          "step": 0,
+          "attempt": 1,
+          "observation": "One silver car is visible in the opposite lane, still driving.",
+          "remaining_question": "",
+          "evidence_complete": true,
+          "repair_round": 1,
+          "inspection_query": "How many cars are in the opposite lane that are still driving?",
+          "inspection_box": [
+            0.2237987012987013,
+            0.49765306122448977,
+            0.33301948051948055,
+            0.6056632653061225
+          ],
+          "view": "full_plus_crop"
+        }
+      ],
+      "finalization_source": "tentative_direct_anchor",
+      "finalization": {
+        "source": "tentative_direct_anchor",
+        "verification": "uncertain",
+        "answer": "A",
+        "policy": "preserve_anchor_when_no_deduction_passes"
+      },
+      "elapsed_seconds": 151.54275293601677,
+      "calls": 20
+    }
+  ]
+}

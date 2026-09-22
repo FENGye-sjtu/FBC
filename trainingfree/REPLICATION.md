@@ -12,6 +12,15 @@ Sources: user's FaithAct PDF; official upstream
 https://github.com/lijunxian111/Faithful-First-RPA at
 f0681f4c8d05fa415ee29f3906faa2bdcdf790ab.
 
+The release does contain an initial `TEMPLATE_GCOT`; the earlier shorthand that
+the initial prompt itself was absent was too broad. What is absent is the Qwen
+base-generation module/data path that would show how that template was applied.
+The released FaithAct script imports missing `qwen_inference.py`, reads a
+precomputed CoT file, and does not reference `TEMPLATE_GCOT` itself. The new
+protocol audit and queued runs therefore keep (a) the released GCOT + released
+refinement code and (b) the paper-appendix reconstruction as separate variants.
+See [prompt/protocol audit](reports/20260922_faithact_prompt_protocol_audit.md).
+
 ## What is actually matched
 
 - Official frozen Qwen2.5-VL-7B-Instruct checkpoint; unquantized BF16 run separate
@@ -205,7 +214,45 @@ and canonical-final VLMEvalKit 88/128. Preserve those raw-protocol results;
 do not present the normalized result as an unmodified official score.
 Some correct final labels contradict their own reasoning, so label recovery is
 not proof of reasoning faithfulness. The fresh full-765 V5 CoT/FaithAct queue is
-now running; its score remains pending.
+complete. V5 CoT scores 542/765 (70.85%) and released-template FaithAct scores
+510/765 (66.67%) under committed parser v4: 57 corrections, 89 regressions,
+net -32 (McNemar p=0.0101). Parser v3 reported 509 because it missed one
+Markdown-bold final marker; this is an extraction correction, not a model gain.
+Raw AGS is 125/765 (16.34%); raw VLMEvalKit is
+413/765 (53.99%); VLMEvalKit canonical-final is 510/765 (66.67%). Of 546 cases
+with box text, 379 correct CoT answers become 349 (40/70, p=0.00545); the 218
+tool cases without box text change 162 to 159. This is a completed negative
+result for our V5 + released-template reconstruction, not the result of the
+paper-appendix protocols still running separately.
+
+The released `TEMPLATE_GCOT` + released-code FaithAct pair is now complete on
+IDs 0–127. Both initial and rewritten outputs score 78/128 (60.94%) with the
+common parser: 17 corrections and 17 regressions (p=1.0). Direct on the same
+slice is 92/128. Initial GCoT scores 77 under AGS raw, 49 under VLMEvalKit raw
+and 78 after canonical-final normalization; rewritten FaithAct scores 16, 58
+and 78 respectively. The AGS collapse is caused by its raw regex's interaction
+with the released rewrite's common `Thus, the final answer is ...` syntax, not
+by 62 additional semantic errors. This completed pair does not reproduce the
+paper's 70.1/74.5 row and argues that `TEMPLATE_GCOT` is not the missing Table-2
+initial adapter.
+
+The Appendix-D-style reconstruction with the same cached GCoT also scores
+78/128. Versus the original GCoT it has one correction and one regression.
+It raises valid labels from the released rewrite's 116 to 125 and reduces
+unresolved MCQs from 12 to 3, but this is format/answer preservation rather than
+accuracy gain. Raw AGS/raw VL/canonical scores are 20/56/78. The only remaining
+prompt-matrix job is paper-literal `Think step by step.` plus released rewrite.
+
+The paper-literal pair is now complete. Initial CoT is 94/128 (73.44%), with
+126 valid labels and 128 inspectable interiors. Direct/layout-v5/released-GCoT
+on the same IDs are 92/90/78. Raw AGS/raw VL/canonical scores are 35/58/94.
+This validates the hypothesis that the terse initial instruction preserves
+Qwen task accuracy better than the released Grounded-CoT template; it remains a
+development-slice result. Released-code FaithAct falls to 87/128 (67.97%), with
+12 corrections and 19 regressions (net -7, p=0.2810). Raw AGS/raw VL/canonical
+for the rewrite are 24/69/87; all 128 use tools, 112 receive box text and 738
+noun inspections complete without changing the negative direction. This is the
+strongest open reconstruction baseline so far, but not paper parity.
 
 The current integration passes 125 focused tests. V12 was stopped after an empty
 visual-question field bypassed the exhausted-point key. V13 fills the missing

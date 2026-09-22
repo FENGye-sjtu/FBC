@@ -61,6 +61,24 @@ def cot_prompt(question, style='reasoned_v2'):
         return (task_question(question) + '\nReason step by step. Start with a short introduction, '
                 'separate numbered reasoning steps by blank lines, and finish with FINAL ANSWER: '
                 + answer_format(question))
+    if style == 'faithact_gcot_official':
+        # Released verbatim in FaithAct's template.py as TEMPLATE_GCOT.  Keep
+        # this separate from our layout prompts: it is the missing upstream
+        # initial-reasoning protocol, not a prompt tuned on our benchmark.
+        payload = re.sub(r'^\s*Question\s*:\s*', '', task_question(question), flags=re.I)
+        return (
+            '\nYou are a visual reasoning assistant.\n'
+            'Follow this process strictly:\n\n'
+            'Step 1. Grounding: Identify and describe the region(s) in the image relevant to the question.\n'
+            'Step 2. Reasoning: Use the grounded evidence to reason step by step.\n'
+            'Step 3. Answer: Provide your final concise answer.\n\n'
+            'Question: ' + payload + '\n'
+        )
+    if style == 'faithact_paper_cot_literal':
+        # Sec. 3.1 states that the raw chain is produced by prompting "think
+        # step by step". This is a separate paper-literal candidate; the
+        # release does not reveal the missing Qwen adapter that applied it.
+        return task_question(question) + '\nThink step by step.'
     if style == 'evidence_layout_v5':
         choices = choices_from_question(question)
         stem = re.sub(r'^\s*Question\s*:\s*', '', task_question(question), flags=re.I)

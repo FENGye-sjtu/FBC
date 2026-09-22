@@ -20,6 +20,13 @@ project; it neither changes its files nor interrupts its jobs.
   and candidate-independent answer-consistency scoring (not image CF).
 - `online_repair.py`: failure-only independent evidence rereading, with a
   neutral acquisition query and explicitly tentative best-supported fallback.
+- `evidence_first.py`: option-blind visual acquisition and repair followed by a
+  separate ledger-only deduction; a direct answer is retained only as an
+  explicitly uncertain no-regression anchor. V18 grounds the relevant region
+  before each atomic observation and permits an insufficient deduction to defer
+  its answer and acquire another verified fact instead of forcing an option.
+  V19 requires two distinct verified facts before changing a disagreeing direct
+  anchor and removes answer-bearing suffixes from localization questions.
 - `run.py`: same input/decoding settings across CoT, FaithAct, online, online-CF;
   declared CoT prompt variants, reference-blind conclusion/option extraction,
   per-case trace, latency/token counts, and resumable runs.
@@ -40,6 +47,12 @@ project; it neither changes its files nor interrupts its jobs.
 Latest fixed-output baseline: 541/765 (70.72%) with the unified parser;
 unmodified AGS remains 539/765 (70.46%). This is parsing recovery, not a model
 improvement. See `STATUS.md` and `reports/20260922_eval_repair_stage.md`.
+The completed released-GCoT/released-FaithAct 128-pair is 78/128 before and
+78/128 after; it does not reproduce the paper row. See
+`reports/20260922_faithact_prompt_protocol_audit.md` for prompt/evaluator causes.
+The paper-literal `Think step by step.` initial prompt is the strongest
+inspectable-chain candidate at 94/128 (73.44%) on the same development IDs; its
+paired released FaithAct rewrite drops to 87/128 (67.97%).
 
 The CF MVP uses image-mean masking (not learned causal interventions). Scores and
 thresholds are engineering defaults, not calibrated confidence or correctness
@@ -65,9 +78,10 @@ Known port choices that must be resolved before declaring paper parity:
 See `REPLICATION.md` for the complete known/unknown protocol checklist and
 `paper/positioning.md` for the distinction between FaithAct's paper and release.
 
-1. Upstream imports an absent `qwen_inference.py`; our adapter supplies the missing
-   model generation implementation. Original raw-CoT prompt/decoding not fully
-   released. Our prompt and deterministic decoding are recorded explicitly.
+1. Upstream does release `TEMPLATE_GCOT`, but the Qwen FaithAct script does not
+   call it: it imports an absent `qwen_inference.py` and reads precomputed CoT.
+   Our adapter supplies the missing generation path. Exact prompt application,
+   decoding and RealWorldQA evaluator remain unresolved and are recorded explicitly.
 2. Keep Qwen script thresholds 0.25/0.20; paper/Tools.py use 0.35/0.25. Do not hide
    this discrepancy or alter the reproduced baseline based on test accuracy.
 3. Share one frozen Qwen instance. The completed reasoned-v2 reconstruction kept

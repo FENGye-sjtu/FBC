@@ -155,6 +155,45 @@ original controller behavior and must not be relabeled as V16 results.
 
 Dependency-specific backtracking is future work, not a claimed implemented feature.
 
+### Implemented development variant: evidence_first (V19)
+
+V18 introduced the evidence/answer separation below; V19 keeps it and adds a
+conservative disagreement boundary. At a new example, the
+ordinary direct-answer prompt is run once and stored only as an unverified safety
+anchor. The visual proposal and every visual repair receive the question stem
+without answer choices and must return `final_answer=null`. After a visual claim
+passes the same support and optional localized-counterfactual gate, a distinct
+deduction call receives the labeled ledger and answer choices. Visual acquisition
+uses an explicit Grounding-to-Observation order inspired by FaithAct's released
+prompt, but emits only one atomic observation rather than a complete chain. The
+deduction schema no longer forces a premature option: it may return
+`final_answer=null` when verified premises do not yet distinguish the choices,
+which sends the controller forward to a new option-blind evidence point. A failed deduction
+returns control to a new option-blind evidence point rather than polishing the
+same conclusion. If no deduction passes within the ordinary step and three-repair
+budgets, the controller reports uncertainty and preserves the direct anchor; it
+does not label the anchor verified. This is a conservative no-regression policy,
+not evidence that the anchor is correct. All calls and the finalization source are
+logged. If a visual claim is explicitly negative (absence/negation), the controller records
+pixel deletion as non-identifying: deleting content cannot insert the missing
+positive instance needed to falsify an absence claim. That branch still requires
+the ordinary image support gate but skips spatial-deletion specificity; positive
+claims retain the CF gate. The protocol version records this selective rule.
+The first NF4-16 V17 online run (before exact-budget anchor logging and the two
+forward-progress fixes) is 8/16 versus matched direct 9/16, with zero gains and
+one invalid-anchor loss. Its completed CF arm is also 8/16 with the same sole
+loss and no gain; CF changes trace cost/status but no answer on this subset.
+The complete V18-online 16-case gate is 8/16 versus its exact direct anchor
+9/16, with zero gains and one loss (ID 3). That trace exposed a same-model correlated error: one visual impression,
+its support judgment and option rescoring all favored A while the correct direct
+anchor was B. V19 therefore requires two distinct verified visual facts before
+a deduction may overwrite a valid, different direct anchor. With only one fact,
+the claim may stay verified but its changed answer is withheld and the next step
+acquires another option-blind fact. It also strips any answer-bearing suffix after
+the first `?` in a generated evidence question. V18-CF was skipped after this
+diagnosis, and V19 is now running on the same spare-memory worker; it replaces
+V18 in the pending BF16-128 job. No gain is claimed before V19 finishes.
+
 ## Implementation and evaluation commitments
 
 One frozen Qwen2.5-VL instance performs proposal, localization, support scoring

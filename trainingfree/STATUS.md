@@ -72,6 +72,15 @@ records are preserved. These are development results, not benchmark gains.
 V7 used `max_pixels=200704`, whereas V9/V10 and the paired controls used
 `1003520`; differences between them cannot be attributed to the method alone.
 
+V16 is now complete on the same NF4 16-case development subset: online is
+9/16 and CF is 8/16. Online has 8 uncertain/8 model-verified finals; among 14
+valid first proposals it has zero gains and one loss (ID 7). CF has 9 uncertain/
+7 model-verified finals, zero gains and two losses (IDs 1/7), with 14 target
+mask checks and 42 total masked-image calls. The closed-question identity fix
+therefore repaired the controller budget but did not improve accuracy on this
+subset. See [online](reports/20260922_v16_online_diagnostics.json) and
+[CF diagnostics](reports/20260922_v16_online_cf_diagnostics.json).
+
 All three new BF16 prompt comparisons have completed on the same first 128
 development cases, using the same committed-answer parser:
 
@@ -119,6 +128,27 @@ are retained rather than replaced by the canonical result. See the [complete
 scorer suite](reports/20260922_parser_v3_layout_v5_faithact128_eval.json) and
 [FaithAct diagnostics](reports/20260922_layout_v5_faithact128_diagnostics.json).
 
+The full 765-case layout-v5 sequence is now complete. Its CoT is 542/765
+(70.85%); released-template FaithAct is 510/765 (66.67%) under parser v4,
+with 57 corrections, 89 regressions and net -32 (McNemar p=0.0101). Parser v3
+gave 509 because of one Markdown-bold marker miss; this is a fixed-output
+extraction correction, not a model gain. The 546 cases receiving box text
+change 379 to 349 (40 corrections/70 regressions, p=0.00545); 218 tool cases
+without box text change 162 to 159. Raw AGS scores 125/765 (16.34%), raw
+VLMEvalKit 413/765 (53.99%), and VLMEvalKit canonical-final 510/765 (66.67%).
+This is a negative result for our layout-v5 input plus the released rewrite,
+not the official-GCOT/paper-appendix runs that follow. See the historical
+[v3 scorer suite](reports/20260922_parser_v3_layout_v5_faithact_full765_eval.json)
+and [v4 paired diagnostics](reports/20260922_parser_v4_layout_v5_faithact_full765_diagnostics.json).
+
+The released `TEMPLATE_GCOT` candidate has completed all 128 pairs at 78/128
+before and 78/128 after FaithAct: 17 corrections and 17 regressions (p=1.0).
+All initial chains contain inspectable interiors. Initial AGS/raw-VL/canonical
+scores are 77/49/78; rewritten scores are 16/58/78. The same slice's direct
+baseline is 92/128, so this released Grounded-CoT prompt should not be mislabeled
+as the missing FaithAct Table-2 CoT protocol. See the
+[protocol audit](reports/20260922_faithact_prompt_protocol_audit.md).
+
 ## Active work
 
 - `runtime/queues/reasoned_bf16`: the released-template FaithAct run is complete.
@@ -132,11 +162,28 @@ scorer suite](reports/20260922_parser_v3_layout_v5_faithact128_eval.json) and
   committed at research milestones; see
   Git history for publication state.
 - `runtime/queues/layout_v5_bf16` has completed job 001 (cached development
-  FaithAct) and job 002 (IDs 128–255 CoT validation). Job 003 is now running
-  the full 765-case `cot,faithact` sequence. No full-layout-v5 score is complete.
-  Job 004, `7b_bf16_v16_online_validation128.json`, is queued afterward to run
-  V16 online and CF on the same 128 validation cases in BF16, not NF4. That
-  online validation job has not started and has no results yet.
+  FaithAct), job 002 (IDs 128–255 CoT validation), and job 003 (full 765-case
+  layout-v5 CoT/FaithAct). Job 003a (released `TEMPLATE_GCOT` + released
+  rewrite/0.25/0.20) and job 003b (same cached GCOT with Appendix-D-style
+  rewrite/0.35/0.25) are complete. Job 003c's paper Sec. 3.1 literal
+  `Think step by step.` initial CoT is complete at 94/128 (73.44%), versus
+  same-ID direct 92, layout-v5 90 and released GCoT 78. All 128 have inspectable
+  interiors; raw AGS/raw VL/canonical scores are 35/58/94. Its released-code
+  released-code FaithAct phase is complete at 87/128 (67.97%): 12 corrections,
+  19 regressions, net -7, p=0.2810. Raw AGS/raw VL/canonical scores are 24/69/87;
+  all 128 use tools, with 738 noun inspections and 112 cases receiving box text.
+  The released-GCOT/released-rewrite pair is now complete: 78/128 before and
+  78/128 after (17 corrections, 17 regressions, p=1.0), versus direct 92/128
+  on the same IDs. Initial raw AGS/raw VLMEval/canonical scores are 77/49/78;
+  rewritten scores are 16/58/78. The severe AGS raw drop is a known regex-format
+  mismatch with `Thus, the final answer is ...`, not the common task-accuracy
+  result. Therefore released GCOT is not assumed to be FaithAct's missing
+  initial adapter. The paper-appendix rewrite is also 78/128, with one
+  correction/one regression versus cached GCoT, valid labels 125/128, and raw
+  AGS/raw VL/canonical scores 20/56/78.
+  Job 004 then runs V16 online/CF;
+  job 005 now runs V19 evidence-first online/CF on the same IDs 128–255. None of
+  those BF16 jobs has a score yet.
 - The new queue reserves a separate GPU for FaithAct tools. At this launch the
   model weights use physical GPUs 1 and 0 (local CUDA 0 and 1), and tools use
   physical GPU 3 (local CUDA 2). `CVPR_GPU_BUDGETS_MIB` contains only the weight
@@ -146,30 +193,46 @@ scorer suite](reports/20260922_parser_v3_layout_v5_faithact128_eval.json) and
   mode. These GPU-tool runs have separate directories and provenance from the
   completed reasoned-v2 FaithAct run whose tools ran on CPU; they are distinct
   experimental outputs.
-- The existing `runtime/queues/v13_cf` worker has advanced to job 003, V15
-  `online_repair,online_cf_repair` on 16 cases. V15 retains compact initial
-  proposals, the original audits, and at most three repairs, while shortening
-  repair observations to 180 characters and claims to 140. Its online arm is
-  complete at 9/16; the CF arm is still running without a completed score.
-  These limits encourage brevity; they do not guarantee semantic atomicity.
-- Job 004, V16 (`7b_dev_v16_point_identity16.json`), is queued after V15 with
-  otherwise identical settings. Its controller change prevents a closed point's
-  same normalized evidence question from reopening merely by changing claim or
-  step kind. Closed query identities remain separate from verified evidence;
-  if query A fails and repair query B passes, A is closed with that point while
-  only B's supported claim enters the verified ledger. Failed aliases are never
-  registered as verified facts. This is a normalized-question identity rule,
-  not a guarantee of semantic paraphrase detection.
+- `runtime/queues/v13_cf` has completed V15, V16 and both V17 arms. V17 online
+  and CF are each 8/16 versus exact matched NF4 direct 9/16; both have zero
+  gains and one loss (ID 12), where its 64-token safety
+  anchor became invalid (`None`) while the matched direct output was correct B.
+  The queued BF16 protocol now uses the exact direct generation budget, records
+  anchor text/answer, advances after an answer-withheld deduction instead of
+  repeating it, and skips non-identifying pixel deletion for negative claims.
+  That old V17 fix has no BF16 score. Running V18
+  `evidence_first_v5_ground_then_commit` additionally borrows FaithAct's useful
+  Grounding-to-Observation ordering for each atomic fact and permits a deduction
+  to defer (`final_answer=null`) when the verified ledger is not yet sufficient,
+  instead of forcing a premature option. V17 stores a direct answer
+  only as an uncertain safe anchor, hides answer options from visual proposals
+  and repairs, and permits an answer only in a separate ledger-grounded deduction.
+  A failed deduction routes to a new option-blind evidence point. See the
+  [completed old-protocol online diagnostic](reports/20260922_v17_evidence_first_online_diagnostics.json).
+  V18 online is complete at 8/16 versus its exact direct anchor 9/16: zero gains
+  and one loss, ID 3. It has 12 uncertain/4 model-verified finals, 73 audits,
+  no runtime errors and mean latency 108.80 seconds. Its ID 3 trace exposed a correlated verifier
+  error that overwrote a correct direct anchor after only one visual fact. V19 is
+  queued next with two fixes: strip answer-bearing suffixes from neutral evidence
+  questions, and require two distinct verified visual facts before a deduction
+  may change a valid direct anchor. The duplicate old-queue V18 request was
+  marked superseded before it could write a second row. V19 replaces V18 in the
+  pending BF16 validation job on the same IDs. V18-CF was intentionally skipped
+  after the online diagnosis; V19 is now running on the independent spare-memory
+  worker instead of spending another arm on a superseded gate.
 - V12 was stopped after an empty visual-question field bypassed the exhausted-
   point key; its events are retained. V13 fills that missing key from the neutral
   public question and uses independent rereading during repair. It retains the
   highest-support tentative candidate under explicit uncertainty if needed.
   Scores across different claims are not calibrated probabilities. Both V13
   and V14 arms are now complete, as reported above.
-- Current scorer suites use the `reports/20260922_parser_v3_*_eval.json` prefix,
+- Existing scorer suites use the `reports/20260922_parser_v3_*_eval.json` prefix,
   with raw snapshots, per-case disagreements, and source hashes. They include
   the completed GPU-tool FaithAct and separate CoT validation slice. The V15
   and validation paired reports also record matched model/input budgets.
+  Parser v4 adds only a formatting recovery for a Markdown-bold terminal marker
+  such as `**Final Answer**: B`; fixed-output rescoring remains separate from
+  model/method gains.
 
 V10's option-likelihood check is answer consistency, not an image counterfactual.
 Localized image masking with control regions is the image-intervention component.
@@ -192,16 +255,22 @@ Official FaithAct port/checkpoint and all 765 original RealWorldQA cases are rea
 Implemented structured atomic steps, processed-image coordinate conversion,
 crop reacquisition, support/entailment gates, CF masking with matched controls,
 uncertain continuation, persistent workers, and explicit BF16 multi-GPU packing.
-125 integration tests pass, including the V16 closed-point regression checks.
+The last complete server integration sweep passed 125 tests. After the new
+FaithAct protocol and evidence-first changes, 71 directly affected controller,
+prompt, analyzer and core tests pass locally; the full sweep awaits the next
+milestone environment run because this Windows interpreter lacks PyTorch.
 Code snapshots and per-case records preserve experiment provenance.
-The current `committed_answer_v3` parser accepts clear final labels, structured
+The current `committed_answer_v4` parser accepts clear final labels, structured
 formats, affirmative embedded option labels, and uniquely matched public option
 wording while rejecting negated or ambiguous mentions. Reports use the shared
+parser source SHA256 `6d7c3d98c5ef949f73a9d982e2503f6cdcd79e89d81062c028247221856fcb8d` and the shared
 raw-source rule and record `parser_version`. Online diagnostics with public
 cases always re-score the original source; saved correctness is a separate
 diagnostic. Initial answers that are missing or invalid are excluded from
 correction gains. Apply the parser equally to all methods; never use reference
-labels as extraction input or rewrite the original generations.
+labels as extraction input or rewrite the original generations. V4 differs from
+v3 only by recognizing a Markdown-bold terminal marker before the colon; the
+historical v3 reports remain immutable.
 
 ## Historical engineering results (development only)
 
