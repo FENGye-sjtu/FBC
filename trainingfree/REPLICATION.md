@@ -93,7 +93,7 @@ converted benchmark expects option letters.
 Raw runs and evaluator records are under server paths
 `runs/realworldqa_vlmevalkit_7b_bf16_cot_v1` and `runs/eval_protocols`.
 An invalid FaithAct pass that reused these mostly direct outputs was stopped and
-preserved after 261 cases. The replacement reasoned CoT run completed with 141
+preserved after 269 cases. The replacement reasoned CoT run completed with 141
 of 765 outputs containing at least one blank-line interior step that FaithAct can
 inspect (mean 1.49 blank-line parts, maximum 7). It is 68.24% by the project
 parser and 68.37% by AGS. The released-template FaithAct job is now running on
