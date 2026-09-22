@@ -16,15 +16,19 @@ project; it neither changes its files nor interrupts its jobs.
 - `core.py`: tentative vs verified vs uncertain steps, three-round repair,
   uncertainty-aware continuation, final deduction audit and complete trace.
 - `online.py`: frozen VLM support scoring, separate deduction entailment, optional
-  independently localized box deletion versus two equal-area low-overlap controls.
+  independently localized box deletion versus two equal-area low-overlap controls,
+  and candidate-independent option-counterfactual scoring.
 - `run.py`: same input/decoding settings across CoT, FaithAct, online, online-CF;
-  per-case trace, latency/token counts, resumable runs, exact-match accuracy.
+  declared CoT prompt variants, reference-blind conclusion/option extraction,
+  per-case trace, latency/token counts, and resumable runs.
 - `prepare.py`, `queue.py`, `experiment.sh`: pinned asset preparation and one-shot
   resource-aware experiment launch under the authorized CVPR roots only.
 - `worker.py`: persistent frozen weights with controller reload between queued
   jobs; `queue_bf16.py` fits unquantized weights across spare GPU memory.
 - `report.py`: paired answer accuracy, actual CF executions, accepted repairs,
   uncertain continuation and reference-blind parser corrections from saved traces.
+- `compare.py`: the same parser and paired wins/losses across methods stored in
+  separate run folders, with raw paths and parser/dataset hashes.
 - `eval_protocols.py`: deterministic AGS JSONL conversion, pinned VLMEvalKit
   `can_infer` scoring, and exact RealWorldQA prompt-packaging materialization.
 
