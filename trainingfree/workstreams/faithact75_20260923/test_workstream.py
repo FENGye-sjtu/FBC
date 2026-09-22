@@ -7,6 +7,7 @@ from trainingfree.workstreams.faithact75_20260923.isolated_bf16_queue import sel
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v22 import has_inference_language
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v23 import EvidenceFirstBlindReadSemantic
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v24 import atomic_observation
+from trainingfree.workstreams.faithact75_20260923.evidence_first_v25 import observation_key
 from trainingfree.workstreams.faithact75_20260923.selective_faithact import choose
 
 
@@ -68,6 +69,12 @@ class SelectiveFaithActTest(unittest.TestCase):
             "The wheel visibly points left, indicating that the car may turn left"
         )
         self.assertEqual(value, "The wheel visibly points left.")
+
+    def test_blind_repair_deduplicates_image_suffix(self):
+        self.assertEqual(
+            observation_key("The wheel faces forward in the image."),
+            observation_key("The wheel faces forward."),
+        )
 
 
 if __name__ == "__main__":

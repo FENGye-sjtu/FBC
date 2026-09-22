@@ -40,7 +40,14 @@ class EvidenceFirstBlindRepair(EvidenceFirstBlindReadSemantic):
                 box=tuple(pending.get("box") or ()),
                 final_answer=None,
             )
-            self._reject_repeated_visual_claim(step, ledger)
+            claim_key = re.sub(r"\W+", " ", step.claim.lower()).strip()
+            if any(
+                item.kind == "visual"
+                and item.verification == "verified"
+                and re.sub(r"\W+", " ", item.claim.lower()).strip() == claim_key
+                for item in ledger
+            ):
+                raise ValueError("Blind repair repeats an already verified visual fact")
             self.last_blind_candidate = None
             self.last_candidate = step
             self.pending_readback = None
@@ -60,4 +67,3 @@ class EvidenceFirstBlindRepair(EvidenceFirstBlindReadSemantic):
         elif result.status == "supported":
             self.last_blind_candidate = None
         return result
-

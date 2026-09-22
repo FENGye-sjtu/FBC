@@ -66,8 +66,22 @@ took 551 seconds. That diagnostic was stopped after one preserved row rather
 than spending the remaining 15 cases on a known control-flow defect.
 
 V23 keeps the candidate-blind semantic audit and removes the brittle lexical
-gate. Its separate four-case NF4 regression run is active. CF remains deferred
-until the non-CF diagnostic is worth the added cost.
+gate. Its first two attempts still ignored the contradictory blind observation,
+so the partial run was stopped with its events preserved.
+
+V24 promotes a resolved blind observation only as a new candidate; it must pass
+another blind comparison and the original support gate before entering the
+ledger. The first 3B smoke exposed a dependency on a newer private base-class
+helper and failed before producing a score. V24b made that duplicate check local
+and exercised the intended loop: support rose from 0.59 to 0.68 after blind
+repair but stayed below 0.8, so the fact remained unverified. The smoke was
+stopped after preserving ten events because it then repeated an equivalent
+blind observation.
+
+V25 suppresses promotion when the blind observation is equivalent to the
+candidate already audited. Its separate 7B four-case NF4 queue is waiting for
+safe spare memory. CF remains deferred until the non-CF diagnostic is worth the
+added cost.
 
 The same frozen unanimity gate was also tested on the existing BF16 online
 validation output. It reduced the 96/128 layout anchor to 92/128 (two corrections
@@ -84,4 +98,6 @@ validation below.
 - V22 run: `runs/v22_blind_read_nf4_pilot16`
 - V23 queue: `queues/v23_blind_semantic_nf4`
 - V23 run: `runs/v23_blind_semantic_nf4_pilot4`
+- V25 queue: `queues/v25_blind_repair_nf4`
+- V25 run: `runs/v25_blind_repair_nf4_pilot4`
 - Development selector result: `analysis/selective_faithact_v1_dev128.jsonl`
