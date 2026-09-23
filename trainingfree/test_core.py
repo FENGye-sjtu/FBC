@@ -8,6 +8,7 @@ from .queue_bf16 import select_devices
 from .placement import pack_modules
 from .format_adapter import FinalFormatAdapter
 from .qwen import align_rope_delta
+from .evidence_first import EvidenceFirstOnlineRepair
 
 
 class Scripted:
@@ -30,6 +31,15 @@ class Scripted:
 
 
 class Tests(unittest.TestCase):
+    def test_repeated_visual_question_uses_core_redirection(self):
+        verified = Step('The wheel points left.', evidence_question='Which way does the wheel point?',
+                        verification='verified')
+        repeated = Step('The wheel points left.', evidence_question='Which way does the wheel point?')
+        EvidenceFirstOnlineRepair._reject_repeated_visual_claim(repeated, [verified])
+        renamed = Step('The wheel points left.', evidence_question='What is the wheel orientation?')
+        with self.assertRaisesRegex(ValueError, 'under a new question'):
+            EvidenceFirstOnlineRepair._reject_repeated_visual_claim(renamed, [verified])
+
     def test_multigpu_rope_delta_follows_dispatched_cache(self):
         class Delta:
             def __init__(self):
@@ -135,6 +145,15 @@ class Tests(unittest.TestCase):
         preserved = cot_prompt(vlmeval, 'preserve_select_v3')
         self.assertIn('Please select', preserved)
         self.assertIn('FINAL ANSWER:', preserved)
+        discriminative = cot_prompt(vlmeval, 'discriminative_evidence_v6')
+        self.assertIn('actually distinguishes the offered answers', discriminative)
+        self.assertNotIn('Please select', discriminative)
+        self.assertIn('Evidence:\n\n1.', discriminative)
+        structured = cot_prompt(vlmeval, 'discriminative_layout_v7')
+        self.assertIn('actually distinguish', structured)
+        self.assertIn('Evidence:\n\n1.', structured)
+        self.assertIn('FINAL ANSWER: <option>', structured)
+        self.assertNotIn('Please select', structured)
 
     def test_localization_uses_processed_not_original_pixels(self):
         class VLM:
@@ -274,6 +293,11 @@ class Tests(unittest.TestCase):
         self.assertEqual(audit.status, 'supported')
         self.assertEqual(audit.scores['option_counterfactual_best'], 'B')
         self.assertTrue(audit.scores['answer_withheld'])
+        formatted = Online(VLM()).audit(
+            Image.new('RGB', (20, 20)), question,
+            Step('Two objects are visible', final_answer='A. one'), [])
+        self.assertEqual(formatted.scores['option_counterfactual_best'], 'B')
+        self.assertTrue(formatted.scores['answer_withheld'])
 
     def test_withheld_answer_does_not_end_reasoning(self):
         class Withheld(Scripted):

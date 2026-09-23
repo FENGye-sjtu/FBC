@@ -5,6 +5,7 @@ import random
 import re
 
 from .core import Audit, Step, parse_json
+from .answers import extract_answer
 from .prompts import task_question, answer_format, compact_initial_prompt
 
 STEP_SCHEMA = {
@@ -272,7 +273,10 @@ class Online:
 
     def option_counterfactual(self, image, question, step, scores):
         labels = re.findall(r'(?m)^\s*([A-E])[.)]\s', question)
-        proposed = (step.final_answer or '').strip().upper()
+        # The final extractor accepts a committed label with its option text
+        # (e.g. "A. Left"). Apply the same reference-blind normalization here,
+        # otherwise that valid answer bypasses option consistency entirely.
+        proposed = extract_answer(step.final_answer or '', question)
         if not (len(labels) >= 2 and proposed in labels and
                 hasattr(self.vlm, 'log_probability')):
             return None

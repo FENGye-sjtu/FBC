@@ -95,6 +95,7 @@ def main(argv=None, shared=None):
     p.add_argument('--max-steps', type=int, default=6)
     p.add_argument('--cot-style', choices=['reasoned_v2','grounded_concise_v3','preserve_select_v3',
                                          'evidence_brief_v4','evidence_adaptive_v4','evidence_layout_v5',
+                                         'discriminative_evidence_v6','discriminative_layout_v7',
                                          'faithact_gcot_official','faithact_paper_cot_literal'],
                    default='reasoned_v2')
     p.add_argument('--repairs', type=int, choices=range(4), default=3)

@@ -21,6 +21,8 @@ from trainingfree.workstreams.faithact75_20260923.evidence_first_v27 import (
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v28 import (
     EvidenceFirstBlindMajorityGate,
 )
+from trainingfree.workstreams.faithact75_20260923.select_option_margin import select as select_margin
+from trainingfree.workstreams.faithact75_20260923.evidence_first_v32 import EvidenceFirstDirectAnchor
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v29 import (
     EvidenceFirstCrossModelBlindGate,
 )
@@ -28,10 +30,37 @@ from trainingfree.workstreams.faithact75_20260923.independent_blind_reader impor
     BLIND_MARKER, QwenWithIndependentBlindReader,
 )
 from trainingfree.qwen import Qwen
+from trainingfree.evidence_first import EvidenceFirstOnlineRepair
+from trainingfree.online_repair import OnlineRepair
+from trainingfree.online import Online
 from trainingfree.workstreams.faithact75_20260923.merge_disjoint_predictions import merge
 
 
 class SelectiveFaithActTest(unittest.TestCase):
+    def test_v32_initial_anchor_is_answer_only_not_upfront_chain(self):
+        class VLM:
+            def __init__(self):
+                self.prompts = []
+            def generate(self, image, prompt, **kwargs):
+                self.prompts.append(prompt)
+                return 'B'
+        vlm = VLM()
+        backend = EvidenceFirstDirectAnchor(vlm)
+        backend._start_case(None, 'Question: Pick?\nA. left\nB. right')
+        self.assertEqual(backend.anchor_answer, 'B')
+        self.assertEqual(len(vlm.prompts), 1)
+        self.assertTrue(vlm.prompts[0].endswith('Return only the concise answer.'))
+        self.assertNotIn('step by step', vlm.prompts[0])
+
+    def test_option_margin_selector_ignores_reference_for_decision(self):
+        base = {'id': '0', 'answer': 'B', 'reference': 'C'}
+        option = {'answer': 'C', 'scores': {'A': -2.0, 'B': -1.0, 'C': 0.0}}
+        result = select_margin(base, option)
+        self.assertTrue(result['changed'])
+        self.assertEqual(result['answer'], 'C')
+        self.assertEqual(select_margin({**base, 'reference': 'A'}, option)['answer'], 'C')
+        self.assertFalse(select_margin(base, option, margin=1.1)['changed'])
+
     def test_disjoint_prediction_merge_rejects_overlap_and_missing_ids(self):
         with TemporaryDirectory() as folder:
             left, right = Path(folder) / "left.jsonl", Path(folder) / "right.jsonl"
@@ -129,6 +158,33 @@ class SelectiveFaithActTest(unittest.TestCase):
             audit = backend.audit(None, "Question", step, [])
         self.assertEqual(audit.status, "inconclusive")
         self.assertEqual(backend.support, 0.8)
+
+    def test_formatted_option_cannot_bypass_changed_answer_guard(self):
+        backend = object.__new__(EvidenceFirstOnlineRepair)
+        backend.counterfactual = False
+        backend.anchor_answer = "B"
+        question = "Question: Which way?\nA. Left\nB. Straight\nC. Right"
+        ledger = [Step("The wheel points left.", kind="visual",
+                       verification="verified")]
+        deduction = Step("The wheel points left.", kind="deduction",
+                         final_answer="A. Left")
+        with patch.object(OnlineRepair, "audit", return_value=Audit("supported", {})):
+            audit = backend.audit(None, question, deduction, ledger)
+        self.assertEqual(audit.status, "supported")
+        self.assertTrue(audit.scores["answer_withheld"])
+        self.assertEqual(audit.scores["anchor_disagreement"]["proposed"], "A")
+
+    def test_formatted_visual_answer_is_recorded_as_tentative_label(self):
+        backend = object.__new__(OnlineRepair)
+        backend.pending_readback = None
+        backend.repair_style = "reread"
+        backend.audited_candidates = []
+        question = "Question: Which way?\nA. Left\nB. Right"
+        step = Step("The wheel points left.", kind="visual",
+                    final_answer="A. Left")
+        with patch.object(Online, "audit", return_value=Audit("inconclusive", {"support": 0.6})):
+            backend.audit(None, question, step, [])
+        self.assertEqual(backend.audited_candidates[0]["answer"], "A")
 
     def test_disagreement_gate_requires_verified_agreement(self):
         anchor, alternate = {"answer": "A"}, {"answer": "B"}

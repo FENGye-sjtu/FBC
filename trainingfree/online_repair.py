@@ -9,6 +9,7 @@ import json
 import math
 import re
 
+from .answers import extract_answer
 from .core import Step, parse_json
 from .online import Online, PROPOSE, STEP_SCHEMA, question_stem, sanitize_evidence_question
 from .prompts import answer_format, task_question
@@ -170,12 +171,13 @@ class OnlineRepair(Online):
         support = result.scores.get('support')
         answer = (step.final_answer or '').strip()
         labels = re.findall(r'(?m)^\s*([A-E])[.)]\s', question)
-        valid = (answer.upper() in labels if labels else
+        normalized = extract_answer(answer, question) if labels else answer
+        valid = (normalized in labels if labels else
                  bool(answer) and answer.lower() not in ('null', 'none', 'unknown'))
         if (step.kind == 'visual' and valid and isinstance(support, (float, int))
                 and math.isfinite(support)):
             self.audited_candidates.append({
-                'answer': answer.upper() if labels else answer,
+                'answer': normalized,
                 'support': float(support), 'claim': step.claim,
                 'candidate_index': len(self.audited_candidates),
                 'audit_status': result.status,

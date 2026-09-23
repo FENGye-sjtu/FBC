@@ -90,10 +90,18 @@ class EvidenceFirstOnlineRepair(OnlineRepair):
     @staticmethod
     def _reject_repeated_visual_claim(step, ledger):
         claim_key = re.sub(r'\W+', ' ', step.claim.lower()).strip()
-        if any(item.kind == 'visual' and item.verification == 'verified'
-               and re.sub(r'\W+', ' ', item.claim.lower()).strip() == claim_key
-               for item in ledger):
-            raise ValueError('Visual claim repeats a verified fact; inspect a different cue')
+        question_key = re.sub(r'\W+', ' ', step.evidence_question.lower()).strip()
+        for item in ledger:
+            if (item.kind == 'visual' and item.verification == 'verified'
+                    and re.sub(r'\W+', ' ', item.claim.lower()).strip() == claim_key):
+                old_question_key = re.sub(r'\W+', ' ', item.evidence_question.lower()).strip()
+                if question_key == old_question_key:
+                    # Let the core controller issue a targeted repeat-point
+                    # redirection and stop after two failures. Raising here
+                    # turns it into four generic parse retries per step.
+                    return
+                raise ValueError('Visual claim repeats a verified fact under a new question; '
+                                 'inspect a different cue')
 
     def _deduction_proposal(self, image, question, ledger):
         prompt = (
@@ -170,7 +178,10 @@ class EvidenceFirstOnlineRepair(OnlineRepair):
             return result
         result = super().audit(image, question, step, ledger)
         labels = re.findall(r'(?m)^\s*([A-E])[.)]\s', question)
-        proposed = (step.final_answer or '').strip().upper()
+        # Use the same option normalization as the final scorer. A model may
+        # emit "A. Left" rather than "A"; the changed-answer guard must not
+        # be bypassed by that harmless formatting difference.
+        proposed = extract_answer(step.final_answer or '', question)
         anchor = (self.anchor_answer or '').strip().upper()
         verified_visual_n = sum(
             item.kind == 'visual' and item.verification == 'verified' for item in ledger)

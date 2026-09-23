@@ -6,8 +6,35 @@ The full continuation report is `../../reports/20260923_evidence_first_v20_qwen3
 V20 BF16 completed 87/128 versus its own paper-literal 83/128 starting point
 but below the stronger independent layout-v5 96/128. Qwen3 NF4 layout-v5
 completed 524/765. Qwen2.5 layout/directive plus Qwen3 majority completed
-555/765 (72.55%), still 19 correct answers below the 75% threshold. A
-same-model Qwen3 high-resolution validation run is queued for free memory.
+555/765 (72.55%), still 19 correct answers below the 75% threshold. The
+same-model Qwen3 high-resolution validation completed 86/128 versus 85/128
+at low resolution, and did not improve the 95/128 three-vote result on that
+slice. It was not expanded to 765.
+
+Qwen2.5 NF4 prompt development IDs 0–127: discriminative evidence v6 reached
+92/128 versus layout-v5 85/128, with 11 paired gains and four losses. This is
+a development result, not a BF16 or full-765 result. V6 relaxed the exact
+FaithAct blank-line layout: only 74/128 outputs match `Evidence:\n\n1.`
+versus 120/128 for v5. A layout-preserving v7 is running for a matched NF4
+development comparison. BF16 v6 completed 94/128 on fixed IDs 128–255,
+below the 96/128 BF16 layout-v5 anchor (six gains, eight losses), so a full
+v6 run is not justified. V7 then reached 89/128 on NF4 development while
+restoring the strict evidence layout in 121/128 outputs; BF16 validation
+reached only 93/128 versus v5 96/128, despite exact layout on all 128 cases.
+A frozen option-likelihood gate reached 97/128 only on NF4
+development, but its fixed 0.75-margin rule reduced the stronger BF16
+layout-v5 validation anchor from 96/128 to 94/128. It is not promoted to the
+method. See `../../reports/20260923_prompt_v6_validation_and_guard.md`.
+An answer-only-anchor V32 stepwise pilot is queued; unlike prior engineering
+variants, it does not create an entire tentative CoT before its first audit.
+
+V30 fixes a controller formatting bug: `A. Left` now normalizes to option A
+before the changed-answer guard. A one-case NF4 regression test confirmed the
+two-independent-verified-facts gate engages. It also exposed repeated attempts
+to reacquire the same fact; the core controller now receives those repetitions
+for targeted redirection instead of treating them as generic parse errors.
+This case remained wrong and uncertain, so the guard is an integrity fix, not
+an accuracy gain.
 
 - V26's first eight NF4 rows were 4/8 versus the same layout-v5 anchor's
   4/8, with no answer changes, no verified visual facts, and 8/8 uncertain
@@ -53,15 +80,13 @@ same-model Qwen3 high-resolution validation run is queued for free memory.
 
 No completed full-765 Evidence-First run has reached 75%+.
 
-Latest fixed validation and parser-v5 replay are summarized in
+Fixed validation and parser-v5 replay are summarized in
 `../../reports/20260923_faithact_validation_and_v26.md`. On IDs 128–255,
 paper-literal CoT/FaithAct score 83/77 under v5; the frozen selector is 91/128,
 while layout-v5 alone is 96/128. The selector's development 75.78% did not
 validate. Full-765 layout-v5/FaithAct remain 542/510; the uniform-v5
-selective diagnostic is only 546/765. V25 finished 1/4 and exposed quoted-`null` final
-answer laundering. V26 fixes it and tests a layout-v5 uncertain anchor in an
-isolated NF4 16-case queue. Its BF16 IDs 128–255 job is queued behind the
-active model workers. V20 BF16 remains incomplete. No full 75%+ claim.
+selective diagnostic is only 546/765. V25 exposed quoted-`null` final-answer
+laundering, now fixed. No completed full Evidence-First score is 75%+.
 
 ## FaithAct reproduction conclusion
 

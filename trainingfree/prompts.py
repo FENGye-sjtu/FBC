@@ -96,6 +96,40 @@ def cot_prompt(question, style='reasoned_v2'):
                 'as a separate numbered paragraph. Do not output placeholders or a code fence. '
                 'Only the final answer line should contain ' + final_value + '.\n\n'
                 'Evidence:\n\n1. <visible fact>\n\nFINAL ANSWER: ' + placeholder)
+    if style == 'discriminative_evidence_v6':
+        choices = choices_from_question(question)
+        final_value = 'one option letter' if choices else 'a short answer'
+        return (
+            task_question(question) + '\n\n'
+            'Find the visible cue that actually distinguishes the offered answers. '
+            'Inspect that cue in the full image before selecting an option; a generic '
+            'related object is not enough. For counts, scan all distinct relevant '
+            'instances; for left/right, check the referenced object and image-relative '
+            'direction; for traffic actions, use an explicit visible sign or signal; '
+            'for size, compare the same physical dimension. Do not infer hidden details '
+            'or metric distance from image coordinates. State one or two short directly '
+            'visible facts, then select the answer. Keep the blank-line layout exactly. '
+            'Only the last line should contain ' + final_value + '.\n\n'
+            'Evidence:\n\n1. <decisive visible fact>\n\nFINAL ANSWER: <answer>'
+        )
+    if style == 'discriminative_layout_v7':
+        choices = choices_from_question(question)
+        final_value, placeholder = ('a single option letter', '<option>') if choices else (
+            'a short answer', '<answer>')
+        return (
+            task_question(question) + '\n\n'
+            'Give one or two short numbered facts from the image that actually distinguish '
+            'the offered answers. Inspect the relevant objects in the full image. For counts, '
+            'scan distinct instances; for left/right, check the referenced object and direction; '
+            'for traffic actions, require a visible sign or signal; for size, compare the same '
+            'physical dimension. Do not infer hidden details or metric distance from image '
+            'coordinates. Copy the blank-line layout below exactly, replacing the placeholders. '
+            'Evidence: must be its own paragraph. Leave an empty line after it, between '
+            'numbered facts, and before FINAL ANSWER. Add a second fact only if needed, '
+            'as a separate numbered paragraph. Do not output placeholders or a code fence. '
+            'Only the final answer line should contain ' + final_value + '.\n\n'
+            'Evidence:\n\n1. <decisive visible fact>\n\nFINAL ANSWER: ' + placeholder
+        )
     if style in ('evidence_brief_v4', 'evidence_adaptive_v4'):
         if re.search(r'(?m)^\s*A[.)]\s', question):
             final_value = 'the single option letter'
