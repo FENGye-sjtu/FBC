@@ -1,4 +1,57 @@
-# Status: 2026-09-23
+# Status: 2026-09-23 (active continuation)
+
+## Latest measured and queued work
+
+The full continuation report is `../../reports/20260923_evidence_first_v20_qwen3_full.md`.
+V20 BF16 completed 87/128 versus its own paper-literal 83/128 starting point
+but below the stronger independent layout-v5 96/128. Qwen3 NF4 layout-v5
+completed 524/765. Qwen2.5 layout/directive plus Qwen3 majority completed
+555/765 (72.55%), still 19 correct answers below the 75% threshold. A
+same-model Qwen3 high-resolution validation run is queued for free memory.
+
+- V26's first eight NF4 rows were 4/8 versus the same layout-v5 anchor's
+  4/8, with no answer changes, no verified visual facts, and 8/8 uncertain
+  fallback answers. The paired BF16 V26 queue was cancelled before launch.
+  Both obsolete V26 processes were terminated after preserving their traces.
+- V27 changes only the *visual* audit: a sub-0.8 claim can pass at 0.65 if a
+  candidate-blind reread yields exactly the same atomic fact and both blind
+  consistency and original-image support meet 0.65. Its five completed NF4
+  rows were 2/5, exactly the 2/5 own anchor, with no changed answers. Four
+  visual facts passed; the run was stopped to release GPU memory. These
+  thresholds are engineering heuristics, not calibrated correctness.
+- V28 tests the natural Yes-over-No boundary (0.5) only for the same exact
+  candidate-blind visual agreement. Deductions still require 0.8; all visual
+  candidates still pass an audit before entering the ledger, followed by at
+  most three repairs, explicit uncertainty and forward continuation. Its
+  first five NF4 rows were 2/5 versus 2/5 layout anchor, including a wrong
+  B->wrong A change and an incorrectly "verified" leftward wheel claim on ID
+  0 (reference C/right). The run was stopped after preserving five rows.
+- A frozen Qwen3-VL-8B-Instruct NF4 layout-v5 32-case **backbone control**
+  finished 23/32, versus 22/32 for the existing Qwen2.5 BF16 layout output on
+  the same IDs. A three-answer Qwen3/layout/directive vote was 25/32 only on
+  this development slice, not a full-benchmark or method result. The remaining
+  733 Qwen3 predictions subsequently completed; the merged 765-case score is
+  524/765. Qwen3 is not comparable as a Qwen2.5 method gain.
+- V29 routes only the candidate-blind visual reread to a separate frozen
+  Qwen3 model. Its first two NF4 rows made no net gain; ID 0 still admitted
+  the wrong leftward wheel claim despite the independent model's correct C
+  answer under the original layout-v5 question. It was stopped after two
+  rows. A focused view/prompt probe showed Qwen3 said *left* under full-image
+  neutral read, full+crop neutral read, and crop-only neutral read; it said
+  *straight* when the original options were added to the observation query.
+  Thus model independence and localized views do not themselves establish
+  visual truth. The correct C arose only from Qwen3's original task-answer
+  generation, so future gates must detect cross-context inconsistency.
+- Two independent Qwen3 jobs briefly attempted to load on the same GPU from
+  separate memory queues and both failed with CUDA OOM. No benchmark rows or
+  unrelated processes were modified; the 733-case run is resumable and has
+  since completed alone. Single-GPU launchers now require sufficient memory
+  on *one* card rather than sum two cards they do not actually use.
+- The older V20 BF16 128-case validation is complete at 87/128. It uses a
+  paper-literal CoT fallback rather than layout-v5 and thus cannot be compared
+  to the 96/128 layout-v5 validation baseline as a same-anchor method delta.
+
+No completed full-765 Evidence-First run has reached 75%+.
 
 Latest fixed validation and parser-v5 replay are summarized in
 `../../reports/20260923_faithact_validation_and_v26.md`. On IDs 128–255,

@@ -38,8 +38,11 @@ class Qwen:
             budget = int(os.environ['CVPR_GPU_BUDGET_MIB']) * 1024**2
             total = torch.cuda.get_device_properties(device).total_memory
             torch.cuda.set_per_process_memory_fraction(min(1., budget/total), device)
+        # Transformers 4.57 switches this checkpoint to the fast processor by
+        # default. Pin the original slow path so new mixed-model runs remain
+        # comparable to the earlier Qwen2.5 BF16/NF4 measurements.
         self.processor = AutoProcessor.from_pretrained(model_path, min_pixels=256*28*28,
-                                                       max_pixels=max_pixels)
+                                                       max_pixels=max_pixels, use_fast=False)
         if quantization == 'nf4':
             from transformers import BitsAndBytesConfig
             options['quantization_config'] = BitsAndBytesConfig(

@@ -1,4 +1,7 @@
 import unittest
+from unittest.mock import patch
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from PIL import Image
 
@@ -12,9 +15,121 @@ from trainingfree.workstreams.faithact75_20260923.selective_faithact import choo
 from trainingfree.workstreams.faithact75_20260923.ensemble_anchor import choose as vote
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v26 import EvidenceFirstLayoutAnchor
 from trainingfree.workstreams.faithact75_20260923.disagreement_gate import choose as gate
+from trainingfree.workstreams.faithact75_20260923.evidence_first_v27 import (
+    EvidenceFirstAdaptiveBlindGate, exact_blind_match,
+)
+from trainingfree.workstreams.faithact75_20260923.evidence_first_v28 import (
+    EvidenceFirstBlindMajorityGate,
+)
+from trainingfree.workstreams.faithact75_20260923.evidence_first_v29 import (
+    EvidenceFirstCrossModelBlindGate,
+)
+from trainingfree.workstreams.faithact75_20260923.independent_blind_reader import (
+    BLIND_MARKER, QwenWithIndependentBlindReader,
+)
+from trainingfree.qwen import Qwen
+from trainingfree.workstreams.faithact75_20260923.merge_disjoint_predictions import merge
 
 
 class SelectiveFaithActTest(unittest.TestCase):
+    def test_disjoint_prediction_merge_rejects_overlap_and_missing_ids(self):
+        with TemporaryDirectory() as folder:
+            left, right = Path(folder) / "left.jsonl", Path(folder) / "right.jsonl"
+            left.write_text('{"id":"0","answer":"A"}\n', encoding="utf-8")
+            right.write_text('{"id":"1","answer":"B"}\n', encoding="utf-8")
+            self.assertEqual([row["id"] for row in merge([left, right], ["0", "1"])],
+                             ["0", "1"])
+            with self.assertRaisesRegex(ValueError, "Duplicate prediction ID"):
+                merge([left, left], ["0"])
+            with self.assertRaisesRegex(ValueError, "Prediction IDs differ"):
+                merge([left], ["0", "1"])
+
+    def test_exact_blind_match_drops_explanatory_spillover_only(self):
+        self.assertTrue(exact_blind_match(
+            "The wheel points left.",
+            "The wheel points left, indicating that the car may turn."))
+        self.assertFalse(exact_blind_match(
+            "The wheel points right.", "The wheel points left."))
+
+    def test_v27_relaxes_only_exact_blind_visual_match(self):
+        backend = object.__new__(EvidenceFirstAdaptiveBlindGate)
+        backend.support = 0.8
+        step = Step("The wheel points left.", evidence_question="Which way does the wheel point?")
+
+        def fake_audit(instance, image, question, candidate, ledger):
+            self.assertEqual(instance.support, 0.65)
+            return Audit("supported", {
+                "blind_observation": {"resolved": True,
+                                      "observation": "The wheel points left."},
+                "blind_consistency": 0.68, "support": 0.68,
+            })
+
+        with patch.object(EvidenceFirstLayoutAnchor, "audit", fake_audit):
+            audit = backend.audit(None, "Question", step, [])
+        self.assertEqual(audit.status, "supported")
+        self.assertEqual(audit.scores["visual_gate"], "exact_blind_match_relaxed")
+        self.assertEqual(backend.support, 0.8)
+
+    def test_v28_majority_gate_still_requires_exact_blind_match(self):
+        backend = object.__new__(EvidenceFirstBlindMajorityGate)
+        backend.support = 0.8
+        step = Step("The wheel points left.", evidence_question="Which way does the wheel point?")
+
+        def fake_audit(instance, image, question, candidate, ledger):
+            self.assertEqual(instance.support, 0.5)
+            return Audit("supported", {
+                "blind_observation": {"resolved": True,
+                                      "observation": "The wheel points left."},
+                "blind_consistency": 0.53, "support": 0.53,
+            })
+
+        with patch.object(EvidenceFirstLayoutAnchor, "audit", fake_audit):
+            audit = backend.audit(None, "Question", step, [])
+        self.assertEqual(audit.status, "supported")
+        self.assertEqual(backend.support, 0.8)
+
+    def test_v29_routes_only_neutral_blind_read_to_independent_model(self):
+        backend = object.__new__(QwenWithIndependentBlindReader)
+        backend.independent_reader_calls = 0
+        backend.calls = backend.input_tokens = backend.generated_tokens = 0
+
+        class FakeReader:
+            input_tokens = 0
+            generated_tokens = 0
+
+            def generate(self, image, prompt, max_tokens):
+                self.input_tokens += 10
+                self.generated_tokens += 5
+                return '{"observation":"right","resolved":true}'
+
+        backend.independent_reader = FakeReader()
+        with patch.object(Qwen, "generate", return_value="primary"):
+            self.assertEqual(backend.generate(None, BLIND_MARKER + " question"),
+                             '{"observation":"right","resolved":true}')
+            self.assertEqual(backend.generate(None, "ordinary proposal"), "primary")
+        self.assertEqual(backend.independent_reader_calls, 1)
+        self.assertEqual((backend.calls, backend.input_tokens, backend.generated_tokens),
+                         (1, 10, 5))
+
+    def test_v29_requires_independent_semantic_agreement(self):
+        backend = object.__new__(EvidenceFirstCrossModelBlindGate)
+        backend.support = 0.8
+        backend.vlm = type("Reader", (), {"independent_reader_model": "Qwen3"})()
+        step = Step("The wheel points left.", evidence_question="Which way does the wheel point?")
+
+        def fake_audit(instance, image, question, candidate, ledger):
+            self.assertEqual(instance.support, 0.5)
+            return Audit("supported", {
+                "blind_observation": {"resolved": True,
+                                      "observation": "The wheel points right."},
+                "blind_consistency": 0.53, "support": 0.99,
+            })
+
+        with patch.object(EvidenceFirstLayoutAnchor, "audit", fake_audit):
+            audit = backend.audit(None, "Question", step, [])
+        self.assertEqual(audit.status, "inconclusive")
+        self.assertEqual(backend.support, 0.8)
+
     def test_disagreement_gate_requires_verified_agreement(self):
         anchor, alternate = {"answer": "A"}, {"answer": "B"}
         self.assertEqual(gate(anchor, alternate,
@@ -77,6 +192,11 @@ class SelectiveFaithActTest(unittest.TestCase):
         self.assertEqual(select_devices([(0, 10000), (1, 9000)], 16000, 1500),
                          [(0, 10000), (1, 9000)])
         self.assertEqual(select_devices([(0, 10000)], 9000, 1500), [])
+        self.assertEqual(select_devices([(0, 18000), (1, 9000)], 16000, 1500,
+                                        min_devices=2, min_each_free_mib=8500),
+                         [(0, 18000), (1, 9000)])
+        self.assertEqual(select_devices([(0, 18000), (1, 8000)], 16000, 1500,
+                                        min_devices=2, min_each_free_mib=8500), [])
 
     def test_visual_inference_language_is_rejected(self):
         self.assertTrue(has_inference_language("The road is uphill because it rises."))

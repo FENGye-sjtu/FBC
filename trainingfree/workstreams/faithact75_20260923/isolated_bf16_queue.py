@@ -11,15 +11,16 @@ import time
 
 
 def select_devices(rows: list[tuple[int, int]], weight_mib: int,
-                   reserve_mib: int) -> list[tuple[int, int]]:
+                   reserve_mib: int, min_devices: int = 1,
+                   min_each_free_mib: int = 0) -> list[tuple[int, int]]:
     selected: list[tuple[int, int]] = []
     capacity = 0
     for index, free in sorted(rows, key=lambda row: row[1], reverse=True):
-        if free < reserve_mib + 2048:
+        if free < max(reserve_mib + 2048, min_each_free_mib):
             continue
         selected.append((index, free))
         capacity += free - reserve_mib
-        if capacity >= weight_mib:
+        if capacity >= weight_mib and len(selected) >= min_devices:
             return selected
     return []
 
@@ -32,6 +33,8 @@ def main() -> None:
     parser.add_argument("--weight-mib", type=int, default=17000)
     parser.add_argument("--reserve-mib", type=int, default=1536)
     parser.add_argument("--timeout-hours", type=float, default=48)
+    parser.add_argument("--min-devices", type=int, default=1)
+    parser.add_argument("--min-each-free-mib", type=int, default=0)
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     root = args.root.resolve()
@@ -52,7 +55,8 @@ def main() -> None:
                 "--format=csv,noheader,nounits",
             ], text=True)
             rows = [tuple(map(int, line.split(","))) for line in raw.splitlines() if line.strip()]
-            selected = select_devices(rows, args.weight_mib, args.reserve_mib)
+            selected = select_devices(rows, args.weight_mib, args.reserve_mib,
+                                      args.min_devices, args.min_each_free_mib)
             status_path.write_text(json.dumps({
                 "state": "waiting", "snapshot": rows, "command": command,
                 "updated": time.time(),
