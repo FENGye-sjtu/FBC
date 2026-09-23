@@ -51,6 +51,8 @@ class SelectiveFaithActTest(unittest.TestCase):
         self.assertEqual(len(vlm.prompts), 1)
         self.assertTrue(vlm.prompts[0].endswith('Return only the concise answer.'))
         self.assertNotIn('step by step', vlm.prompts[0])
+        self.assertEqual(backend.finalize(None, 'Question: Pick?\nA. left\nB. right', []), 'B')
+        self.assertEqual(backend.last_finalization['source'], 'tentative_answer_only_anchor')
 
     def test_option_margin_selector_ignores_reference_for_decision(self):
         base = {'id': '0', 'answer': 'B', 'reference': 'C'}

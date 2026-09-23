@@ -89,7 +89,7 @@ def main(argv=None, shared=None):
     p.add_argument('--limit', type=int, default=0)
     p.add_argument('--offset', type=int, default=0)
     p.add_argument('--device', default='cuda:0')
-    p.add_argument('--quantization', choices=['none','nf4'], default='none')
+    p.add_argument('--quantization', choices=['none','nf4','awq'], default='none')
     p.add_argument('--max-new-tokens', type=int, default=512)
     p.add_argument('--max-pixels', type=int, default=1003520)
     p.add_argument('--max-steps', type=int, default=6)

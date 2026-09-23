@@ -1,11 +1,15 @@
 import unittest
+import json
+from pathlib import Path
+import struct
+from tempfile import TemporaryDirectory
 from PIL import Image
 from .core import Audit, Step, parse_json, solve
 from .online import Online, control_boxes, mask, overlap
 from .run import extract_answer
 from .prompts import task_question, answer_format, cot_prompt
 from .queue_bf16 import select_devices
-from .placement import pack_modules
+from .placement import module_bytes, pack_modules
 from .format_adapter import FinalFormatAdapter
 from .qwen import align_rope_delta
 from .evidence_first import EvidenceFirstOnlineRepair
@@ -31,6 +35,20 @@ class Scripted:
 
 
 class Tests(unittest.TestCase):
+    def test_awq_placement_uses_actual_packed_tensor_dtypes(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root/'model.safetensors.index.json').write_text(json.dumps({
+                'weight_map': {'model.layers.0.self_attn.q_proj.qweight': 'part.safetensors',
+                               'model.layers.0.self_attn.q_proj.scales': 'part.safetensors'}}))
+            header = json.dumps({
+                'model.layers.0.self_attn.q_proj.qweight': {'dtype': 'I32', 'shape': [4]},
+                'model.layers.0.self_attn.q_proj.scales': {'dtype': 'F16', 'shape': [4]},
+            }).encode()
+            (root/'part.safetensors').write_bytes(struct.pack('<Q', len(header)) + header)
+            self.assertEqual(module_bytes(root)['model.layers.0'], 16)
+            self.assertEqual(module_bytes(root, actual_dtypes=True)['model.layers.0'], 24)
+
     def test_repeated_visual_question_uses_core_redirection(self):
         verified = Step('The wheel points left.', evidence_question='Which way does the wheel point?',
                         verification='verified')

@@ -2,6 +2,7 @@
 import math
 import json
 import os
+from pathlib import Path
 
 
 def align_rope_delta(model, cache_position):
@@ -20,16 +21,23 @@ class Qwen:
         self.signature = (str(model_path), device, max_pixels, quantization)
         self.max_new_tokens = max_new_tokens
         options = {}
+        checkpoint_quant = json.loads((Path(model_path) / 'config.json').read_text(
+            encoding='utf-8')).get('quantization_config', {}).get('quant_method')
+        if quantization == 'awq' and checkpoint_quant != 'awq':
+            raise ValueError('AWQ mode requires an AWQ checkpoint')
+        if quantization != 'awq' and checkpoint_quant == 'awq':
+            raise ValueError('AWQ checkpoint must be declared as --quantization awq')
         if device == 'auto':
-            if quantization != 'none':
-                raise ValueError('Multi-GPU replication uses unquantized BF16 weights')
+            if quantization not in ('none', 'awq'):
+                raise ValueError('Multi-GPU placement supports BF16 or native AWQ checkpoints')
             budgets = json.loads(os.environ['CVPR_GPU_BUDGETS_MIB'])
             # Launch-time free-memory budgets, never utilization-based scheduling.
             # Reserve 1 GiB per device for vision activations and generation caches.
             options['max_memory'] = {int(i): (int(mib)-1024)*1024**2 for i,mib in budgets.items()}
             options['max_memory']['cpu'] = 0  # No silent slow CPU/disk offload.
             from .placement import module_bytes, pack_modules
-            options['device_map'] = pack_modules(module_bytes(model_path),
+            options['device_map'] = pack_modules(module_bytes(
+                model_path, actual_dtypes=quantization == 'awq'),
                 {i:value for i,value in options['max_memory'].items() if isinstance(i,int)})
             for i,mib in budgets.items():
                 total = torch.cuda.get_device_properties(int(i)).total_memory

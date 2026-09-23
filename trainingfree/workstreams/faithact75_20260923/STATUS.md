@@ -25,8 +25,18 @@ A frozen option-likelihood gate reached 97/128 only on NF4
 development, but its fixed 0.75-margin rule reduced the stronger BF16
 layout-v5 validation anchor from 96/128 to 94/128. It is not promoted to the
 method. See `../../reports/20260923_prompt_v6_validation_and_guard.md`.
-An answer-only-anchor V32 stepwise pilot is queued; unlike prior engineering
-variants, it does not create an entire tentative CoT before its first audit.
+The answer-only-anchor V32 stepwise NF4 pilot completed 6/8, equal to its own
+6/8 anchor, with no changed answers, six uncertain outcomes and 11.5 calls/case.
+It does not create an entire tentative CoT before its first audit. The first
+snapshot mislabeled the fallback source as paper-literal; the actual prompt
+and protocol were answer-only, and subsequent code corrects the metadata.
+See `../../reports/20260923_answer_only_pilot_and_awq.md`.
+
+An official frozen Qwen2.5-VL-32B-Instruct-AWQ checkpoint (20.7 GB) is now
+fully downloaded inside `/data_cinema/zqc/CVPR/models`, with AutoAWQ installed
+only in the CVPR vendor tree. Its 8-case loading/accuracy smoke is queued for
+sufficient combined free GPU memory. This is a separate backbone/verifier
+control; it has no score yet and cannot be counted as an Evidence-First gain.
 
 V30 fixes a controller formatting bug: `A. Left` now normalizes to option A
 before the changed-answer guard. A one-case NF4 regression test confirmed the

@@ -5,7 +5,7 @@ from pathlib import Path
 import struct
 
 
-def module_bytes(model_path):
+def module_bytes(model_path, actual_dtypes=False):
     root = Path(model_path)
     index = json.loads((root/'model.safetensors.index.json').read_text())
     sizes = {}
@@ -19,7 +19,17 @@ def module_bytes(model_path):
             parts = name.split('.')
             group = '.'.join(parts[:3]) if name.startswith('model.layers.') else (
                 'visual' if parts[0]=='visual' else '.'.join(parts[:-1]))
-            sizes[group] = sizes.get(group,0) + math.prod(entry['shape'])*2
+            if actual_dtypes:
+                dtype_bytes = {'F32': 4, 'I32': 4, 'U32': 4, 'F16': 2,
+                               'BF16': 2, 'I16': 2, 'U16': 2, 'I8': 1,
+                               'U8': 1, 'F8_E4M3': 1, 'F8_E5M2': 1}
+                try:
+                    unit = dtype_bytes[entry['dtype']]
+                except KeyError as exc:
+                    raise ValueError(f'Unsupported safetensors dtype in placement: {entry["dtype"]}') from exc
+            else:
+                unit = 2  # Preserve the BF16 packing used by prior experiments.
+            sizes[group] = sizes.get(group,0) + math.prod(entry['shape'])*unit
     return sizes
 
 
