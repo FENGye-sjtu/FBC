@@ -1,5 +1,12 @@
 # Training-free CVPR2027 status — 2026-09-22
 
+2026-09-23 update: the isolated FaithAct validation, parser-v5 replay, and
+Evidence-First V26 continuation are in
+`reports/20260923_faithact_validation_and_v26.md`. The frozen FaithAct selector
+did not meet 75% on validation; the best completed full-765 reconstruction is
+546/765 (71.37%). V26 is running and has no completed accuracy yet. Older
+tables below remain historical under their stated parser/protocol versions.
+
 Implemented research prototype with measured outputs, not a completed paper or
 a successful replication claim. Read live files, not process-launch status.
 

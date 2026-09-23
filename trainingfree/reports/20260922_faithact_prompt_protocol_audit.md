@@ -133,7 +133,8 @@ under their own format rules.
 1. Preserve the completed full V5 job and its frozen code snapshot.
 2. Preserve all three completed 128-case protocol pairs and use the paper-literal
    94/128 chain as the strongest open reconstruction baseline for our controller.
-   with the common committed parser, raw AGS and raw/canonical VLMEvalKit outputs.
+   Score each with the common committed parser, raw AGS and raw/canonical
+   VLMEvalKit outputs.
 3. Inspect step coverage, low-confidence noun delivery, box/no-box paired changes,
    answer-mapping contradictions and exact output hashes before deciding which
    FaithAct row is the primary reproduction baseline.

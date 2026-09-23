@@ -9,7 +9,7 @@ import re
 import unicodedata
 
 
-PARSER_VERSION = 'committed_answer_v4'
+PARSER_VERSION = 'committed_answer_v5'
 _LABEL = r'[A-E]'
 _NUMBER_WORDS = dict(zip(
     'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen '
@@ -287,6 +287,37 @@ def _terminal_option(text, choices):
     return None
 
 
+def _conclusion_option_line(text, choices):
+    """Recover a labeled answer line followed by explanation, not an option list.
+
+    Some CoT outputs commit to ``C. ...`` after an answer-introducing sentence
+    and then continue with prose.  A last-line-only parser misses these.  The
+    preceding sentence must denote a singular selection, and the answer line
+    must be the sole unbulleted choice line after it.
+    """
+    lines = [_clean(line) for line in str(text).splitlines() if _clean(line)]
+    marker = re.compile(
+        r'\b(?:answer|choice|option|action|response|selection)\b.*'
+        r'\b(?:is|would\s+be)\s*:\s*$', re.I)
+    label_line = re.compile(r'^([A-E])[.)]\s+\S')
+    for index in range(len(lines) - 2, -1, -1):
+        if not marker.search(lines[index]):
+            continue
+        if re.search(r'\b(?:rejected|wrong|incorrect|not|if|hypothetical|'
+                     r'alternative|possible|candidate|might|could)\b', lines[index], re.I):
+            continue
+        match = label_line.match(lines[index + 1])
+        if not match or match[1] not in choices:
+            continue
+        if re.search(r'\b(?:if|unless|otherwise|incorrect|wrong|rejected|might|could)\b|'
+                     r'\b(?:or|and)\s+(?:option\s+)?[A-E]\b', lines[index + 1], re.I):
+            continue
+        if any(label_line.match(line) for line in lines[index + 2:]):
+            continue
+        return match[1]
+    return None
+
+
 def _extract_v2(text, question=''):
     """Preserved v2 extraction path, including its existing limitations.
 
@@ -380,5 +411,8 @@ def extract_answer(text, question=''):
             return previous
     else:
         selected = original
+    conclusion = _conclusion_option_line(original, choices)
+    if conclusion:
+        return conclusion
     terminal = _terminal_option(_clean(selected), choices)
     return terminal if terminal in choices else previous

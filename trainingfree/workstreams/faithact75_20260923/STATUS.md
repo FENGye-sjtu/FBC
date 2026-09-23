@@ -1,5 +1,15 @@
 # Status: 2026-09-23
 
+Latest fixed validation and parser-v5 replay are summarized in
+`../../reports/20260923_faithact_validation_and_v26.md`. On IDs 128–255,
+paper-literal CoT/FaithAct score 83/77 under v5; the frozen selector is 91/128,
+while layout-v5 alone is 96/128. The selector's development 75.78% did not
+validate. Full-765 layout-v5/FaithAct remain 542/510; the uniform-v5
+selective diagnostic is only 546/765. V25 finished 1/4 and exposed quoted-`null` final
+answer laundering. V26 fixes it and tests a layout-v5 uncertain anchor in an
+isolated NF4 16-case queue. Its BF16 IDs 128–255 job is queued behind the
+active model workers. V20 BF16 remains incomplete. No full 75%+ claim.
+
 ## FaithAct reproduction conclusion
 
 The upstream release is sufficient to reproduce the public noun extraction,

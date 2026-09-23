@@ -2,16 +2,70 @@ import unittest
 
 from PIL import Image
 
-from trainingfree.core import Step
+from trainingfree.core import Audit, Step, solve
 from trainingfree.workstreams.faithact75_20260923.isolated_bf16_queue import select_devices
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v22 import has_inference_language
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v23 import EvidenceFirstBlindReadSemantic
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v24 import atomic_observation
 from trainingfree.workstreams.faithact75_20260923.evidence_first_v25 import observation_key
 from trainingfree.workstreams.faithact75_20260923.selective_faithact import choose
+from trainingfree.workstreams.faithact75_20260923.ensemble_anchor import choose as vote
+from trainingfree.workstreams.faithact75_20260923.evidence_first_v26 import EvidenceFirstLayoutAnchor
+from trainingfree.workstreams.faithact75_20260923.disagreement_gate import choose as gate
 
 
 class SelectiveFaithActTest(unittest.TestCase):
+    def test_disagreement_gate_requires_verified_agreement(self):
+        anchor, alternate = {"answer": "A"}, {"answer": "B"}
+        self.assertEqual(gate(anchor, alternate,
+                              {"answer": "B", "status": "verified_by_model"}),
+                         ("B", "verified_alternate"))
+        self.assertEqual(gate(anchor, alternate,
+                              {"answer": "B", "status": "answered_with_uncertainty"}),
+                         ("A", "keep_anchor"))
+
+    def test_v26_anchor_chain_is_not_promoted_to_ledger(self):
+        class FakeVLM:
+            def generate(self, image, prompt, **kwargs):
+                self.prompt = prompt
+                return "Visible cue.\nFinal answer: B"
+
+        backend = object.__new__(EvidenceFirstLayoutAnchor)
+        backend.vlm = FakeVLM()
+        backend._start_case(None, "Question: Which?\nOptions:\nA. left\nB. right")
+        self.assertEqual(backend.anchor_answer, "B")
+        self.assertEqual(backend.fallback_answer, "B")
+        self.assertIn("Evidence:\n\n1. <visible fact>", backend.vlm.prompt)
+
+    def test_majority_anchor_uses_reference_blind_labels(self):
+        self.assertEqual(vote([{"answer": "B"}, {"answer": "A"}, {"answer": "B"}]),
+                         ("B", "majority"))
+        self.assertEqual(vote([{"answer": "B"}, {"answer": "A"}, {"answer": "C"}]),
+                         ("B", "priority_tie"))
+
+    def test_quoted_null_is_not_a_verified_answer(self):
+        step = Step.from_dict({
+            "claim": "The visible evidence is insufficient.",
+            "kind": "deduction",
+            "evidence_question": "",
+            "final_answer": "null",
+        })
+        self.assertIsNone(step.final_answer)
+
+        class FakeBackend:
+            def propose(self, image, question, ledger, feedback):
+                return step
+
+            def audit(self, image, question, proposed, ledger):
+                return Audit("supported")
+
+            def finalize(self, image, question, ledger):
+                return "A"
+
+        result = solve(FakeBackend(), None, "Question", max_steps=1)
+        self.assertEqual(result["status"], "answered_with_uncertainty")
+        self.assertIsNone(result["ledger"][0]["final_answer"])
+
     def test_accepts_only_unanimously_supported_valid_revision(self):
         anchor = {"answer": "A"}
         revision = {"answer": "B"}

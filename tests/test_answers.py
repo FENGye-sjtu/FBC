@@ -54,7 +54,7 @@ class AnswerTests(unittest.TestCase):
             self.assertEqual(raw_answer(row), value)
 
     def test_v3_weak_conclusion_with_complete_terminal_option(self):
-        self.assertEqual(PARSER_VERSION, 'committed_answer_v4')
+        self.assertEqual(PARSER_VERSION, 'committed_answer_v5')
         question = ('If I stay in this lane, where do I end up?\n'
                     'A. Highway 1\nB. Highway 95\nC. Highway 280')
         for text in ('Thus, if you stay in this lane, you will end up on:\n\nB. Highway 95',
@@ -143,6 +143,18 @@ class AnswerTests(unittest.TestCase):
         # The explicit final commitment must also override an earlier label.
         self.assertEqual(extract_answer('Answer: A\nCorrection.\n**Final Answer**: B. No',
                                         'A. Yes\nB. No'), 'B')
+
+    def test_v5_conclusion_line_with_trailing_explanation(self):
+        question = 'A. 25\nB. 35\nC. 45'
+        self.assertEqual(extract_answer(
+            'Given the options:\n- A. 25\n- B. 35\n- C. 45\n\n'
+            'The most likely option based on the scene is:\n\n**C. 45 mph**\n\n'
+            'This is common on a highway.', question), 'C')
+        self.assertEqual(extract_answer(
+            'The most appropriate action would be:\n\n**C. Keep in the current lane**',
+            'A. Change left\nB. Change right\nC. Keep in the current lane'), 'C')
+        self.assertNotIn(extract_answer(
+            'Thus, the rejected option is:\n\nB. blue', QUESTION), ('A', 'B', 'C'))
 
     def test_no_ground_truth_or_reference_input(self):
         # A declared label is respected even if the option wording disagrees;

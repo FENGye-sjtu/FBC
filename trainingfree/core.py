@@ -37,6 +37,10 @@ class Step:
                     or box[0] >= box[2] or box[1] >= box[3]):
             raise ValueError('Box must be normalized xyxy with positive area')
         final = value.get('final_answer')
+        # Some schema-following decoders emit the JSON null sentinel as a
+        # quoted string.  It is an abstention, never a verified answer.
+        if isinstance(final, str) and final.strip().lower() in ('null', 'none'):
+            final = None
         if final is not None and (not isinstance(final, str) or not final.strip()):
             raise ValueError('Final answer must be null or nonempty text')
         question = value.get('evidence_question', '')
