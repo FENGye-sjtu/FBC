@@ -1,0 +1,35 @@
+给另一个 AI 的交接说明
+
+请先完整阅读 CHAT_TRANSCRIPT.txt，按 messages.json 的 parent/children 关系区分今天的群聊与转发记录内的历史消息。不要把10月12日、13日、16日的历史消息误判为今天新说的话。
+
+本包有24条消息：9条主群消息，15条转发记录内消息，外加1条被起始消息引用的范围之前补充上下文。
+主群范围：2026-10-18 Joseph 在17:06时间块提出数据真实性疑问，至Joseph末条“辛苦辛苦～”（会话列表17:23）。
+
+讨论重点（摘要，原话见完整记录）：
+Joseph质疑当前评测使用的是仓库模拟资料，而非企业实际需求转化的数据。清风建议从分享的真实需求整理task，在无skill与使用学生skill两种设置下比较。Joseph建议时间允许则用真实数据验证原结论；时间不足则提炼5分钟PPT中的认知。本人答应研究资料，争取晚会前产出结果。这些是聊天观点与行动建议，归档未代为验证实验结论。
+
+聊天记录的层级：
+M002 Joseph 转发 SUN🌏的聊天记录
+  F001 SUN🌏 10月12日23:48再次转发
+    E001–E003：评测框架链接、evaluation-report.md、报告说明
+  F002 SUN🌏 10月12日23:50转发群聊
+    D001–D007：设备记录zip、51个session、欢乐互娱12个session及关键词口径（数字为聊天所述）
+  F003 SUN🌏 10月13日00:06：三个飞书入口
+M004 清风转发10月16日两份企业需求zip，见Q001–Q002。
+
+GitHub资料目录：https://github.com/FENGye-sjtu/FBC/tree/main/docs/wechat-benchmark/2026-10-18
+GitHub下载页面：https://github.com/FENGye-sjtu/FBC/releases/tag/wechat-benchmark-2026-10-18
+完整压缩包：https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/wechat-benchmark-2026-10-18-complete.zip
+大型设备记录原附件：https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/fdex-handoff-kelvin-2devices.zip
+
+原文件对应位置：
+1. evaluation-report.md：仓库资料目录/attachments/evaluation-report.md；完整包内同路径。
+2. fdex-handoff-kelvin-2devices.zip：上方GitHub下载页面同名附件；完整包内attachments/fdex-handoff-kelvin-2devices.zip。大文件未直接放入Git正文目录。
+3. 欢乐互娱-企业需求.zip：仓库资料目录/attachments/欢乐互娱-企业需求.zip；完整包内同路径。
+4. 欢乐互娱-企业需求-学生发布版.zip：仓库资料目录/attachments/欢乐互娱-企业需求-学生发布版.zip；完整包内同路径。
+
+文件使用：原始zip全部保留。inventories/逐层列出zip内部文件（含设备包内嵌的session zip），路径中的“!/”表示需要再解压一层；attachment-manifest.json列出原始字节数和SHA256。evidence/保存本群聊天区域及展开记录截图。
+
+重要界限：三个飞书入口见links-original.txt，未抓取其远端内容。你若需要这些云端资料，须通过有权限的连接或让用户另行提供。仓库为私有仓库，能否读取取决于你运行环境的GitHub授权；普通网页AI无法访问时，请用户直接上传完整zip。不要索取或复述访问令牌。
+
+报告内容本身明确写有“基于虚构案例与模拟资料，不代表欢乐互娱实际经营情况”。请区分企业原始需求、模拟评测资料、实际API运行记录与聊天中关于真实性的判断，不能仅凭“运行过API”推断输入资料真实。

@@ -1,0 +1,28 @@
+[
+  {
+    "file": "attachments/evaluation-report.md",
+    "size_bytes": 8924,
+    "sha256": "16e4094e90ced3300b9ccee386a6ef1e441634b1757b818931dc5484a98bbd02"
+  },
+  {
+    "file": "attachments/fdex-handoff-kelvin-2devices.zip",
+    "size_bytes": 215284629,
+    "sha256": "ab88e8363f8c2b83e7a913f2fcee1036151bed8f89024a8aa1ad218a39aac0b5",
+    "crc_check": "passed, including nested zip files",
+    "recursive_file_entries": 155
+  },
+  {
+    "file": "attachments/欢乐互娱-企业需求-学生发布版.zip",
+    "size_bytes": 139636,
+    "sha256": "ed4351675e550c48a5abaec8aaffdd1bb2ec118e7daf168a623de7da91b1b5f1",
+    "crc_check": "passed, including nested zip files",
+    "recursive_file_entries": 41
+  },
+  {
+    "file": "attachments/欢乐互娱-企业需求.zip",
+    "size_bytes": 140035,
+    "sha256": "9a03ac0045a8b2d217a17fee26d2f085036459e5d617d82bfbe0630e7ef4f089",
+    "crc_check": "passed, including nested zip files",
+    "recursive_file_entries": 40
+  }
+]
