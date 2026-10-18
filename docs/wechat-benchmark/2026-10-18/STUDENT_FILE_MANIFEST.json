@@ -1,0 +1,150 @@
+[
+  {
+    "student": "杨柏森",
+    "source_filename": "FDE-X-T01-年度战略规划-Skill包-杨柏森 (1).zip",
+    "path": "feishu/student-submissions/杨柏森/FDE-X-T01-年度战略规划-Skill包-杨柏森.zip",
+    "size": 587148,
+    "sha256": "0fa655ee3d0e5ab05666d0a922db6b5f5677338a1d7b82c96e8d7363db1cacb0",
+    "recursive_crc_verified": true,
+    "recursive_entries": 138,
+    "inventory": "feishu/inventories/杨柏森/FDE-X-T01-年度战略规划-Skill包-杨柏森.json"
+  },
+  {
+    "student": "杨柏森",
+    "source_filename": "项目说明与验证记录-杨柏森.docx",
+    "path": "feishu/student-submissions/杨柏森/项目说明与验证记录-杨柏森.docx",
+    "size": 19422,
+    "sha256": "5394118900586105566494aaae37b58e1dc08be4c5a17c7897852beec9172974",
+    "docx_extraction": {
+      "text_characters": 8655,
+      "external_links": 0,
+      "media": []
+    }
+  },
+  {
+    "student": "赵一然",
+    "source_filename": "00-FDE-X-Skill交付总包.zip",
+    "path": "feishu/student-submissions/赵一然/00-FDE-X-Skill交付总包.zip",
+    "size": 59514962,
+    "sha256": "3a808fb1d9e68010d7b4b6fa49b9bb3bc62f76240b8e941e04ea89462d43b593",
+    "recursive_crc_verified": true,
+    "recursive_entries": 692,
+    "inventory": "feishu/inventories/赵一然/00-FDE-X-Skill交付总包.json"
+  },
+  {
+    "student": "赵一然",
+    "source_filename": "T01 项目说明与验证记录（星芽英语探险·完全虚构案例）.docx",
+    "path": "feishu/student-submissions/赵一然/T01 项目说明与验证记录（星芽英语探险·完全虚构案例）.docx",
+    "size": 15995,
+    "sha256": "b5efcb1dab5707c38e48b5480aee83cdff73373d4fc2907ac3e6631698dbdf1a",
+    "docx_extraction": {
+      "text_characters": 7467,
+      "external_links": 15,
+      "media": []
+    }
+  },
+  {
+    "student": "方术伟",
+    "source_filename": "FDEX.zip",
+    "path": "feishu/student-submissions/方术伟/FDEX.zip",
+    "size": 3157552,
+    "sha256": "92489777164da015f1713748a5e60397cbb05229d41971c6d9721fbe0a91b8a3",
+    "recursive_crc_verified": true,
+    "recursive_entries": 180,
+    "inventory": "feishu/inventories/方术伟/FDEX.json"
+  },
+  {
+    "student": "陈思微",
+    "source_filename": "strategy-agent.zip",
+    "path": "feishu/student-submissions/陈思微/strategy-agent.zip",
+    "size": 239991,
+    "sha256": "fcacd462755d076217d78040c66e8c394b901ac1d82619f9b9b0273ee6b4dadf",
+    "recursive_crc_verified": true,
+    "recursive_entries": 37,
+    "inventory": "feishu/inventories/陈思微/strategy-agent.json"
+  },
+  {
+    "student": "陈思微",
+    "source_filename": "战略 Agent｜项目说明与验证记录.docx",
+    "path": "feishu/student-submissions/陈思微/战略 Agent｜项目说明与验证记录.docx",
+    "size": 6096,
+    "sha256": "d60118f75e8c2d227794599e68e8c71c4770fc2798e9730a677a16b573aa82ab",
+    "docx_extraction": {
+      "text_characters": 1478,
+      "external_links": 0,
+      "media": []
+    }
+  },
+  {
+    "student": "王奕鸣",
+    "source_filename": "01-Skills-and-ordinary-components.zip",
+    "path": "feishu/student-submissions/王奕鸣/01-Skills-and-ordinary-components.zip",
+    "size": 194106,
+    "sha256": "183094abba5d962f16fdfe310ae323db6d38796ccdcbc7fbc7c0ae92dc2472af",
+    "recursive_crc_verified": true,
+    "recursive_entries": 77,
+    "inventory": "feishu/inventories/王奕鸣/01-Skills-and-ordinary-components.json"
+  },
+  {
+    "student": "王奕鸣",
+    "source_filename": "03-Strategy-1.1.0-unpackaged-Skill-development-materials.zip",
+    "path": "feishu/student-submissions/王奕鸣/03-Strategy-1.1.0-unpackaged-Skill-development-materials.zip",
+    "size": 38517,
+    "sha256": "8cce3bd866dc9b6e181cef8ccc2aaefe252f33956122a19e55256b9cb4b928e6",
+    "recursive_crc_verified": true,
+    "recursive_entries": 11,
+    "inventory": "feishu/inventories/王奕鸣/03-Strategy-1.1.0-unpackaged-Skill-development-materials.json"
+  },
+  {
+    "student": "王奕鸣",
+    "source_filename": "04-PPT-2.5.13-candidate-unpackaged-Skill-development-materials.zip",
+    "path": "feishu/student-submissions/王奕鸣/04-PPT-2.5.13-candidate-unpackaged-Skill-development-materials.zip",
+    "size": 104960,
+    "sha256": "024163ebc2a8819dfa7e6baf013763237ab08df8b6282feb4a789498be74d8fe",
+    "recursive_crc_verified": true,
+    "recursive_entries": 46,
+    "inventory": "feishu/inventories/王奕鸣/04-PPT-2.5.13-candidate-unpackaged-Skill-development-materials.json"
+  },
+  {
+    "student": "王奕鸣",
+    "source_filename": "conditional-annual-strategy-draft.zip",
+    "path": "feishu/student-submissions/王奕鸣/conditional-annual-strategy-draft.zip",
+    "size": 40966,
+    "sha256": "a2ca339c1613f65b01bf464c9ab1376951ca277e424318146f6f915977059b4e",
+    "recursive_crc_verified": true,
+    "recursive_entries": 12,
+    "inventory": "feishu/inventories/王奕鸣/conditional-annual-strategy-draft.json"
+  },
+  {
+    "student": "王奕鸣",
+    "source_filename": "editable-ppt-workflow-draft.zip",
+    "path": "feishu/student-submissions/王奕鸣/editable-ppt-workflow-draft.zip",
+    "size": 110180,
+    "sha256": "68a83170a1995a14543f803dabce618beea9083514253c15738d284de39c6b5d",
+    "recursive_crc_verified": true,
+    "recursive_entries": 48,
+    "inventory": "feishu/inventories/王奕鸣/editable-ppt-workflow-draft.json"
+  },
+  {
+    "student": "王奕鸣",
+    "source_filename": "Clean07-finite-outcomes-and-legacy-PPT-recipient-review.zip",
+    "path": "feishu/student-submissions/王奕鸣/Clean07-finite-outcomes-and-legacy-PPT-recipient-review.zip",
+    "size": 851897,
+    "sha256": "696213a2935bbedad6aa6df118a5ffe8368ec0dc4217179aa77a187e62dcb12d",
+    "recursive_crc_verified": true,
+    "recursive_entries": 16,
+    "inventory": "feishu/inventories/王奕鸣/Clean07-finite-outcomes-and-legacy-PPT-recipient-review.json"
+  },
+  {
+    "student": "王奕鸣",
+    "source_filename": "欢乐互娱年度战略规划：项目说明与验证记录.docx",
+    "path": "feishu/student-submissions/王奕鸣/欢乐互娱年度战略规划：项目说明与验证记录.docx",
+    "size": 48291,
+    "sha256": "b22451cd9badb9788c2d3b7777450393e02c0e13558e3fffeae83c0564d531b6",
+    "docx_extraction": {
+      "text_characters": 40081,
+      "external_links": 24,
+      "media": []
+    }
+  }
+]

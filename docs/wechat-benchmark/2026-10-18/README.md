@@ -1,9 +1,11 @@
 # 微信 benchmark 讨论资料归档
 
-[给另一个 AI 的交接说明](AI_HANDOFF.txt) · [完整聊天文字](CHAT_TRANSCRIPT.txt) · [结构化记录](messages.json) · [附件清单与校验值](attachment-manifest.json)
+[给另一个AI的交接说明](AI_HANDOFF.txt) · [完整聊天](CHAT_TRANSCRIPT.txt) · [结构化消息](messages.json) · [新增资料索引](FEISHU_INDEX.md)
 
-[下载完整资料包](https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/wechat-benchmark-2026-10-18-complete.zip) · [下载设备记录原文件](https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/fdex-handoff-kelvin-2devices.zip)
+[下载新版整合资料包](https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/wechat-benchmark-2026-10-18-with-student-materials.zip) · [只下载学生与任务补充资料](https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/feishu-student-materials-2026-10-18.zip) · [Release](https://github.com/FENGye-sjtu/FBC/releases/tag/wechat-benchmark-2026-10-18)
 
-范围：2026-10-18，Joseph 17:06时间块消息开始，至末条「辛苦辛苦～」（会话列表17:23）。包含9条主群消息、15条转发内消息及4个原附件。飞书链接已保留，其云端内容未下载。
+范围：2026-10-18，Joseph 17:06消息开始，至“辛苦辛苦～”（会话列表17:23）；9条主群消息、15条转发内消息，另含1条引用的先前上下文。保留4个微信原附件、聊天截图、嵌套关系和校验清单。
 
-大文件存放在本仓库对应 Release；本目录的 attachments 保存其余3个小附件。完整资料包包含全部4个附件。微信未逐条显示精确时间；一名历史消息发送者的昵称请见截图。
+本次补充5位学生的10个skill ZIP、4份项目说明DOCX、表格与本项目5条提交记录，以及两套原始需求ZIP的展开资料。说明全文见[STUDENT_DOCS.txt](STUDENT_DOCS.txt)，任务文本见[TASK_MATERIALS.txt](TASK_MATERIALS.txt)。学生表最右侧独立session列10个附件经用户明确排除；包内部已有会话记录保留。云端目录版本核验界限见[索引](FEISHU_INDEX.md)。
+
+原大型设备记录见Release的fdex-handoff-kelvin-2devices.zip。旧名wechat-benchmark-2026-10-18-complete.zip仅覆盖微信归档；请优先使用新版with-student-materials整合包。所有附件路径及SHA256见包内清单。

@@ -30,6 +30,9 @@ GitHub下载页面：https://github.com/FENGye-sjtu/FBC/releases/tag/wechat-benc
 
 文件使用：原始zip全部保留。inventories/逐层列出zip内部文件（含设备包内嵌的session zip），路径中的“!/”表示需要再解压一层；attachment-manifest.json列出原始字节数和SHA256。evidence/保存本群聊天区域及展开记录截图。
 
-重要界限：三个飞书入口见links-original.txt，未抓取其远端内容。你若需要这些云端资料，须通过有权限的连接或让用户另行提供。仓库为私有仓库，能否读取取决于你运行环境的GitHub授权；普通网页AI无法访问时，请用户直接上传完整zip。不要索取或复述访问令牌。
+飞书与学生补充材料：请读FEISHU_INDEX.md、STUDENT_DOCS.txt、TASK_MATERIALS.txt和STUDENT_FILE_MANIFEST.json。新版整合包：https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/wechat-benchmark-2026-10-18-with-student-materials.zip；补充包：https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/feishu-student-materials-2026-10-18.zip。旧文件名含complete的包仅含原微信归档，新增资料在新版或补充包中。
+两套飞书任务入口分别对应聊天内无OKR学生发布版与带OKR企业需求ZIP；原ZIP均已保留并展开。仅学生版根目录两个云端文本逐字节核对一致，不能声称所有云端最新版本已逐文件比对。
+5位学生为杨柏森、赵一然、方术伟、陈思微、王奕鸣。已收齐本次下载的10个skill ZIP与4个项目说明DOCX（方术伟说明在FDEX.zip内），每个原件保留SHA256、递归文件清单及CRC校验结果。DOCX另提供全文和链接提取。学生表最右侧独立session附件经用户明确排除，不纳入本次范围；skill包自带session保留。阅读学生自述时不要将“已完结”或“上传成功”误判为实验验收通过。
+仓库为私有仓库，另一个AI需要已有FENGye-sjtu/FBC读取授权；本资料不含任何访问令牌。
 
 报告内容本身明确写有“基于虚构案例与模拟资料，不代表欢乐互娱实际经营情况”。请区分企业原始需求、模拟评测资料、实际API运行记录与聊天中关于真实性的判断，不能仅凭“运行过API”推断输入资料真实。

@@ -1,0 +1,717 @@
+[
+  {
+    "path": "AI_HANDOFF.txt",
+    "size": 4531,
+    "sha256": "b3fc36832df701006963fbd50b263dda8715381c95089f4153a698531ca7b73c"
+  },
+  {
+    "path": "attachment-manifest.json",
+    "size": 1000,
+    "sha256": "52a2395b1ffb305142b89578d5c95334f79c93f58d85f44cbdcdaa86c05dd7fa"
+  },
+  {
+    "path": "attachments/evaluation-report.md",
+    "size": 8924,
+    "sha256": "16e4094e90ced3300b9ccee386a6ef1e441634b1757b818931dc5484a98bbd02"
+  },
+  {
+    "path": "attachments/fdex-handoff-kelvin-2devices.zip",
+    "size": 215284629,
+    "sha256": "ab88e8363f8c2b83e7a913f2fcee1036151bed8f89024a8aa1ad218a39aac0b5"
+  },
+  {
+    "path": "attachments/欢乐互娱-企业需求-学生发布版.zip",
+    "size": 139636,
+    "sha256": "ed4351675e550c48a5abaec8aaffdd1bb2ec118e7daf168a623de7da91b1b5f1"
+  },
+  {
+    "path": "attachments/欢乐互娱-企业需求.zip",
+    "size": 140035,
+    "sha256": "9a03ac0045a8b2d217a17fee26d2f085036459e5d617d82bfbe0630e7ef4f089"
+  },
+  {
+    "path": "CHAT_TRANSCRIPT.txt",
+    "size": 5099,
+    "sha256": "879f68ea8dabc31db68c787b32e5b92ee0fef02fc4b8b24fa450e08e01d6e827"
+  },
+  {
+    "path": "evidence/forward-dataset.png",
+    "size": 147797,
+    "sha256": "cef0383fe663ab359fc504a4ea276a83fa9a84ecd2ba5e04778fbcfc75ab1575"
+  },
+  {
+    "path": "evidence/forward-evaluation.png",
+    "size": 112222,
+    "sha256": "5c303add92f7bfebc255986c99744b8609e9dff2bcd46864bbaadbd70e32e6e7"
+  },
+  {
+    "path": "evidence/forward-requirements.png",
+    "size": 77023,
+    "sha256": "637a9d3bab92d8c3667d6691f8176a7fdbe7672e1407119ad075b7640b238209"
+  },
+  {
+    "path": "evidence/forward-SUN-outer.png",
+    "size": 213546,
+    "sha256": "dcb10b527094a6fe2ded249d9c4903069086f3ef401f91b083cd8e181b7500aa"
+  },
+  {
+    "path": "evidence/main-1719.png",
+    "size": 180998,
+    "sha256": "94421b754a4a379cbcd28cec10a5a9e4a62cd0998c02e595b711391359bfa10b"
+  },
+  {
+    "path": "evidence/main-end.png",
+    "size": 168163,
+    "sha256": "a10ebdf06d0636eebef10720b876e6b1614350c9cc6630f83f7facd602440073"
+  },
+  {
+    "path": "evidence/main-quoted-context.png",
+    "size": 305274,
+    "sha256": "5d1b3102dc09cc26d306bf67223b4eb9e90b51610c2ecf54b9ffe9979d7b17d0"
+  },
+  {
+    "path": "evidence/main-start.png",
+    "size": 185581,
+    "sha256": "e358bd466a824395b2f664aec35477298f1dd360f90de4033ddd5d31976eb0ff"
+  },
+  {
+    "path": "feishu/downloaded-files-manifest.json",
+    "size": 1685,
+    "sha256": "e7869f594bca4f500e0740a0e983524773bb26fd6ed76abd708b509d9ba77f31"
+  },
+  {
+    "path": "feishu/inventories/方术伟/FDEX.json",
+    "size": 45823,
+    "sha256": "f58d74779a2687ba5f4575db14bb2ba6f279063a8ac5218e218ef3e0e3a535a8"
+  },
+  {
+    "path": "feishu/inventories/杨柏森/FDE-X-T01-年度战略规划-Skill包-杨柏森.json",
+    "size": 31343,
+    "sha256": "101d7ce0d8e9d9c2c82a94e9fd64dee82dad175f750810b16f5341218507ab04"
+  },
+  {
+    "path": "feishu/inventories/王奕鸣/01-Skills-and-ordinary-components.json",
+    "size": 28538,
+    "sha256": "236f72d1f970fe708c649440485f8659a27d1fb37e8b7f23fe698a0da4099bc3"
+  },
+  {
+    "path": "feishu/inventories/王奕鸣/03-Strategy-1.1.0-unpackaged-Skill-development-materials.json",
+    "size": 2640,
+    "sha256": "709729d7fca5cfa9fb6cca1826ff7aadc1da52e67fd6a5b7fa5a6661a2406d4c"
+  },
+  {
+    "path": "feishu/inventories/王奕鸣/04-PPT-2.5.13-candidate-unpackaged-Skill-development-materials.json",
+    "size": 11445,
+    "sha256": "9fdc6079e7420017a5fd3371087815cf1564dfc91e14e669150a4140797c1bbb"
+  },
+  {
+    "path": "feishu/inventories/王奕鸣/Clean07-finite-outcomes-and-legacy-PPT-recipient-review.json",
+    "size": 3846,
+    "sha256": "fba3aef55a1d9343885b5ab3c497805a96b675edac407ae1ce36d42639be8680"
+  },
+  {
+    "path": "feishu/inventories/王奕鸣/conditional-annual-strategy-draft.json",
+    "size": 3252,
+    "sha256": "f4e0d50e669384368153ed7c78e462696a918b596b0960a70e8ee459992a1b64"
+  },
+  {
+    "path": "feishu/inventories/王奕鸣/editable-ppt-workflow-draft.json",
+    "size": 13584,
+    "sha256": "bf7c383a3cdbe6c6ea8382312b8ee370f2bff50d68a700524e1e72c20dc03c62"
+  },
+  {
+    "path": "feishu/inventories/赵一然/00-FDE-X-Skill交付总包.json",
+    "size": 220071,
+    "sha256": "5b0d3eed703e84c358afa675d5a0283075c3fcf55b6b3a9fac044b5f52bb596e"
+  },
+  {
+    "path": "feishu/inventories/陈思微/strategy-agent.json",
+    "size": 9352,
+    "sha256": "8860b5c02565464fe1ef154ae9fa2bc9fc4efd6e6baf59b9b54ae27a51de4a3c"
+  },
+  {
+    "path": "feishu/manual-archive-summary.json",
+    "size": 3085,
+    "sha256": "04d41d85cfc950b4b17b78e4418d42bb9827c0bc9e67bb75737e24a1c8ae6edf"
+  },
+  {
+    "path": "feishu/manual-downloads-manifest.json",
+    "size": 6460,
+    "sha256": "0bef9b8c1a6355d52a3c45416faa12e79f02d4e3d080d77b7414e783a1670aae"
+  },
+  {
+    "path": "feishu/README.txt",
+    "size": 1292,
+    "sha256": "42a85d392b07e93ba12e28d94bde934ee0e6ed743b230aba64ae297ef027b594"
+  },
+  {
+    "path": "feishu/scope-and-verification.json",
+    "size": 1167,
+    "sha256": "475c31155b960f3083a248c1983491973dd765216733084c413d5c2c33d6d504"
+  },
+  {
+    "path": "feishu/student-submissions/方术伟/FDEX.zip",
+    "size": 3157552,
+    "sha256": "92489777164da015f1713748a5e60397cbb05229d41971c6d9721fbe0a91b8a3"
+  },
+  {
+    "path": "feishu/student-submissions/杨柏森/FDE-X-T01-年度战略规划-Skill包-杨柏森.zip",
+    "size": 587148,
+    "sha256": "0fa655ee3d0e5ab05666d0a922db6b5f5677338a1d7b82c96e8d7363db1cacb0"
+  },
+  {
+    "path": "feishu/student-submissions/杨柏森/项目说明与验证记录-杨柏森.docx",
+    "size": 19422,
+    "sha256": "5394118900586105566494aaae37b58e1dc08be4c5a17c7897852beec9172974"
+  },
+  {
+    "path": "feishu/student-submissions/杨柏森/项目说明与验证记录-杨柏森.links.json",
+    "size": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "feishu/student-submissions/杨柏森/项目说明与验证记录-杨柏森.txt",
+    "size": 19563,
+    "sha256": "d1e2d95c598d0164908206ea354ca1dc757e5a4551ea895ddb5eda658fe5b72f"
+  },
+  {
+    "path": "feishu/student-submissions/王奕鸣/01-Skills-and-ordinary-components.zip",
+    "size": 194106,
+    "sha256": "183094abba5d962f16fdfe310ae323db6d38796ccdcbc7fbc7c0ae92dc2472af"
+  },
+  {
+    "path": "feishu/student-submissions/王奕鸣/03-Strategy-1.1.0-unpackaged-Skill-development-materials.zip",
+    "size": 38517,
+    "sha256": "8cce3bd866dc9b6e181cef8ccc2aaefe252f33956122a19e55256b9cb4b928e6"
+  },
+  {
+    "path": "feishu/student-submissions/王奕鸣/04-PPT-2.5.13-candidate-unpackaged-Skill-development-materials.zip",
+    "size": 104960,
+    "sha256": "024163ebc2a8819dfa7e6baf013763237ab08df8b6282feb4a789498be74d8fe"
+  },
+  {
+    "path": "feishu/student-submissions/王奕鸣/Clean07-finite-outcomes-and-legacy-PPT-recipient-review.zip",
+    "size": 851897,
+    "sha256": "696213a2935bbedad6aa6df118a5ffe8368ec0dc4217179aa77a187e62dcb12d"
+  },
+  {
+    "path": "feishu/student-submissions/王奕鸣/conditional-annual-strategy-draft.zip",
+    "size": 40966,
+    "sha256": "a2ca339c1613f65b01bf464c9ab1376951ca277e424318146f6f915977059b4e"
+  },
+  {
+    "path": "feishu/student-submissions/王奕鸣/editable-ppt-workflow-draft.zip",
+    "size": 110180,
+    "sha256": "68a83170a1995a14543f803dabce618beea9083514253c15738d284de39c6b5d"
+  },
+  {
+    "path": "feishu/student-submissions/王奕鸣/欢乐互娱年度战略规划：项目说明与验证记录.docx",
+    "size": 48291,
+    "sha256": "b22451cd9badb9788c2d3b7777450393e02c0e13558e3fffeae83c0564d531b6"
+  },
+  {
+    "path": "feishu/student-submissions/王奕鸣/欢乐互娱年度战略规划：项目说明与验证记录.links.json",
+    "size": 6086,
+    "sha256": "895a317c8352c6b6f5f620be71c16ea2761d51055ddeef577af21a048a87ca9f"
+  },
+  {
+    "path": "feishu/student-submissions/王奕鸣/欢乐互娱年度战略规划：项目说明与验证记录.txt",
+    "size": 96870,
+    "sha256": "f40e8e3b054d6d1e8dbc93b1759e0d7c7ee3994f852f602549ec5e94b9567c3c"
+  },
+  {
+    "path": "feishu/student-submissions/赵一然/00-FDE-X-Skill交付总包.zip",
+    "size": 59514962,
+    "sha256": "3a808fb1d9e68010d7b4b6fa49b9bb3bc62f76240b8e941e04ea89462d43b593"
+  },
+  {
+    "path": "feishu/student-submissions/赵一然/T01 项目说明与验证记录（星芽英语探险·完全虚构案例）.docx",
+    "size": 15995,
+    "sha256": "b5efcb1dab5707c38e48b5480aee83cdff73373d4fc2907ac3e6631698dbdf1a"
+  },
+  {
+    "path": "feishu/student-submissions/赵一然/T01 项目说明与验证记录（星芽英语探险·完全虚构案例）.links.json",
+    "size": 3853,
+    "sha256": "7b8f4b4a878b7a39858b2472bd0932118c82d01deb19e40b2b271c240ab20435"
+  },
+  {
+    "path": "feishu/student-submissions/赵一然/T01 项目说明与验证记录（星芽英语探险·完全虚构案例）.txt",
+    "size": 16093,
+    "sha256": "1d412b64da54550537499b6c583b3fe158b31340fa39793ee535b4ec10e6568b"
+  },
+  {
+    "path": "feishu/student-submissions/陈思微/strategy-agent.zip",
+    "size": 239991,
+    "sha256": "fcacd462755d076217d78040c66e8c394b901ac1d82619f9b9b0273ee6b4dadf"
+  },
+  {
+    "path": "feishu/student-submissions/陈思微/战略 Agent｜项目说明与验证记录.docx",
+    "size": 6096,
+    "sha256": "d60118f75e8c2d227794599e68e8c71c4770fc2798e9730a677a16b573aa82ab"
+  },
+  {
+    "path": "feishu/student-submissions/陈思微/战略 Agent｜项目说明与验证记录.links.json",
+    "size": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "feishu/student-submissions/陈思微/战略 Agent｜项目说明与验证记录.txt",
+    "size": 3223,
+    "sha256": "8e5c8ed5ecbcb8bee6d12e8b44d9bd2f7790cf8187062864ed6cb9f51c2b2570"
+  },
+  {
+    "path": "feishu/student-task/README.md",
+    "size": 1800,
+    "sha256": "f2eba152eafca28001b88076098949aa82f3c9e330d25b6f998b61d2dcc162d0"
+  },
+  {
+    "path": "feishu/student-task/需求提报表.md",
+    "size": 15900,
+    "sha256": "9827a176f092947164e20aeec313f782723d40875799726259100f9f717650ff"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/README.md",
+    "size": 1800,
+    "sha256": "f2eba152eafca28001b88076098949aa82f3c9e330d25b6f998b61d2dcc162d0"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/README.md",
+    "size": 1930,
+    "sha256": "5fb4abbefc92b4f6a90145e8c586258f3e304ba2f866846daf4f06094cb03693"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/任务卡/T00-企业业务任务说明.md",
+    "size": 4251,
+    "sha256": "3342076dfe405f4852de2a1edf78c984833bd123997651c9a9f45566513ee853"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/任务卡/T01-模拟年度规划.md",
+    "size": 2576,
+    "sha256": "b6828ad77065aeab097f6211ea9922412eea3068d27ed7ffd41c96d084a4c650"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/开发与运行说明.md",
+    "size": 8233,
+    "sha256": "fdc74e901bad209f55b868f78df1c06a5b6813c9d4747eec182c1041bbe895b2"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/战略方法与公开来源.md",
+    "size": 13510,
+    "sha256": "e7c20240db2ce50238b37c09d00b8ff86576156e6a9e48b805080f198e410d65"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/manifest.json",
+    "size": 6420,
+    "sha256": "5c2871c248962876376783adad04af0275d5626ba84a4b21f150af5c2c29f88c"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/README.md",
+    "size": 3751,
+    "sha256": "e3aace193de92d2760b87b81d0c7496917eb50243d0e925fce24340c57177641"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/公司与产品/K01-公司背景.md",
+    "size": 977,
+    "sha256": "8a8440867a0472c6ef686d8c90344b3bce01a651690d09e6293450beba604562"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/公司与产品/K02-产品现状与能力边界.md",
+    "size": 1086,
+    "sha256": "7823b2d5eeb14bfd95850382b65ed715ff2adf9ab97394e2ffd422bef2a90177"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/公司与产品/K03-早期路线图设想.md",
+    "size": 926,
+    "sha256": "ff8f7a13bd9f697e5398f9e962f731af20c7782b635b0200c13d4cb17acd5066"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/公司与产品/K04-路线图复议备忘录.md",
+    "size": 845,
+    "sha256": "ebe379634ed80bd00862374563f794cb986cc7b13cbcf6b3f29b80ac01a12045"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/公司与产品/K05-资源与数据可用情况.md",
+    "size": 923,
+    "sha256": "66bd5c046cb12e257a9fd03caf47439f963d57b87042ff46681ba098006a31a7"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/公司与产品/K06-内部演示复盘.md",
+    "size": 581,
+    "sha256": "c41cc8a35eff6e7b58b12e4e21950ef5b1fb6320c307edb288b456ba49789af3"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/公司与产品/K07-历史会议摘录.md",
+    "size": 610,
+    "sha256": "867e7824391feb4b2f2d02030455fccc25e74f769c6a7e21d629d420e5f38610"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/公司与产品/K08-教学评价设计便签.md",
+    "size": 946,
+    "sha256": "83f9e54e45baaa8f54b8dfaab38f27199cbb07e4680afd86a120198fb0df226c"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/外部快照/E01-口语岛厂商宣传快照.md",
+    "size": 765,
+    "sha256": "637523cab2c38362d91ba87d6aab8f199d5ac52619f633ef4c611db0ab29f96d"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/外部快照/E02-口语岛报道转载快照.md",
+    "size": 620,
+    "sha256": "f402a892f36773d7d3cba33df7b05355a994f8920fc3013a31e3a258954b664c"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/外部快照/E03-口语岛小样本体验快照.md",
+    "size": 757,
+    "sha256": "736207dc114ee6ff41e0018eac323a3950f904fbee03a49d164b4f74f34b82d1"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/外部快照/E04-伴学工坊产品说明快照.md",
+    "size": 705,
+    "sha256": "6333e7498fbfed5dc272a383828cfbb394bd9d32b9807b68e9f041ad01588a02"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/用户研究/U01-家长访谈甲.md",
+    "size": 795,
+    "sha256": "cc2a1e811e1223e590b0fa9946f5cdfcb0d531fd82bf7b2d2e2cebbef27a27ee"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/用户研究/U02-家长访谈乙.md",
+    "size": 778,
+    "sha256": "3c1b05704f895d936817a83608e5dc88ace2d49c7902c895554b83fe860eda1f"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/用户研究/U03-家长访谈丙.md",
+    "size": 793,
+    "sha256": "72182aa0ab10b73e8ceb1949734ef9c1badfe2891ece18d91adaaa224a4858b6"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/用户研究/U04-儿童概念访谈.md",
+    "size": 790,
+    "sha256": "c79b8ad4ec0054ca93273f88c9901fd472ff69c2b5c877fb5fbc01c056dc94ba"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/用户研究/U05-教师访谈.md",
+    "size": 795,
+    "sha256": "8957085852fb88e967734571ff88149b45915dc6e3c847fba7d6979c2d3231ba"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/用户研究/U06-机构访谈.md",
+    "size": 834,
+    "sha256": "73976e397fbdc29063d62791500f521c27d14fccf59b7cb56fc99c4482a881cc"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/用户研究/U07-需求研究汇总草稿.md",
+    "size": 990,
+    "sha256": "38b868485685b1f012899f12cbfec771aa821a116c56de18fa1272abe8c6b396"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/竞品与行业/C01-虚构竞品口语岛.md",
+    "size": 825,
+    "sha256": "54e9c81b187b59e9827ef7ab36717f0dfe02ea47e7228a168fe9e09c1821c957"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/竞品与行业/C02-虚构标杆伴学工坊.md",
+    "size": 730,
+    "sha256": "35146f48b6880ed5eb325e7797e61d56c87840d976e470a7bf7f1a66a211710a"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/竞品与行业/C03-虚构标杆远航课堂.md",
+    "size": 268,
+    "sha256": "b75defc8ed24d3b3b4d0c27696ef6a512e0b2031fb108c7dbdeaf7e42bb45c07"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/竞品与行业/E05-AI语音能力旧笔记.md",
+    "size": 789,
+    "sha256": "1908e12d81c5943c5cb6664018e1ff534ea1fc253c3ef5704d0e77821160e134"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/竞品与行业/E06-行业研究问题清单.md",
+    "size": 911,
+    "sha256": "25115c103cf4434ae569c6948a53d7ce40c666cbeba7c298fed52e33ed3ec625"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/资源/K03-路线图.svg",
+    "size": 1994,
+    "sha256": "e606d37b125a0ca56d5d5ecf59eb3abe9ec2c5a95f8682a5e86149431705be8f"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库/资源/U08-访谈台账.csv",
+    "size": 657,
+    "sha256": "417687e50159dff4ccae679c034d64a047b578ddd3d128168f21c904983f1268"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/模拟知识库导入飞书说明.md",
+    "size": 4176,
+    "sha256": "d30921e6a666172a6002417afcafb4243d9f19752b5863fc852ae5a101dd0040"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/输出模板/年度战略草案-橙白框架样板.pptx",
+    "size": 79437,
+    "sha256": "a670e4b8560206fc5de379491582182b3a5ea3acc34ab845d7b545c0f07d7365"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/学生材料/输出模板/战略PPT排版说明.md",
+    "size": 8936,
+    "sha256": "d194132d1c5137846023a2479d676841981145afcd99443cf18dafccbed1c318"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求/需求提报表.md",
+    "size": 23182,
+    "sha256": "2e83ca6e3fc5bb01376265b0139fb1059d1955b17b2dec5f3fee504ae6b37dbe"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/README.md",
+    "size": 1800,
+    "sha256": "f2eba152eafca28001b88076098949aa82f3c9e330d25b6f998b61d2dcc162d0"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/README.md",
+    "size": 1930,
+    "sha256": "5fb4abbefc92b4f6a90145e8c586258f3e304ba2f866846daf4f06094cb03693"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/任务卡/T00-企业业务任务说明.md",
+    "size": 4196,
+    "sha256": "61a49c7b1f6773ab271a03e1f82fa20fcf11d1671f310cef0fdcbbc4eb7b450a"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/任务卡/T01-模拟年度规划.md",
+    "size": 2534,
+    "sha256": "231a2122cc6f72683726f374c2698f44b0c21ab581b66e660ad89552d9d49194"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/开发与运行说明.md",
+    "size": 8233,
+    "sha256": "fdc74e901bad209f55b868f78df1c06a5b6813c9d4747eec182c1041bbe895b2"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/战略方法与公开来源.md",
+    "size": 13510,
+    "sha256": "e7c20240db2ce50238b37c09d00b8ff86576156e6a9e48b805080f198e410d65"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/manifest.json",
+    "size": 6420,
+    "sha256": "5c2871c248962876376783adad04af0275d5626ba84a4b21f150af5c2c29f88c"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/README.md",
+    "size": 3751,
+    "sha256": "e3aace193de92d2760b87b81d0c7496917eb50243d0e925fce24340c57177641"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/公司与产品/K01-公司背景.md",
+    "size": 977,
+    "sha256": "8a8440867a0472c6ef686d8c90344b3bce01a651690d09e6293450beba604562"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/公司与产品/K02-产品现状与能力边界.md",
+    "size": 1086,
+    "sha256": "7823b2d5eeb14bfd95850382b65ed715ff2adf9ab97394e2ffd422bef2a90177"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/公司与产品/K03-早期路线图设想.md",
+    "size": 926,
+    "sha256": "ff8f7a13bd9f697e5398f9e962f731af20c7782b635b0200c13d4cb17acd5066"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/公司与产品/K04-路线图复议备忘录.md",
+    "size": 845,
+    "sha256": "ebe379634ed80bd00862374563f794cb986cc7b13cbcf6b3f29b80ac01a12045"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/公司与产品/K05-资源与数据可用情况.md",
+    "size": 923,
+    "sha256": "66bd5c046cb12e257a9fd03caf47439f963d57b87042ff46681ba098006a31a7"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/公司与产品/K06-内部演示复盘.md",
+    "size": 581,
+    "sha256": "c41cc8a35eff6e7b58b12e4e21950ef5b1fb6320c307edb288b456ba49789af3"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/公司与产品/K07-历史会议摘录.md",
+    "size": 610,
+    "sha256": "867e7824391feb4b2f2d02030455fccc25e74f769c6a7e21d629d420e5f38610"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/公司与产品/K08-教学评价设计便签.md",
+    "size": 946,
+    "sha256": "83f9e54e45baaa8f54b8dfaab38f27199cbb07e4680afd86a120198fb0df226c"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/外部快照/E01-口语岛厂商宣传快照.md",
+    "size": 765,
+    "sha256": "637523cab2c38362d91ba87d6aab8f199d5ac52619f633ef4c611db0ab29f96d"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/外部快照/E02-口语岛报道转载快照.md",
+    "size": 620,
+    "sha256": "f402a892f36773d7d3cba33df7b05355a994f8920fc3013a31e3a258954b664c"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/外部快照/E03-口语岛小样本体验快照.md",
+    "size": 757,
+    "sha256": "736207dc114ee6ff41e0018eac323a3950f904fbee03a49d164b4f74f34b82d1"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/外部快照/E04-伴学工坊产品说明快照.md",
+    "size": 705,
+    "sha256": "6333e7498fbfed5dc272a383828cfbb394bd9d32b9807b68e9f041ad01588a02"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/用户研究/U01-家长访谈甲.md",
+    "size": 795,
+    "sha256": "cc2a1e811e1223e590b0fa9946f5cdfcb0d531fd82bf7b2d2e2cebbef27a27ee"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/用户研究/U02-家长访谈乙.md",
+    "size": 778,
+    "sha256": "3c1b05704f895d936817a83608e5dc88ace2d49c7902c895554b83fe860eda1f"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/用户研究/U03-家长访谈丙.md",
+    "size": 793,
+    "sha256": "72182aa0ab10b73e8ceb1949734ef9c1badfe2891ece18d91adaaa224a4858b6"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/用户研究/U04-儿童概念访谈.md",
+    "size": 790,
+    "sha256": "c79b8ad4ec0054ca93273f88c9901fd472ff69c2b5c877fb5fbc01c056dc94ba"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/用户研究/U05-教师访谈.md",
+    "size": 795,
+    "sha256": "8957085852fb88e967734571ff88149b45915dc6e3c847fba7d6979c2d3231ba"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/用户研究/U06-机构访谈.md",
+    "size": 834,
+    "sha256": "73976e397fbdc29063d62791500f521c27d14fccf59b7cb56fc99c4482a881cc"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/用户研究/U07-需求研究汇总草稿.md",
+    "size": 990,
+    "sha256": "38b868485685b1f012899f12cbfec771aa821a116c56de18fa1272abe8c6b396"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/竞品与行业/C01-虚构竞品口语岛.md",
+    "size": 825,
+    "sha256": "54e9c81b187b59e9827ef7ab36717f0dfe02ea47e7228a168fe9e09c1821c957"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/竞品与行业/C02-虚构标杆伴学工坊.md",
+    "size": 730,
+    "sha256": "35146f48b6880ed5eb325e7797e61d56c87840d976e470a7bf7f1a66a211710a"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/竞品与行业/C03-虚构标杆远航课堂.md",
+    "size": 268,
+    "sha256": "b75defc8ed24d3b3b4d0c27696ef6a512e0b2031fb108c7dbdeaf7e42bb45c07"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/竞品与行业/E05-AI语音能力旧笔记.md",
+    "size": 789,
+    "sha256": "1908e12d81c5943c5cb6664018e1ff534ea1fc253c3ef5704d0e77821160e134"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/竞品与行业/E06-行业研究问题清单.md",
+    "size": 911,
+    "sha256": "25115c103cf4434ae569c6948a53d7ce40c666cbeba7c298fed52e33ed3ec625"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/资源/K03-路线图.svg",
+    "size": 1994,
+    "sha256": "e606d37b125a0ca56d5d5ecf59eb3abe9ec2c5a95f8682a5e86149431705be8f"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库/资源/U08-访谈台账.csv",
+    "size": 657,
+    "sha256": "417687e50159dff4ccae679c034d64a047b578ddd3d128168f21c904983f1268"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/模拟知识库导入飞书说明.md",
+    "size": 4176,
+    "sha256": "d30921e6a666172a6002417afcafb4243d9f19752b5863fc852ae5a101dd0040"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/输出模板/年度战略草案-橙白框架样板.pptx",
+    "size": 79437,
+    "sha256": "a670e4b8560206fc5de379491582182b3a5ea3acc34ab845d7b545c0f07d7365"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/学生材料/输出模板/战略PPT排版说明.md",
+    "size": 8936,
+    "sha256": "d194132d1c5137846023a2479d676841981145afcd99443cf18dafccbed1c318"
+  },
+  {
+    "path": "feishu/task-materials/欢乐互娱-企业需求-学生发布版/需求提报表.md",
+    "size": 15900,
+    "sha256": "9827a176f092947164e20aeec313f782723d40875799726259100f9f717650ff"
+  },
+  {
+    "path": "feishu/学生总提交记录.xlsx",
+    "size": 9422,
+    "sha256": "2e221a7abaf328aafc6335f92490aef99f188c9cf19b4fe366eafab51d36a745"
+  },
+  {
+    "path": "feishu/杨柏森-skill-递归文件清单.json",
+    "size": 21347,
+    "sha256": "a44ff176929b109893a8a4ebe0546020ea04e449f50d52517e01f5632639afd6"
+  },
+  {
+    "path": "feishu/欢乐互娱提交记录.json",
+    "size": 5209,
+    "sha256": "d752cb4ea9d65f31542037150b83f80f42c32480de82f09453a71f5046825caf"
+  },
+  {
+    "path": "FEISHU_INDEX.md",
+    "size": 5267,
+    "sha256": "c9a48ef6fe3b2ac399bbadfa761c4a85b2ab172bb7947f474cf251207c9bad9e"
+  },
+  {
+    "path": "inventories/fdex-handoff-kelvin-2devices.json",
+    "size": 32387,
+    "sha256": "92424bc269136cc1e5ea7582fd42468c2d57f26dc3745552eb7daf8fcafa5a76"
+  },
+  {
+    "path": "inventories/欢乐互娱-企业需求-学生发布版.json",
+    "size": 7736,
+    "sha256": "d9f7d9ef8d80eb8e6d9377533cb8750f752c9a1fa9f35cf4486b11150e9ac5e9"
+  },
+  {
+    "path": "inventories/欢乐互娱-企业需求.json",
+    "size": 6927,
+    "sha256": "786d034cf6f21eb433f3b818cb5742787b931022375e4b740b989a03a5eb022f"
+  },
+  {
+    "path": "links-original.txt",
+    "size": 354,
+    "sha256": "3e21a9199b27646718095effd4037b7cf4749d210af06db5f26794d74f4c03b9"
+  },
+  {
+    "path": "messages.json",
+    "size": 8451,
+    "sha256": "940e8cd0bfbf9cf3616f228e670c86e4e042bb2fc3015492d6ee2f8a488989ed"
+  },
+  {
+    "path": "README.md",
+    "size": 1557,
+    "sha256": "800be267e036391f0a6fd77cea96e8d165df4773c6d162d7c57243b55fdd8848"
+  },
+  {
+    "path": "STUDENT_DOCS.txt",
+    "size": 160920,
+    "sha256": "6585ad21f7de53919d1d3cc1cd6a37c9d5ef3ce27aa957bf14e21db95a281620"
+  },
+  {
+    "path": "STUDENT_FILE_MANIFEST.json",
+    "size": 6460,
+    "sha256": "0bef9b8c1a6355d52a3c45416faa12e79f02d4e3d080d77b7414e783a1670aae"
+  },
+  {
+    "path": "TASK_MATERIALS.txt",
+    "size": 204454,
+    "sha256": "9b234072d760fc8f4c442852d1827b31be9ae150016cec2ad607a1fef074732d"
+  }
+]
