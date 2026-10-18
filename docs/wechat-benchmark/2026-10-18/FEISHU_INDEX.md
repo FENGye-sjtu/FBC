@@ -1,3 +1,7 @@
+> 2026-10-18云端版本核对更新：两套目录全部文件路径与清风原ZIP对应，无新增或缺失；68份Markdown源文本（每套34份）全文一致，仅统一换行和末尾空行。另8个非Markdown文件当前云端内容未核验，不能声称全部逐字节一致。详见CLOUD_VERSION_VERIFICATION.md、CLOUD_VERSION_VERIFICATION.json及LATEST_CLOUD_TEXT.txt；本段更新取代下面旧版的云端核验进度说明。
+
+[云端核对报告](CLOUD_VERSION_VERIFICATION.md) · [当前Markdown全文](LATEST_CLOUD_TEXT.txt)
+
 # 飞书与学生资料索引
 
 [下载包含微信与学生资料的整合包](https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/wechat-benchmark-2026-10-18-with-student-materials.zip) · [只下载学生及任务补充包](https://github.com/FENGye-sjtu/FBC/releases/download/wechat-benchmark-2026-10-18/feishu-student-materials-2026-10-18.zip) · [GitHub Release](https://github.com/FENGye-sjtu/FBC/releases/tag/wechat-benchmark-2026-10-18)

@@ -1,3 +1,7 @@
+> 2026-10-18云端版本核对更新：两套目录全部文件路径与清风原ZIP对应，无新增或缺失；68份Markdown源文本（每套34份）全文一致，仅统一换行和末尾空行。另8个非Markdown文件当前云端内容未核验，不能声称全部逐字节一致。详见CLOUD_VERSION_VERIFICATION.md、CLOUD_VERSION_VERIFICATION.json及LATEST_CLOUD_TEXT.txt；本段更新取代下面旧版的云端核验进度说明。
+
+[云端核对报告](CLOUD_VERSION_VERIFICATION.md) · [当前Markdown全文](LATEST_CLOUD_TEXT.txt)
+
 # 微信 benchmark 讨论资料归档
 
 [给另一个AI的交接说明](AI_HANDOFF.txt) · [完整聊天](CHAT_TRANSCRIPT.txt) · [结构化消息](messages.json) · [新增资料索引](FEISHU_INDEX.md)

@@ -1,3 +1,5 @@
+2026-10-18云端版本核对更新：两套目录全部文件路径与清风原ZIP对应，无新增或缺失；68份Markdown源文本（每套34份）全文一致，仅统一换行和末尾空行。另8个非Markdown文件当前云端内容未核验，不能声称全部逐字节一致。详见CLOUD_VERSION_VERIFICATION.md、CLOUD_VERSION_VERIFICATION.json及LATEST_CLOUD_TEXT.txt；本段更新取代下面旧版的云端核验进度说明。
+
 给另一个 AI 的交接说明
 
 请先完整阅读 CHAT_TRANSCRIPT.txt，按 messages.json 的 parent/children 关系区分今天的群聊与转发记录内的历史消息。不要把10月12日、13日、16日的历史消息误判为今天新说的话。
